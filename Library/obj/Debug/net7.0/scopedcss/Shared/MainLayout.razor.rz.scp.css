@@ -1,10 +1,10 @@
-.page {
+.page[b-83zf23ogl0] {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
 
-.topbar {
+.topbar[b-83zf23ogl0] {
     display: flex;
     justify-content: center;
     gap: 1rem;
@@ -16,7 +16,7 @@
     z-index: 10;
 }
 
-.nav-button {
+.nav-button[b-83zf23ogl0] {
     background: white;
     padding: 10px 16px;
     border-radius: 20px;
@@ -27,19 +27,19 @@
     transition: background 0.3s;
 }
 
-.nav-button:hover {
+.nav-button:hover[b-83zf23ogl0] {
     background-color: #f0f0f0;
     color: black;
 }
 
 @media (max-width: 640px) {
-    .topbar {
+    .topbar[b-83zf23ogl0] {
         flex-wrap: wrap;
         justify-content: flex-start;
         padding: 0.5rem;
     }
 
-    .nav-button {
+    .nav-button[b-83zf23ogl0] {
         margin-bottom: 0.5rem;
     }
 }
