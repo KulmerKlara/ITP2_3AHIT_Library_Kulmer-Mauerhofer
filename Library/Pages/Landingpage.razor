@@ -1,0 +1,41 @@
+﻿@page "/"
+
+<PageTitle>Index</PageTitle>
+
+<div class="background-container">
+    <!-- Halbtransparentes Overlay -->
+    <div class="overlay">
+        <h1>Welcome to your ONLINE BOOKSHELF</h1>
+
+        <!-- Suchleiste -->
+        <div class="search-wrapper">
+            <div class="search-bar">        
+                <input type="search" placeholder="Search for a book" />
+                <span class="icon">&#10006;</span>
+            </div>
+        </div>
+
+        <p>Welcome to your new app.</p>
+
+        <!-- Buchvorschau-Leiste mit Pfeilen -->
+        <div class="book-carousel">
+            <div class="arrow left-arrow">&#10094;</div> <!-- Pfeil nach links -->
+
+            <div class="book-preview-bar">
+                @for (int i = 0; i < 4; i++)
+                {
+                    <div class="book-preview-item">
+                        <div class="book-image-placeholder"></div>
+                        <div class="genre-label">Genre</div>
+                    </div>
+                }
+            </div>
+
+            <div class="arrow right-arrow">&#10095;</div> <!-- Pfeil nach rechts -->
+        </div>
+
+        <SurveyPrompt Title="How is Blazor working for you?" />
+    </div>
+</div>
+
+

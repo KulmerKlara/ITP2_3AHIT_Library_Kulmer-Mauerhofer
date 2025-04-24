@@ -1,0 +1,113 @@
+/* Hintergrundbild */
+.background-container {
+background-image: url('/images/image1_lp.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* Overlay */
+.overlay {
+    background-color: rgba(255, 255, 255, 0.8); /* Weiß mit 80% Deckkraft */
+    min-height: 100vh;
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h1 {
+    text-align: center;
+    font-size: 2.5em;
+    color: #333;
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);    
+}
+
+.search-wrapper {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 16px; 
+    padding: 10px 15px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    width: 90%;
+    max-width: 400px;
+}
+
+.search-bar input[type="search"] {
+    border: none;
+    outline: none;
+    flex-grow: 1;
+    font-size: 16px;
+    padding: 6px;
+}
+
+.icon {
+    font-size: 20px;
+    margin: 0 8px;
+    color: #555;
+    cursor: pointer;
+}
+
+    /* Buchvorschau-Leiste */
+.book-carousel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 30px;
+    gap: 10px;
+}
+
+.arrow {
+    font-size: 2.5rem;
+    color: gray;
+    cursor: pointer;
+    user-select: none;
+    padding: 10px;
+    transition: transform 0.2s ease;
+}
+
+.arrow:hover {
+    transform: scale(1.2);
+}
+
+.book-preview-bar {
+    display: flex;
+    gap: 20px;
+}
+
+.book-preview-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.book-image-placeholder {
+    width: 120px;
+    height: 160px;
+    background-color: #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.genre-label {
+    margin-top: 8px;
+    background-color: #eee;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    color: #444;
+    width: 100%;
+    text-align: center;
+}
