@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\klara\\OneDrive\\Desktop\\Schule\\3AHIT\\ITP\\Klamminger\\Projekt_Bücherei\\ITP2_3AHIT_Library_Kulmer-Mauerhofer\\Library\\Library.csproj": {}
+    "c:\\Users\\klara\\OneDrive\\Desktop\\Schule\\3AHIT\\ITP\\Klamminger\\Projekt_Bücherei\\ITP2_3AHIT_Library_Kulmer-Mauerhofer-1\\Library\\Library.csproj": {}
   },
   "projects": {
-    "C:\\Users\\klara\\OneDrive\\Desktop\\Schule\\3AHIT\\ITP\\Klamminger\\Projekt_Bücherei\\ITP2_3AHIT_Library_Kulmer-Mauerhofer\\Library\\Library.csproj": {
+    "c:\\Users\\klara\\OneDrive\\Desktop\\Schule\\3AHIT\\ITP\\Klamminger\\Projekt_Bücherei\\ITP2_3AHIT_Library_Kulmer-Mauerhofer-1\\Library\\Library.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\klara\\OneDrive\\Desktop\\Schule\\3AHIT\\ITP\\Klamminger\\Projekt_Bücherei\\ITP2_3AHIT_Library_Kulmer-Mauerhofer\\Library\\Library.csproj",
+        "projectUniqueName": "c:\\Users\\klara\\OneDrive\\Desktop\\Schule\\3AHIT\\ITP\\Klamminger\\Projekt_Bücherei\\ITP2_3AHIT_Library_Kulmer-Mauerhofer-1\\Library\\Library.csproj",
         "projectName": "Library",
-        "projectPath": "C:\\Users\\klara\\OneDrive\\Desktop\\Schule\\3AHIT\\ITP\\Klamminger\\Projekt_Bücherei\\ITP2_3AHIT_Library_Kulmer-Mauerhofer\\Library\\Library.csproj",
+        "projectPath": "c:\\Users\\klara\\OneDrive\\Desktop\\Schule\\3AHIT\\ITP\\Klamminger\\Projekt_Bücherei\\ITP2_3AHIT_Library_Kulmer-Mauerhofer-1\\Library\\Library.csproj",
         "packagesPath": "C:\\Users\\klara\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\klara\\OneDrive\\Desktop\\Schule\\3AHIT\\ITP\\Klamminger\\Projekt_Bücherei\\ITP2_3AHIT_Library_Kulmer-Mauerhofer\\Library\\obj\\",
+        "outputPath": "c:\\Users\\klara\\OneDrive\\Desktop\\Schule\\3AHIT\\ITP\\Klamminger\\Projekt_Bücherei\\ITP2_3AHIT_Library_Kulmer-Mauerhofer-1\\Library\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\klara\\AppData\\Roaming\\NuGet\\NuGet.Config"

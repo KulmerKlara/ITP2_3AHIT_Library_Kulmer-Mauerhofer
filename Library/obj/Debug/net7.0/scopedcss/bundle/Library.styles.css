@@ -9,14 +9,17 @@ background-image: url('/images/image1_lp.png');
     position: relative;
 }
 
-/* Overlay */
 .overlay[b-57c5ksc2ws] {
-    background-color: rgba(255, 255, 255, 0.8); /* Weiß mit 80% Deckkraft */
+    background-color: rgba(255, 255, 255, 0.5); /* Weiß mit 80% Deckkraft */
     min-height: 100vh;
     padding: 40px 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    position: relative;
+    
 }
 
 h1[b-57c5ksc2ws] {
@@ -61,13 +64,14 @@ h1[b-57c5ksc2ws] {
     cursor: pointer;
 }
 
-    /* Buchvorschau-Leiste */
 .book-carousel[b-57c5ksc2ws] {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 30px;
-    gap: 10px;
+    margin-top: 50px;
+    gap: 25px;
+    width: 100%;
+    length: 100%;
 }
 
 .arrow[b-57c5ksc2ws] {
@@ -94,11 +98,13 @@ h1[b-57c5ksc2ws] {
     align-items: center;
 }
 
+/*https://www.w3schools.com/howto/howto_css_full_page.asp?utm_source=chatgpt.com
+https://css-tricks.com/perfect-full-page-background-image/?utm_source=chatgpt.com*/
 .book-image-placeholder[b-57c5ksc2ws] {
-    width: 120px;
-    height: 160px;
+    width: 250px;
+    height: 250px;
     background-color: #ccc;
-    border-radius: 8px;
+    border-radius: 0px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
@@ -112,6 +118,7 @@ h1[b-57c5ksc2ws] {
     width: 100%;
     text-align: center;
 }
+
 /* _content/Library/Shared/MainLayout.razor.rz.scp.css */
 .page[b-83zf23ogl0] {
     display: flex;
