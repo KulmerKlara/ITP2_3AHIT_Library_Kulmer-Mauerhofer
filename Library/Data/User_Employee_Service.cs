@@ -1,6 +1,6 @@
 namespace Library.Data;
 
-public class UserService
+public class User_Employee_Service
 {
     private static readonly string[] Roles = new[]
     {
