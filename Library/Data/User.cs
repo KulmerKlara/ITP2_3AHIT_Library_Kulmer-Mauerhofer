@@ -2,11 +2,20 @@ namespace Library.Data;
 
 public class User
 {
-    public int UserId { get; protected set; }
+    public int UserId { get;  set; }
     public string Name { get; set; }
     public string Email { get; set; }    
     public string Password { get; protected set; }    
     public string telephone { get; protected set; }
+
+    public User(int userId, string name, string email, string password, string telephone)
+    {
+        UserId = userId;
+        Name = name;
+        Email = email;
+        Password = password;
+        this.telephone = telephone;
+    }
    
     public void login(string email, string password)
     {
