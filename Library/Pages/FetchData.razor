@@ -1,14 +1,14 @@
 ﻿@page "/fetchdata"
 @using Library.Data
-@inject WeatherForecastService ForecastService
+@inject User_Employee_Service UserService
 
-<PageTitle>Weather forecast</PageTitle>
+<PageTitle>User Data</PageTitle>
 
-<h1>Weather forecast</h1>
+<h1>User Data</h1>
 
-<p>This component demonstrates fetching data from a service.</p>
+<p>This component demonstrates fetching user data from a service.</p>
 
-@if (forecasts == null)
+@if (users == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -17,20 +17,20 @@ else
     <table class="table">
         <thead>
             <tr>
-                <th>Date</th>
-                <th>Temp. (C)</th>
-                <th>Temp. (F)</th>
-                <th>Summary</th>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var forecast in forecasts)
+            @foreach (var user in users)
             {
                 <tr>
-                    <td>@forecast.Date.ToShortDateString()</td>
-                    <td>@forecast.TemperatureC</td>
-                    <td>@forecast.TemperatureF</td>
-                    <td>@forecast.Summary</td>
+                    <td>@user.Id</td>
+                    <td>@user.Name</td>
+                    <td>@user.Email</td>
+                    <td>@user.telephone</td>
                 </tr>
             }
         </tbody>
@@ -38,10 +38,10 @@ else
 }
 
 @code {
-    private WeatherForecast[]? forecasts;
+    private User[]? users;
 
     protected override async Task OnInitializedAsync()
     {
-        forecasts = await ForecastService.GetForecastAsync(DateOnly.FromDateTime(DateTime.Now));
+        users = await UserService.GetUsersAsync(10); // Fetch 10 users
     }
 }

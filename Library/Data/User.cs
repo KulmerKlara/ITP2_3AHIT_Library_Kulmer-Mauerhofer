@@ -2,7 +2,7 @@ namespace Library.Data;
 
 public class User
 {
-    public int UserId { get;  set; }
+    public int Id { get;  set; }
     public string Name { get; set; }
     public string Email { get; set; }    
     public string Password { get; protected set; }    
@@ -10,7 +10,7 @@ public class User
 
     public User(int userId, string name, string email, string password, string telephone)
     {
-        UserId = userId;
+        Id = userId;
         Name = name;
         Email = email;
         Password = password;
