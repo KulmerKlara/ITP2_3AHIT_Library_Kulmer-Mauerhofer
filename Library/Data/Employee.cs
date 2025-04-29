@@ -27,6 +27,6 @@ public class Employee : User
     {
         Position = newPosition;
         Salary = newSalary;
-        Console.WriteLine($"Employee demoted to {newPosition} with a salary of {newSalary}.");
+        Console.WriteLine($"Employee promoted to {newPosition} with a salary of {newSalary}.");
     }
 }
