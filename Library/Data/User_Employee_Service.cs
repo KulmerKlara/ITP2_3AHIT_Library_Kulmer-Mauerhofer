@@ -1,0 +1,21 @@
+namespace Library.Data;
+
+public class UserService
+{
+    private static readonly string[] Roles = new[]
+    {
+        "Admin", "User", "Guest", "Moderator", "Editor"
+    };
+
+    public Task<User[]> GetUsersAsync(int count)
+    {
+        return Task.FromResult(Enumerable.Range(1, count).Select(index => new User(
+            index,
+            $"User{index}",
+            $"user{index}@example.com",
+            $"Password{index}",
+            $"123-456-789{index}"
+        )).ToArray());
+    }
+}
+
