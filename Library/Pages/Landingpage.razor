@@ -1,13 +1,12 @@
 ﻿@page "/"
+@inject NavigationManager NavigationManager
 
 <PageTitle>Index</PageTitle>
 
 <div class="background-container">
-    <!-- Halbtransparentes Overlay -->
     <div class="overlay">
         <h1>Welcome to your ONLINE BOOKSHELF</h1>
 
-        <!-- Suchleiste -->
         <div class="search-wrapper">
             <div class="search-bar">        
                 <input type="search" placeholder="Search for a book" />
@@ -17,62 +16,49 @@
 
         <p>Welcome to your new app.</p>
 
-        <!-- Buchvorschau-Leiste mit Pfeilen -->
         <div class="book-carousel">
-            <div class="arrow left-arrow" @onclick="MoveLeft">&#10094;</div> <!-- Pfeil nach links -->
+            <div class="arrow left-arrow" @onclick="MoveLeft">&#10094;</div>
 
             <div class="book-preview-bar">
-                @code {
-                    private int currentIndex = 0;
-                    private const int itemsPerPage = 3;
-                    private const int totalItems = 10;
-
-                    private List<string> genres = new List<string>
-                    {
-                        "Romane",
-                        "Krimis",
-                        "Thriller",
-                        "Fantasy",
-                        "Science Fiction",
-                        "Horror",
-                        "Reise",
-                        "Jugendbuch",
-                        "Kinderbuch",
-                        "Sachbuch"
-                    };
-
-                    private void MoveLeft()
-                    {
-                        if (currentIndex > 0)
-                        {
-                            currentIndex--;
-                        }
-                    }
-
-                    private void MoveRight()
-                    {
-                        if (currentIndex < totalItems - itemsPerPage)
-                        {
-                            currentIndex++;
-                        }
-                    }
+                @for (int i = currentIndex; i < currentIndex + itemsPerPage && i < totalItems; i++)
+                {
+                    <div class="book-preview-item" @onclick="() => NavigateToGenrePage(genres[i])">
+                        <div class="book-image-placeholder"></div>
+                        <div class="genre-label">@genres[i]</div> 
+                    </div>
                 }
-
-                <div class="book-preview-bar">
-                    @for (int i = currentIndex; i < currentIndex + itemsPerPage && i < totalItems; i++)
-                    {
-                        <div class="book-preview-item">
-                            <div class="book-image-placeholder"></div>
-                            <div class="genre-label">@genres[i]</div> 
-                        </div>
-                    }
-                </div>
-
             </div>
 
-            <div class="arrow right-arrow" @onclick="MoveRight">&#10095;</div> <!-- Pfeil nach rechts -->
+            <div class="arrow right-arrow" @onclick="MoveRight">&#10095;</div>
         </div>
 
         <SurveyPrompt Title="How is Blazor working for you?" />
     </div>
 </div>
+
+@code {
+    private int currentIndex = 0;
+    private const int itemsPerPage = 3;
+    private const int totalItems = 10;
+
+    private List<string> genres = new()
+    {
+        "Romane", "Krimis", "Thriller", "Fantasy", "Science Fiction",
+        "Horror", "Reise", "Jugendbuch", "Kinderbuch", "Sachbuch"
+    };
+
+    private void MoveLeft()
+    {
+        if (currentIndex > 0) currentIndex--;
+    }
+
+    private void MoveRight()
+    {
+        if (currentIndex < totalItems - itemsPerPage) currentIndex++;
+    }
+
+    private void NavigateToGenrePage(string genre)
+    {
+        NavigationManager.NavigateTo($"/genrespage");
+    }
+}
