@@ -2,22 +2,24 @@ namespace Library.Data;
 
 public class User
 {
-    public int Id { get;  set; }
+    public int Id { get; set; }
     public string Name { get; set; }
-    public string Email { get; set; }    
-    public string Password { get; protected set; }    
-    public string telephone { get; protected set; }
+    public string Email { get; set; }
+    public string Password { get; protected set; }
+    public string Phone { get; protected set; }
+    public string Role { get; set; }
 
-    public User(int userId, string name, string email, string password, string telephone)
+    public User(int userId, string name, string email, string password, string phone, string role)
     {
         Id = userId;
         Name = name;
         Email = email;
         Password = password;
-        this.telephone = telephone;
+        Phone = phone;
+        Role = role;
     }
-   
-    public void login(string email, string password)
+
+    public void Login(string email, string password)
     {
         if (email == Email && password == Password)
         {
@@ -28,12 +30,12 @@ public class User
             Console.WriteLine("Invalid email or password.");
         }
     }
-    public void register(string name, string email, string password, string telephone)
+    public void register(string name, string email, string password, string phone)
     {
         Name = name;
         Email = email;
         Password = password;
-        this.telephone = telephone;
+        this.Phone = phone;
         Console.WriteLine("Registration successful!");
     }
 }
