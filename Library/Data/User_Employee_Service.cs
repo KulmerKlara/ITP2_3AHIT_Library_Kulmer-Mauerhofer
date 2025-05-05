@@ -14,7 +14,8 @@ public class User_Employee_Service
             $"User{index}",
             $"user{index}@example.com",
             $"Password{index}",
-            $"123-456-789{index}"
+            $"123-456-789{index}",
+            Roles[index % Roles.Length]
         )).ToArray());
     }
 }
