@@ -9,13 +9,13 @@ public class Book
     public string Summary { get; set; }
     public bool IsAvailable { get; set; } = true; // Default value is true
 
-    public Book(int id, string title, string author, string genre, string summary)
+    public Book(int id, string title, string author, string genre, string summary, bool isAvailable = true)
     {
         Id = id;
         Title = title;
         Author = author;
         Genre = genre;
         Summary = summary;
+        IsAvailable = isAvailable;
     }
-
 }
