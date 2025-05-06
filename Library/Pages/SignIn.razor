@@ -2,31 +2,45 @@
 @using Library.Data
 @inject UserRepository UserRepository
 
-<PageTitle>Sign In</PageTitle>
+<PageTitle>BestReads - Sign in</PageTitle>
 
-<h1>Sign In</h1>
+<div class="login-container">
+    <div class="login-form">
+        <h2>Sign in</h2>
+        <hr />
 
-@if (!string.IsNullOrEmpty(Message))
-{
-    <div class="message">@Message</div>
-}
+        @if (!string.IsNullOrEmpty(Message))
+        {
+            <div class="alert alert-danger">@Message</div>
+        }
 
-<div class="form-container">
-    <EditForm Model="@newUser" OnValidSubmit="@RegisterUser">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
+        <EditForm Model="@newUser" OnValidSubmit="@RegisterUser">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
 
-        <input placeholder="Name" @bind="newUser.Name" required />
-        <input type="email" placeholder="Email" @bind="newUser.Email" required />
-        <input type="password" placeholder="Password" @bind="newUser.Password" required />
-        <input placeholder="Phone" @bind="newUser.Phone" />
-        <select @bind="newUser.Role">
-            <option value="Customer">Customer</option>
-            <option value="Employee">Employee</option>
-        </select>
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" class="form-control" @bind="newUser.Name" required />
+            </div>
 
-        <button type="submit">Register</button>
-    </EditForm>
+            <div class="form-group">
+                <label>E-mail-addres</label>
+                <input type="email" class="form-control" @bind="newUser.Email" required />
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" class="form-control" @bind="newUser.Password" required />
+            </div>
+
+            <div class="form-group">
+                <label>Phonenumber (optional)</label>
+                <input type="text" class="form-control" @bind="newUser.Phone" />
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Registrieren</button>
+        </EditForm>
+    </div>
 </div>
 
 @code {
@@ -35,14 +49,15 @@
 
     private void RegisterUser()
     {
+        newUser.Role = "Customer";
         var existing = UserRepository.GetUserByEmail(newUser.Email);
         if (existing != null)
         {
-            Message = "Ein Benutzer mit dieser E-Mail existiert bereits.";
+            Message = "This e-mail is already used.";
             return;
         }
 
         UserRepository.AddUser(newUser);
-        Message = "Registrierung erfolgreich!";
+        Message = "Registration sucessful!";
     }
 }
