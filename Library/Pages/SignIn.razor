@@ -1,0 +1,48 @@
+@page "/signin"
+@using Library.Data
+@inject UserRepository UserRepository
+
+<PageTitle>Sign In</PageTitle>
+
+<h1>Sign In</h1>
+
+@if (!string.IsNullOrEmpty(Message))
+{
+    <div class="message">@Message</div>
+}
+
+<div class="form-container">
+    <EditForm Model="@newUser" OnValidSubmit="@RegisterUser">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <input placeholder="Name" @bind="newUser.Name" required />
+        <input type="email" placeholder="Email" @bind="newUser.Email" required />
+        <input type="password" placeholder="Password" @bind="newUser.Password" required />
+        <input placeholder="Phone" @bind="newUser.Phone" />
+        <select @bind="newUser.Role">
+            <option value="Customer">Customer</option>
+            <option value="Employee">Employee</option>
+        </select>
+
+        <button type="submit">Register</button>
+    </EditForm>
+</div>
+
+@code {
+    private User newUser = new User(0, "", "", "", "", "Customer");
+    private string Message;
+
+    private void RegisterUser()
+    {
+        var existing = UserRepository.GetUserByEmail(newUser.Email);
+        if (existing != null)
+        {
+            Message = "Ein Benutzer mit dieser E-Mail existiert bereits.";
+            return;
+        }
+
+        UserRepository.AddUser(newUser);
+        Message = "Registrierung erfolgreich!";
+    }
+}
