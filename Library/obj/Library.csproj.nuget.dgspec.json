@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\klara\\OneDrive\\Desktop\\Schule\\3AHIT\\ITP\\Klamminger\\Projekt_Bücherei\\ITP2_3AHIT_Library_Kulmer-Mauerhofer-1\\Library\\Library.csproj": {}
+    "c:\\Users\\klara\\OneDrive\\Desktop\\Schule\\3AHIT\\ITP\\Klamminger\\Projekt_Bücherei\\ITP2_3AHIT_Library_Kulmer-Mauerhofer-3\\Library\\Library.csproj": {}
   },
   "projects": {
-    "c:\\Users\\klara\\OneDrive\\Desktop\\Schule\\3AHIT\\ITP\\Klamminger\\Projekt_Bücherei\\ITP2_3AHIT_Library_Kulmer-Mauerhofer-1\\Library\\Library.csproj": {
+    "c:\\Users\\klara\\OneDrive\\Desktop\\Schule\\3AHIT\\ITP\\Klamminger\\Projekt_Bücherei\\ITP2_3AHIT_Library_Kulmer-Mauerhofer-3\\Library\\Library.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\klara\\OneDrive\\Desktop\\Schule\\3AHIT\\ITP\\Klamminger\\Projekt_Bücherei\\ITP2_3AHIT_Library_Kulmer-Mauerhofer-1\\Library\\Library.csproj",
+        "projectUniqueName": "c:\\Users\\klara\\OneDrive\\Desktop\\Schule\\3AHIT\\ITP\\Klamminger\\Projekt_Bücherei\\ITP2_3AHIT_Library_Kulmer-Mauerhofer-3\\Library\\Library.csproj",
         "projectName": "Library",
-        "projectPath": "c:\\Users\\klara\\OneDrive\\Desktop\\Schule\\3AHIT\\ITP\\Klamminger\\Projekt_Bücherei\\ITP2_3AHIT_Library_Kulmer-Mauerhofer-1\\Library\\Library.csproj",
+        "projectPath": "c:\\Users\\klara\\OneDrive\\Desktop\\Schule\\3AHIT\\ITP\\Klamminger\\Projekt_Bücherei\\ITP2_3AHIT_Library_Kulmer-Mauerhofer-3\\Library\\Library.csproj",
         "packagesPath": "C:\\Users\\klara\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\klara\\OneDrive\\Desktop\\Schule\\3AHIT\\ITP\\Klamminger\\Projekt_Bücherei\\ITP2_3AHIT_Library_Kulmer-Mauerhofer-1\\Library\\obj\\",
+        "outputPath": "c:\\Users\\klara\\OneDrive\\Desktop\\Schule\\3AHIT\\ITP\\Klamminger\\Projekt_Bücherei\\ITP2_3AHIT_Library_Kulmer-Mauerhofer-3\\Library\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\klara\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -37,6 +37,12 @@
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
+          "dependencies": {
+            "System.Data.SQLite": {
+              "target": "Package",
+              "version": "[1.0.119, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
