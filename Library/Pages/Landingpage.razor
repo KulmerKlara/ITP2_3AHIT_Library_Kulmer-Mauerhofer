@@ -19,15 +19,15 @@
         <div class="book-carousel">
             <div class="arrow left-arrow" @onclick="MoveLeft">&#10094;</div>
 
-            <div class="book-preview-bar">
-                @for (int i = currentIndex; i < currentIndex + itemsPerPage && i < genres.Count; i++)
-                {
-                    <div class="book-preview-item" @onclick="() => NavigateToGenrePage(genres[i])">
-                        <div class="book-image-placeholder"></div>
-                        <div class="genre-label">@genres[i]</div> 
-                    </div>
-                }
-            </div>
+            @for (int i = currentIndex; i < currentIndex + itemsPerPage && i < genres.Count; i++)
+            {
+                var genre = genres[i]; 
+                <div class="book-preview-item" @onclick="() => NavigateToGenrePage(genre)">
+                    <div class="book-image-placeholder"></div>
+                    <div class="genre-label">@genre</div> 
+                </div>
+            }
+
 
             <div class="arrow right-arrow" @onclick="MoveRight">&#10095;</div>
         </div>

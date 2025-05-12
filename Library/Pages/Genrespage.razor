@@ -1,8 +1,9 @@
 ﻿@page "/genrespage/{Genre}"
 @using Library.Data
 @inject BookRepository BookRepo
+@using Microsoft.AspNetCore.Components
 
-<h3>@Genre</h3>
+<h3>Genre: @Genre</h3>
 
 @if (books == null)
 {
