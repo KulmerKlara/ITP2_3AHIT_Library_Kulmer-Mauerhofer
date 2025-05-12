@@ -1,18 +1,42 @@
-﻿@page "/genrespage"
+﻿@page "/genrespage/{Genre}"
+@using Library.Data
+@inject BookRepository BookRepo
 
-<PageTitle>Books</PageTitle>
+<PageTitle>Bücher nach Genre</PageTitle>
 
-<h1>Genrepages</h1>
+<div class="genre-books-container">
+    <h2>Bücher im Genre: @Genre</h2>
 
-<p role="status">Current count: @currentCount</p>
-
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+    @if (books == null)
+    {
+        <p>Lade Bücher...</p>
+    }
+    else if (!books.Any())
+    {
+        <p>Keine Bücher im Genre <strong>@Genre</strong> gefunden.</p>
+    }
+    else
+    {
+        <ul class="book-list">
+            @foreach (var book in books)
+            {
+                <li class="book-item">
+                    <strong>@book.Title</strong> von @book.Author<br />
+                    <em>@book.Summary</em>
+                </li>
+            }
+        </ul>
+    }
+</div>
 
 @code {
-    private int currentCount = 0;
+    [Parameter]
+    public string Genre { get; set; }
 
-    private void IncrementCount()
+    private List<Book> books;
+
+    protected override void OnInitialized()
     {
-        currentCount++;
+        books = BookRepo.GetBooksByGenre(Genre);
     }
 }

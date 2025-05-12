@@ -39,7 +39,8 @@
 @code {
     private int currentIndex = 0;
     private const int itemsPerPage = 3;
-    private const int totalItems = 10;
+    private int totalItems => genres.Count;
+
 
     private List<string> genres = new()
     {
@@ -57,8 +58,10 @@
         if (currentIndex < totalItems - itemsPerPage) currentIndex++;
     }
 
-    private void NavigateToGenrePage(string genre)
-    {
-        NavigationManager.NavigateTo($"/genrespage");
-    }
+   private void NavigateToGenrePage(string genre)
+{
+    NavigationManager.NavigateTo($"/genrespage/{Uri.EscapeDataString(genre)}");
+}
+
+
 }

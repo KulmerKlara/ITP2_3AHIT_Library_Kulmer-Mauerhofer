@@ -44,5 +44,29 @@ namespace Library.Data
 
             return books;
         }
+        public List<Book> GetBooksByGenre(string genre)
+        {
+            var books = new List<Book>();
+            using var conn = Database.GetConnection();
+            using var cmd = new SQLiteCommand("SELECT * FROM Books WHERE Genre = @Genre", conn);
+            cmd.Parameters.AddWithValue("@Genre", genre);
+            using var reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                books.Add(new Book(
+                    Convert.ToInt32(reader["BookID"]),
+                    reader["Title"].ToString(),
+                    reader["Author"].ToString(),
+                    reader["Genre"].ToString(),
+                    reader["Summary"].ToString(),
+                    Convert.ToBoolean(reader["IsAvailable"])
+                ));
+            }
+
+            return books;
+        }
+
+
     }
 }
