@@ -2,32 +2,25 @@
 @using Library.Data
 @inject BookRepository BookRepo
 
-<PageTitle>Bücher nach Genre</PageTitle>
+<h3>@Genre</h3>
 
-<div class="genre-books-container">
-    <h2>Bücher im Genre: @Genre</h2>
-
-    @if (books == null)
-    {
-        <p>Lade Bücher...</p>
-    }
-    else if (!books.Any())
-    {
-        <p>Keine Bücher im Genre <strong>@Genre</strong> gefunden.</p>
-    }
-    else
-    {
-        <ul class="book-list">
-            @foreach (var book in books)
-            {
-                <li class="book-item">
-                    <strong>@book.Title</strong> von @book.Author<br />
-                    <em>@book.Summary</em>
-                </li>
-            }
-        </ul>
-    }
-</div>
+@if (books == null)
+{
+    <p>Loading books for "@Genre"...</p>
+}
+else if (books.Count == 0)
+{
+    <p>No books found for genre: "@Genre"</p>
+}
+else
+{
+    <ul>
+        @foreach (var book in books)
+        {
+            <li><strong>@book.Title</strong> by @book.Author</li>
+        }
+    </ul>
+}
 
 @code {
     [Parameter]

@@ -20,7 +20,7 @@
             <div class="arrow left-arrow" @onclick="MoveLeft">&#10094;</div>
 
             <div class="book-preview-bar">
-                @for (int i = currentIndex; i < currentIndex + itemsPerPage && i < totalItems; i++)
+                @for (int i = currentIndex; i < currentIndex + itemsPerPage && i < genres.Count; i++)
                 {
                     <div class="book-preview-item" @onclick="() => NavigateToGenrePage(genres[i])">
                         <div class="book-image-placeholder"></div>
@@ -39,8 +39,6 @@
 @code {
     private int currentIndex = 0;
     private const int itemsPerPage = 3;
-    private int totalItems => genres.Count;
-
 
     private List<string> genres = new()
     {
@@ -55,13 +53,11 @@
 
     private void MoveRight()
     {
-        if (currentIndex < totalItems - itemsPerPage) currentIndex++;
+        if (currentIndex < genres.Count - itemsPerPage) currentIndex++;
     }
 
-   private void NavigateToGenrePage(string genre)
-{
-    NavigationManager.NavigateTo($"/genrespage/{Uri.EscapeDataString(genre)}");
-}
-
-
+    private void NavigateToGenrePage(string genre)
+    {
+        NavigationManager.NavigateTo($"/genrespage/{Uri.EscapeDataString(genre)}");
+    }
 }
