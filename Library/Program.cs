@@ -9,8 +9,9 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<User_Employee_Service>();
 
-// 🔧 Registriere UserRepository für Dependency Injection
+// Registriere Repositories für Dependency Injection
 builder.Services.AddScoped<UserRepository>();
+builder.Services.AddSingleton<BookRepository>(); // HIER hinzugefügt
 
 var app = builder.Build();
 

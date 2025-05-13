@@ -19,15 +19,15 @@
         <div class="book-carousel">
             <div class="arrow left-arrow" @onclick="MoveLeft">&#10094;</div>
 
-            <div class="book-preview-bar">
-                @for (int i = currentIndex; i < currentIndex + itemsPerPage && i < totalItems; i++)
-                {
-                    <div class="book-preview-item" @onclick="() => NavigateToGenrePage(genres[i])">
-                        <div class="book-image-placeholder"></div>
-                        <div class="genre-label">@genres[i]</div> 
-                    </div>
-                }
-            </div>
+            @for (int i = currentIndex; i < currentIndex + itemsPerPage && i < genres.Count; i++)
+            {
+                var genre = genres[i]; 
+                <div class="book-preview-item" @onclick="() => NavigateToGenrePage(genre)">
+                    <div class="book-image-placeholder"></div>
+                    <div class="genre-label">@genre</div> 
+                </div>
+            }
+
 
             <div class="arrow right-arrow" @onclick="MoveRight">&#10095;</div>
         </div>
@@ -39,7 +39,6 @@
 @code {
     private int currentIndex = 0;
     private const int itemsPerPage = 3;
-    private const int totalItems = 10;
 
     private List<string> genres = new()
     {
@@ -54,11 +53,11 @@
 
     private void MoveRight()
     {
-        if (currentIndex < totalItems - itemsPerPage) currentIndex++;
+        if (currentIndex < genres.Count - itemsPerPage) currentIndex++;
     }
 
     private void NavigateToGenrePage(string genre)
     {
-        NavigationManager.NavigateTo($"/genrespage");
+        NavigationManager.NavigateTo($"/genrespage/{Uri.EscapeDataString(genre)}");
     }
 }
