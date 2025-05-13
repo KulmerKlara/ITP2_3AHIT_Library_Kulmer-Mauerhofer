@@ -2,57 +2,35 @@
 @using Library.Data
 @inject UserRepository UserRepository
 
-<PageTitle>BestReads - Login</PageTitle>
-
-<div class="login-container">
-    <div class="login-form">
-        <h2>Login</h2>
-        <hr />
-
-        @if (!string.IsNullOrEmpty(Message))
-        {
-            <div class="alert alert-danger">@Message</div>
-        }
-
-        <EditForm Model="@loginUser" OnValidSubmit="@LoginUser">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
-
-            <div class="form-group">
-                <label>E-mail-address</label>
-                <input type="email" class="form-control" @bind="loginUser.Email" required />
+<div class="container">
+    <div class="form-wrapper">
+        <div class="form-block login">
+            <h1>Sign in</h1>
+            <div class="social-container">
+                <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+                <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
             </div>
+            <span>or use your account</span>
+            <input type="email" placeholder="Email" />
+            <input type="password" placeholder="Password" />
+            <a href="#">Forgot your password?</a>
+            <button>Sign In</button>
+        </div>
 
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" class="form-control" @bind="loginUser.Password" required />
+        <div class="form-block signup"></div>
+            <h1>Create Account</h1>
+            <div class="social-container">
+                <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+                <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
             </div>
-
-            <button type="submit" class="btn btn-primary btn-block">Sign in</button>
-        </EditForm>
+            <span>or use your email for registration</span>
+            <input type="text" placeholder="Name" />
+            <input type="email" placeholder="Email" />
+            <input type="password" placeholder="Password" />
+            <button>Sign Up</button>
+        </div>
     </div>
-</div>
 
-@code {
-    private LoginModel loginUser = new LoginModel();
-    private string Message;
 
-    private void LoginUser()
-    {
-        var user = UserRepository.GetUserByEmail(loginUser.Email);
-        if (user == null || user.Password != loginUser.Password)
-        {
-            Message = "Invalid e-mail or password.";
-            return;
-        }
-
-        Message = "Login successful!";
-        // Hier kannst du die Logik für eine erfolgreiche Anmeldung hinzufügen, z. B. das Speichern des Benutzers in einer Session.
-    }
-
-    private class LoginModel
-    {
-        public string Email { get; set; }
-        public string Password { get; set; }
-    }
-}
