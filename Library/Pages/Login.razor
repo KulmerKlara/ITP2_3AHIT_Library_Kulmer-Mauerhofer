@@ -2,35 +2,77 @@
 @using Library.Data
 @inject UserRepository UserRepository
 
-<div class="container">
-    <div class="form-wrapper">
-        <div class="form-block login">
-            <h1>Sign in</h1>
-            <div class="social-container">
-                <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-                <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-                <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
-            </div>
-            <span>or use your account</span>
-            <input type="email" placeholder="Email" />
-            <input type="password" placeholder="Password" />
-            <a href="#">Forgot your password?</a>
-            <button>Sign In</button>
+@code {
+    private bool showSignUp = false;
+
+    private void ToggleSignUp()
+    {
+        showSignUp = !showSignUp;
+    }
+}
+
+<div class="container" style="display: flex; justify-content: space-between; align-items: flex-start;">
+    <div class="form-block login" style="width: 45%; display: @(showSignUp ? "none" : "block");">
+        <h1>Sign in</h1>
+        <div class="social-container">
+            <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+            <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
         </div>
 
-        <div class="form-block signup"></div>
-            <h1>Create Account</h1>
-            <div class="social-container">
-                <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-                <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-                <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
-            </div>
-            <span>or use your email for registration</span>
-            <input type="text" placeholder="Name" />
+        <div>
             <input type="email" placeholder="Email" />
-            <input type="password" placeholder="Password" />
-            <button>Sign Up</button>
+        </div>
+
+        <br />
+
+        <div>
+            <input type="password" placeholder="Password" required />
+        </div>
+
+        <br />
+
+        <button>Sign In</button>
+    </div>
+
+    <div>
+        <div>
+            <button @onclick="ToggleSignUp">Sign Up</button>
         </div>
     </div>
 
+    @if (showSignUp)
+    {
+    <div class="form-block signup" style="width: 45%;">
+        <h1>Create Account</h1>
 
+        <div>
+            <input type="text" placeholder="Name" />
+        </div>
+
+        <br />
+        
+        <div>
+            <input type="text" placeholder="Username" />
+        </div>
+        
+        <br />
+        
+        <div>
+            <input type="email" placeholder="Email" />
+        </div>
+        
+        <br />
+        
+        <div>
+            <input type="password" placeholder="Password" />
+        </div>
+        
+        <br />
+        
+        <div>
+            <button>Sign Up</button>
+        </div>
+    </div>
+    }
+</div>
