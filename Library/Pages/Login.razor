@@ -5,36 +5,32 @@
 @code {
     private bool showSignUp = false;
 
-    private string signUpName = "";
-    private string signUpEmail = "";
-    private string signUpPassword = "";
-    private string signUpPhone = "";
-    private string signUpRole = "Customer";
-
-    private string? message;
+    // Registrierungsfelder
+    private string signUpName;
+    private string signUpEmail;
+    private string signUpPassword;
+    private string signUpPhone;
+    private string errorMessage;
 
     private void ToggleSignUp()
     {
         showSignUp = !showSignUp;
-        message = null; // Zurücksetzen
+        errorMessage = "";
     }
 
-    private async Task HandleSignUp()
+    private void RegisterUser()
     {
-        var existing = UserRepository.GetUserByEmail(signUpEmail);
-        if (existing != null)
+        var existingUser = UserRepository.GetUserByName(signUpName);
+        if (existingUser != null)
         {
-            message = "E-Mail ist bereits registriert.";
+            errorMessage = "Benutzername ist bereits vergeben.";
             return;
         }
 
-        var newUser = new User(0, signUpName, signUpEmail, signUpPassword, signUpPhone, signUpRole);
-        UserRepository.AddUser(newUser);
-        message = "Registrierung erfolgreich!";
-
+        var user = new User(0, signUpName, signUpEmail, signUpPassword, signUpPhone, "Customer");
+        UserRepository.AddUser(user);
+        errorMessage = "";
         showSignUp = false;
-
-        signUpName = signUpEmail = signUpPassword = signUpPhone = "";
     }
 }
 
@@ -60,61 +56,51 @@
         <br />
 
         <button>Sign In</button>
+    </div>
 
-        <br /><br />
-        <button @onclick="ToggleSignUp">Sign Up</button>
+    <div>
+        <div>
+            <button @onclick="ToggleSignUp">Sign Up</button>
+        </div>
     </div>
 
     @if (showSignUp)
     {
-        <div class="form-block signup" style="width: 45%;">
-            <h1>Create Account</h1>
+    <div class="form-block signup" style="width: 45%;">
+        <h1>Create Account</h1>
 
-            <div>
-                <input type="text" placeholder="Name" @bind="signUpName" />
-            </div>
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <p style="color: red">@errorMessage</p>
+        }
 
-            <br />
-
-            <div>
-                <input type="email" placeholder="Email" @bind="signUpEmail" />
-            </div>
-
-            <br />
-
-            <div>
-                <input type="password" placeholder="Password" @bind="signUpPassword" />
-            </div>
-
-            <br />
-
-            <div>
-                <input type="text" placeholder="Phone" @bind="signUpPhone" />
-            </div>
-
-            <br />
-
-            <div>
-                <select @bind="signUpRole">
-                    <option value="Customer">Customer</option>
-                    <option value="Employee">Employee</option>
-                </select>
-            </div>
-
-            <br />
-
-            <div>
-                <button @onclick="HandleSignUp">Sign Up</button>
-            </div>
-
-            <br />
-
-            <button @onclick="ToggleSignUp">Back to Sign In</button>
-
-            @if (!string.IsNullOrEmpty(message))
-            {
-                <p>@message</p>
-            }
+        <div>
+            <input type="text" placeholder="Name" @bind="signUpName" />
         </div>
+        
+        <br />
+        
+        <div>
+            <input type="email" placeholder="Email" @bind="signUpEmail" />
+        </div>
+        
+        <br />
+        
+        <div>
+            <input type="password" placeholder="Password" @bind="signUpPassword" />
+        </div>
+        
+        <br />
+
+        <div>
+            <input type="text" placeholder="Phone" @bind="signUpPhone" />
+        </div>
+
+        <br />
+        
+        <div>
+            <button @onclick="RegisterUser">Sign Up</button>
+        </div>
+    </div>
     }
 </div>

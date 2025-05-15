@@ -43,5 +43,28 @@ namespace Library.Data
 
             return null;
         }
+
+        public User? GetUserByName(string name)
+        {
+            using var conn = Database.GetConnection();
+            using var cmd = new SQLiteCommand("SELECT * FROM Users WHERE Name = @Name", conn);
+            cmd.Parameters.AddWithValue("@Name", name);
+            using var reader = cmd.ExecuteReader();
+
+            if (reader.Read())
+            {
+                return new User(
+                    Convert.ToInt32(reader["UserID"]),
+                    reader["Name"].ToString(),
+                    reader["Email"].ToString(),
+                    reader["Password"].ToString(),
+                    reader["Phone"].ToString(),
+                    reader["Role"].ToString()
+                );
+            }
+
+            return null;
+        }
+
     }
 }
