@@ -11,6 +11,7 @@
     private string signUpPassword;
     private string signUpPhone;
     private string errorMessage;
+    private bool signInSuccess = false;
 
     private void ToggleSignUp()
     {
@@ -32,6 +33,21 @@
         errorMessage = "";
         showSignUp = false;
     }
+
+    private void SignIn()
+    {
+        var user = UserRepository.GetUserByName(signUpName);
+        if (user != null && user.Password == signUpPassword)
+        {
+            signInSuccess = true;
+            errorMessage = "";
+        }
+        else
+        {
+            signInSuccess = false;
+            errorMessage = "Invalid username or password.";
+        }
+    }
 }
 
 <div class="container" style="display: flex; justify-content: space-between; align-items: flex-start;">
@@ -42,21 +58,30 @@
             <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
             <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
         </div>
-
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <p style="color: red">@errorMessage</p>
+        }
         <div>
-            <input type="email" placeholder="Email" />
+            <input type="text" placeholder="Username or Email" @bind="signUpName" />
         </div>
 
         <br />
 
         <div>
-            <input type="password" placeholder="Password" required />
+            <input type="password" placeholder="Password" @bind="signUpPassword" required />
         </div>
 
         <br />
 
-        <button>Sign In</button>
+        <button @onclick="SignIn">Sign In</button>
+
+        @if (signInSuccess)
+        {
+            <p style="color: green">Login successful!</p>
+        }
     </div>
+</div>
 
     <div>
         <div>
@@ -103,4 +128,3 @@
         </div>
     </div>
     }
-</div>
