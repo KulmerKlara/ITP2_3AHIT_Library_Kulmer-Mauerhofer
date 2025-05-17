@@ -80,6 +80,7 @@ namespace Library.Data
             using var cmd = new SQLiteCommand("SELECT * FROM Users WHERE Name = @Name", conn);
             cmd.Parameters.AddWithValue("@Name", name);
 
+
             using var reader = cmd.ExecuteReader();
 
             if (reader.Read())
