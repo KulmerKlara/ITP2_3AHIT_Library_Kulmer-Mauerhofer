@@ -11,6 +11,7 @@ public class Book
 
     public Book(int bookId, string title, string author, string genre, string summary, bool isAvailable = true)
     {
+
         BookId = bookId;
         Title = title;
         Author = author;
