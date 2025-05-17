@@ -29,65 +29,79 @@ namespace Library.Data
         /// </summary>
         public static void Initialize()
         {
-            // Check if the database file already exists
             if (!File.Exists(_dbPath))
             {
-                // Create the SQLite database file
                 SQLiteConnection.CreateFile(_dbPath);
-
-                // Open connection to the newly created database
                 using var conn = GetConnection();
-
-                // Create a command to define the database schema
                 using var cmd = new SQLiteCommand(conn);
 
-                // SQL commands to create the necessary tables with their relationships and constraints
                 cmd.CommandText = @"
-                    CREATE TABLE Users (
-                        UserID INTEGER PRIMARY KEY,
-                        Name TEXT NOT NULL,
-                        Email TEXT NOT NULL,
-                        Password TEXT NOT NULL,
-                        Role TEXT CHECK (Role IN ('Customer', 'Employee')) NOT NULL,
-                        Phone TEXT,
-                        Address TEXT
-                    );
+CREATE TABLE IF NOT EXISTS Users (
+    UserID INTEGER PRIMARY KEY AUTOINCREMENT,
+    Name TEXT NOT NULL,
+    Email TEXT NOT NULL,
+    Password TEXT NOT NULL,
+    Role TEXT CHECK (Role IN ('Customer', 'Employee')) NOT NULL,
+    Phone TEXT,
+    Address TEXT
+);";
+                cmd.ExecuteNonQuery();
 
-                    CREATE TABLE Books (
-                        BookID INTEGER PRIMARY KEY,
-                        Title TEXT NOT NULL,
-                        Author TEXT NOT NULL,
-                        Genre TEXT,
-                        Summary TEXT,
-                        IsAvailable BOOLEAN DEFAULT 1
-                    );
+                // Employee1 einfügen
+                cmd.CommandText = @"
+INSERT INTO Users (Name, Email, Password, Role, Phone) 
+SELECT 'Employee1', 'employee1@example.com', 'password1', 'Employee', '123-456-7890'
+WHERE NOT EXISTS(SELECT 1 FROM Users WHERE Email = 'employee1@example.com');
+";
+                cmd.ExecuteNonQuery();
 
-                    CREATE TABLE Reservations (
-                        ReservationID INTEGER PRIMARY KEY,
-                        UserID INTEGER NOT NULL,
-                        BookID INTEGER NOT NULL,
-                        ReservationAt DATE NOT NULL,
-                        PickupDeadline DATE NOT NULL,
-                        FOREIGN KEY (UserID) REFERENCES Users(UserID),
-                        FOREIGN KEY (BookID) REFERENCES Books(BookID)
-                    );
+                // Employee2 einfügen
+                cmd.CommandText = @"
+INSERT INTO Users (Name, Email, Password, Role, Phone) 
+SELECT 'Employee2', 'employee2@example.com', 'password2', 'Employee', '098-765-4321'
+WHERE NOT EXISTS(SELECT 1 FROM Users WHERE Email = 'employee2@example.com');
+";
+                cmd.ExecuteNonQuery();
 
-                    CREATE TABLE Loans (
-                        LoanID INTEGER PRIMARY KEY,
-                        BookID INTEGER NOT NULL,
-                        UserID INTEGER NOT NULL,
-                        LoanDate DATE NOT NULL,
-                        DueDate DATE NOT NULL,
-                        ReturnedDate DATE,
-                        Extended BOOLEAN DEFAULT 0,
-                        FOREIGN KEY (UserID) REFERENCES Users(UserID),
-                        FOREIGN KEY (BookID) REFERENCES Books(BookID)
-                    );
-                ";
+                // Weitere Tabellen anlegen
+                cmd.CommandText = @"
+CREATE TABLE IF NOT EXISTS Books (
+    BookID INTEGER PRIMARY KEY AUTOINCREMENT,
+    Title TEXT NOT NULL,
+    Author TEXT NOT NULL,
+    Genre TEXT,
+    Summary TEXT,
+    IsAvailable BOOLEAN DEFAULT 1
+);";
+                cmd.ExecuteNonQuery();
 
-                // Execute the SQL commands to create tables
+                cmd.CommandText = @"
+CREATE TABLE IF NOT EXISTS Reservations (
+    ReservationID INTEGER PRIMARY KEY AUTOINCREMENT,
+    UserID INTEGER NOT NULL,
+    BookID INTEGER NOT NULL,
+    ReservationAt DATE NOT NULL,
+    PickupDeadline DATE NOT NULL,
+    FOREIGN KEY (UserID) REFERENCES Users(UserID),
+    FOREIGN KEY (BookID) REFERENCES Books(BookID)
+);";
+                cmd.ExecuteNonQuery();
+
+                cmd.CommandText = @"
+CREATE TABLE IF NOT EXISTS Loans (
+    LoanID INTEGER PRIMARY KEY AUTOINCREMENT,
+    BookID INTEGER NOT NULL,
+    UserID INTEGER NOT NULL,
+    LoanDate DATE NOT NULL,
+    DueDate DATE NOT NULL,
+    ReturnedDate DATE,
+    Extended BOOLEAN DEFAULT 0,
+    FOREIGN KEY (UserID) REFERENCES Users(UserID),
+    FOREIGN KEY (BookID) REFERENCES Books(BookID)
+);";
                 cmd.ExecuteNonQuery();
             }
         }
+
     }
 }
