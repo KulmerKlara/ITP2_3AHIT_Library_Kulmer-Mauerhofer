@@ -68,5 +68,30 @@ namespace Library.Data
         }
 
 
+        public static List<Book> SearchBooksByTitle(string title)
+        {
+            var results = new List<Book>();
+            using var conn = Database.GetConnection();
+            using var cmd = new SQLiteCommand(conn);
+
+            // Suche mit LIKE und Platzhaltern, case insensitive
+            cmd.CommandText = "SELECT BookID, Title, Author, Genre, Summary, IsAvailable FROM Books WHERE Title LIKE @title";
+            cmd.Parameters.AddWithValue("@title", $"%{title}%");
+
+            using var reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                results.Add(new Book(
+                    reader.GetInt32(0),
+                    reader.GetString(1),
+                    reader.GetString(2),
+                    reader.IsDBNull(3) ? null : reader.GetString(3),
+                    reader.IsDBNull(4) ? null : reader.GetString(4),
+                    reader.GetBoolean(5)
+                ));
+            }
+
+            return results;
+        }
     }
 }
