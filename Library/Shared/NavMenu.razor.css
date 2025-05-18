@@ -5,6 +5,11 @@
 .top-row {
     height: 3.5rem;
     background-color: rgba(0,0,0,0.4);
+    position: relative; /* wichtig für .profile-circle */
+}
+
+.container-fluid {
+    position: relative; /* wichtig für .profile-circle */
 }
 
 .navbar-brand {
@@ -23,22 +28,22 @@
     padding-bottom: 0.5rem;
 }
 
-    .nav-item:first-of-type {
-        padding-top: 1rem;
-    }
+.nav-item:first-of-type {
+    padding-top: 1rem;
+}
 
-    .nav-item:last-of-type {
-        padding-bottom: 1rem;
-    }
+.nav-item:last-of-type {
+    padding-bottom: 1rem;
+}
 
-    .nav-item ::deep a {
-        color: #d7d7d7;
-        border-radius: 4px;
-        height: 3rem;
-        display: flex;
-        align-items: center;
-        line-height: 3rem;
-    }
+.nav-item ::deep a {
+    color: #d7d7d7;
+    border-radius: 4px;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    line-height: 3rem;
+}
 
 .nav-item ::deep a.active {
     background-color: rgba(255,255,255,0.25);
@@ -65,4 +70,26 @@
         height: calc(100vh - 3.5rem);
         overflow-y: auto;
     }
+}
+
+.profile-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #4a90e2; /* Blau, anpassbar */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: absolute;
+    top: 5px;
+    right: 60px; /* Abstand vom rechten Rand, um nicht mit dem Toggler zu kollidieren */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    z-index: 10;
+}
+
+.profile-circle:hover {
+    transform: scale(1.1);
 }

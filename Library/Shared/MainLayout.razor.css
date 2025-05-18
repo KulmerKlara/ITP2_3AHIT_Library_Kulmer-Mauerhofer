@@ -14,6 +14,8 @@
     position: sticky;
     top: 0;
     z-index: 10;
+
+    position: relative; /* Für absolutes Positionieren vom Kreis */
 }
 
 .nav-button {
@@ -32,6 +34,25 @@
     color: black;
 }
 
+.profile-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #4a90e2; /* Blau, kannst du ändern */
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    z-index: 15;
+}
+
+.profile-circle:hover {
+    transform: translateY(-50%) scale(1.1);
+}
+
 @media (max-width: 640px) {
     .topbar {
         flex-wrap: wrap;
@@ -39,7 +60,23 @@
         padding: 0.5rem;
     }
 
-    .nav-button {
-        margin-bottom: 0.5rem;
+    .profile-circle {
+        width: 100px;          /* Breite = 5x Höhe */
+        height: 20px;          /* Höhe */
+        border-radius: 10px;   /* Rundungen an den Ecken */
+        background-color: #4a90e2;
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        cursor: pointer;
+        transition: transform 0.2s ease;
+        z-index: 15;
     }
+    
+    .profile-circle:hover {
+        transform: translateY(-50%) scale(1.05);
+    }    
+    
 }
