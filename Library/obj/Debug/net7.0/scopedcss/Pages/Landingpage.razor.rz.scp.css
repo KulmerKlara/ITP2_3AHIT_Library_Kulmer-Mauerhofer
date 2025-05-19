@@ -101,7 +101,7 @@ h1[b-57c5ksc2ws] {
 https://css-tricks.com/perfect-full-page-background-image/?utm_source=chatgpt.com*/
 .book-image-placeholder[b-57c5ksc2ws] {
     width: 250px;
-    height: 250px;
+    height: 0px;
     background-color: #ccc;
     border-radius: 0px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);

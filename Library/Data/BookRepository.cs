@@ -68,15 +68,19 @@ namespace Library.Data
         }
 
 
-        public static List<Book> SearchBooksByTitle(string title)
+        public static List<Book> SearchBooks(string searchTerm)
         {
             var results = new List<Book>();
             using var conn = Database.GetConnection();
             using var cmd = new SQLiteCommand(conn);
 
-            // Suche mit LIKE und Platzhaltern, case insensitive
-            cmd.CommandText = "SELECT BookID, Title, Author, Genre, Summary, IsAvailable FROM Books WHERE Title LIKE @title";
-            cmd.Parameters.AddWithValue("@title", $"%{title}%");
+            // Suche mit LIKE und Platzhaltern, case insensitive für Titel, Autor und Genre
+            cmd.CommandText = @"SELECT BookID, Title, Author, Genre, Summary, IsAvailable 
+                    FROM Books 
+                    WHERE Title LIKE @searchTerm 
+                       OR Author LIKE @searchTerm 
+                       OR Genre LIKE @searchTerm";
+            cmd.Parameters.AddWithValue("@searchTerm", $"%{searchTerm}%");
 
             using var reader = cmd.ExecuteReader();
             while (reader.Read())
