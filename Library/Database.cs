@@ -101,28 +101,42 @@ CREATE TABLE IF NOT EXISTS Loans (
 );";
                 cmd.ExecuteNonQuery();
 
+                cmd.CommandText = @"
+
+                CREATE TABLE IF NOT EXISTS UserBookList (
+    ListID INTEGER PRIMARY KEY AUTOINCREMENT,
+    UserID INTEGER NOT NULL,
+    BookID INTEGER NOT NULL,
+    AddedAt DATE NOT NULL DEFAULT (DATE('now')),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID),
+    FOREIGN KEY (BookID) REFERENCES Books(BookID),
+    UNIQUE(UserID, BookID) -- optional: verhindert doppelte Einträge
+);";
+                cmd.ExecuteNonQuery();
+
+
                 // Beispielbücher einfügen (wenn noch nicht vorhanden)
                 cmd.CommandText = @"
-INSERT INTO Books (Title, Author, Genre, Summary, IsAvailable)
+INSERT INTO Books(Title, Author, Genre, Summary, IsAvailable)
 SELECT 'Der Herr der Ringe', 'J.R.R. Tolkien', 'Fantasy', 'Ein episches Fantasy-Abenteuer.', 1
 WHERE NOT EXISTS(SELECT 1 FROM Books WHERE Title = 'Der Herr der Ringe');
 
-INSERT INTO Books (Title, Author, Genre, Summary, IsAvailable)
+                INSERT INTO Books(Title, Author, Genre, Summary, IsAvailable)
 SELECT '1984', 'George Orwell', 'Dystopie', 'Ein Klassiker über Überwachung und Freiheit.', 1
 WHERE NOT EXISTS(SELECT 1 FROM Books WHERE Title = '1984');
 
-INSERT INTO Books (Title, Author, Genre, Summary, IsAvailable)
+                INSERT INTO Books(Title, Author, Genre, Summary, IsAvailable)
 SELECT 'Die Verwandlung', 'Franz Kafka', 'Novelle', 'Die Geschichte von Gregor Samsa.', 1
 WHERE NOT EXISTS(SELECT 1 FROM Books WHERE Title = 'Die Verwandlung');
 
-INSERT INTO Books (Title, Author, Genre, Summary, IsAvailable)
+                INSERT INTO Books(Title, Author, Genre, Summary, IsAvailable)
 SELECT 'Der kleine Prinz', 'Antoine de Saint-Exupéry', 'Kinderbuch', 'Ein philosophisches Märchen.', 1
 WHERE NOT EXISTS(SELECT 1 FROM Books WHERE Title = 'Der kleine Prinz');
 
-INSERT INTO Books (Title, Author, Genre, Summary, IsAvailable)
+                INSERT INTO Books(Title, Author, Genre, Summary, IsAvailable)
 SELECT 'Faust', 'Johann Wolfgang von Goethe', 'Drama', 'Das klassische Drama um den Pakt mit dem Teufel.', 1
 WHERE NOT EXISTS(SELECT 1 FROM Books WHERE Title = 'Faust');
-";
+                ";
                 cmd.ExecuteNonQuery();
             }
         }
