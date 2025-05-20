@@ -8,7 +8,7 @@
 <div style="display: flex; height: 100vh;">
 
     <!-- Linke Hälfte: Blau -->
-    <div style="flex: 1; background-color: #ADD8E6; display: flex; align-items: center; justify-content: center;">
+    <div style="flex: 1; background-color: @(showSignUp ? "white" : "#ADD8E6"); display: flex; align-items: center; justify-content: center;">
         @if (!showSignUp)
         {
             <div style="background-color: rgb(255, 255, 255); padding: 30px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
@@ -41,8 +41,8 @@
         }
     </div>
 
-    <!-- Rechte Hälfte: Weiß -->
-    <div style="flex: 1; background-color: white; display: flex; align-items: center; justify-content: center;">
+    <!-- Rechte Hälfte: Weiß oder Blau -->
+    <div style="flex: 1; background-color: @(showSignUp ? "#ADD8E6" : "white"); display: flex; align-items: center; justify-content: center;">
         @if (showSignUp)
         { 
             <div class="form-block signup">
