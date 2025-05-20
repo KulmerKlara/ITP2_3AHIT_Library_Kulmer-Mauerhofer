@@ -5,6 +5,7 @@
 
 <PageTitle>Genre: @Genre</PageTitle>
 
+
 <h3>Genre: @Genre</h3>
 
 @if (books == null)
@@ -20,6 +21,7 @@ else
     <div class="grid-container">
         @foreach (var book in books)
         {
+            <li><strong>@book.Title</strong> by @book.Author</li>
             <div class="book-card">
                 <div class="placeholder-container">Bildplatzhalter</div>
                 <div class="book-text">
