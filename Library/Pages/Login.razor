@@ -118,6 +118,7 @@
         var user = UserRepository.GetUserByName(signUpName);
         if (user != null && user.Password == signUpPassword)
         {
+            AuthService.SetUser(user); // Benutzer merken
             signInSuccess = true;
             errorMessage = "";
         }
