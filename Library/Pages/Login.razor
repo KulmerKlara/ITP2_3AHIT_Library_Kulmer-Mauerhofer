@@ -3,19 +3,26 @@
 @inject UserRepository UserRepository
 @inject AuthService AuthService
 
-
 <link href="css/login.css" rel="stylesheet" />
 
-<!-- Container mit geteiltem Hintergrund -->
+<!-- 
+    Login.razor
+    - Implements a split-screen login/sign-up page.
+    - Left side: Sign In form (blue background), right side: Sign Up form (blue background when active).
+    - Uses local state to toggle between forms.
+    - Handles user registration and authentication using injected repositories/services.
+-->
+
 <div style="display: flex; height: 100vh;">
 
-    <!-- Linke Hälfte: Blau -->
+    <!-- Left: Sign In -->
     <div style="flex: 1; background-color: @(showSignUp ? "white" : "#ADD8E6"); display: flex; align-items: center; justify-content: center;">
         @if (!showSignUp)
         {
             <div style="background-color: rgb(255, 255, 255); padding: 30px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
                 <div class="form-block login">
                     <h1>Sign in</h1>
+                    @* Show error if login fails *@
                     @if (!string.IsNullOrEmpty(errorMessage))
                     {
                         <p style="color: red">@errorMessage</p>
@@ -29,13 +36,14 @@
                     </div>
                     <br />
                     <button @onclick="SignIn">Sign In</button>
+                    @* Show success and navigation if login succeeds *@
                     @if (signInSuccess)
                     {
                         <p style="color: green">Welcome @signUpName!</p>
                         <button @onclick="GoToBooklist">Go to your book list</button>
                     }
 
-                    <div style="margin-top: 10px;">
+                    <div style="margin-top: 10px;"></div>
                         <button @onclick="ToggleSignUp">Sign Up</button>
                     </div>
                 </div>
@@ -43,19 +51,11 @@
         }
     </div>
 
-    <!-- Rechte Hälfte: Weiß oder Blau -->
+    <!-- Right: Sign Up -->
     <div style="flex: 1; background-color: @(showSignUp ? "#ADD8E6" : "white"); display: flex; align-items: center; justify-content: center;">
         @if (showSignUp)
         { 
             <div style="background-color: rgb(255, 255, 255); padding: 30px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
-                <div class="form-block signup">
-                    <h1>Sign up</h1>
-                    @if (!string.IsNullOrEmpty(errorMessage))
-                    {
-                        <p style="color: red">@errorMessage</p>
-                    }
-                    <div>
-                        <input type="text" placeholder="Name" @bind="signUpName" />
                     </div>
                     <br />
                     <div>
