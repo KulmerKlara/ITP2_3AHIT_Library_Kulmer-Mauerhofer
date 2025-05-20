@@ -4,8 +4,16 @@ using System.Data.SQLite;
 
 namespace Library.Data
 {
+    /// <summary>
+    /// Repository for managing the relationship between users and their book lists.
+    /// </summary>
     public class UserBookListRepository
     {
+        /// <summary>
+        /// Adds a book to a user's book list. If the entry already exists, it is ignored.
+        /// </summary>
+        /// <param name="userId">The ID of the user.</param>
+        /// <param name="bookId">The ID of the book.</param>
         public void AddBookToUserList(int userId, int bookId)
         {
             using var conn = Database.GetConnection();
@@ -19,6 +27,11 @@ namespace Library.Data
             cmd.ExecuteNonQuery();
         }
 
+        /// <summary>
+        /// Removes a book from a user's book list.
+        /// </summary>
+        /// <param name="userId">The ID of the user.</param>
+        /// <param name="bookId">The ID of the book.</param>
         public void RemoveBookFromUserList(int userId, int bookId)
         {
             using var conn = Database.GetConnection();
@@ -32,6 +45,11 @@ namespace Library.Data
             cmd.ExecuteNonQuery();
         }
 
+        /// <summary>
+        /// Retrieves the list of books associated with a specific user.
+        /// </summary>
+        /// <param name="userId">The ID of the user.</param>
+        /// <returns>A list of books belonging to the user.</returns>
         public List<Book> GetUserBookList(int userId)
         {
             var books = new List<Book>();
