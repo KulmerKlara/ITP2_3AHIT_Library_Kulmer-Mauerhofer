@@ -3,7 +3,7 @@
 	justify-content: center;
 	align-items: center;
 	height: 100vh;
-	background-color: #f6f5f7;
+	background-color: #ffffff;
 }
 
 .form-wrapper {
@@ -24,11 +24,11 @@
 }
 
 .form-block.login {
-	background-color: #ffffff;
+	background-color: #ddd;
 }
 
 .form-block.signup {
-	background-color: #f0f0f0;
+	background-color: #ddd;
 }
 
 
