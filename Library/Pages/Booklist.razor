@@ -1,26 +1,25 @@
-﻿@page "/Booklist"
+﻿@page "/booklist"
 @using Library.Data
 @inject AuthService AuthService
-@inject BookRepository BookRepository
+@inject UserBookListRepository UserBookListRepository
 
-<PageTitle>Book List</PageTitle>
+<PageTitle>Your Book List</PageTitle>
 
 @if (!AuthService.IsAuthenticated)
 {
-    <p>Please <a href="/login">log in</a> to see the book list.</p>
+    <p>Please <a href="/login">log in</a> to see your book list.</p>
 }
 else
 {
-    <h1>Welcome, @AuthService.LoggedInUser.Name!</h1>
+    <h1>Your Book List, @AuthService.LoggedInUser.Name</h1>
 
-    <h2>Available Books</h2>
     @if (books == null)
     {
-        <p>Loading books...</p>
+        <p>Loading your books...</p>
     }
     else if (books.Count == 0)
     {
-        <p>No books found.</p>
+        <p>Your list is empty.</p>
     }
     else
     {
@@ -30,7 +29,8 @@ else
                 <li>
                     <strong>@book.Title</strong> by @book.Author<br />
                     Genre: @book.Genre<br />
-                    @book.Summary
+                    @book.Summary<br />
+                    <button @onclick="() => RemoveFromList(book.BookId)">Remove</button>
                 </li>
             }
         </ul>
@@ -44,7 +44,14 @@ else
     {
         if (AuthService.IsAuthenticated)
         {
-            books = BookRepository.GetAllBooks();
+            books = UserBookListRepository.GetUserBookList(AuthService.LoggedInUser.Id);
         }
+    }
+
+    private void RemoveFromList(int bookId)
+    {
+        UserBookListRepository.RemoveBookFromUserList(AuthService.LoggedInUser.Id, bookId);
+        books = UserBookListRepository.GetUserBookList(AuthService.LoggedInUser.Id);
+        StateHasChanged();
     }
 }
