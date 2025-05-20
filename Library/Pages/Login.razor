@@ -45,31 +45,33 @@
     <div style="flex: 1; background-color: @(showSignUp ? "#ADD8E6" : "white"); display: flex; align-items: center; justify-content: center;">
         @if (showSignUp)
         { 
-            <div class="form-block signup">
-                <h1>Sign up</h1>
-                @if (!string.IsNullOrEmpty(errorMessage))
-                {
-                    <p style="color: red">@errorMessage</p>
-                }
-                <div>
-                    <input type="text" placeholder="Name" @bind="signUpName" />
-                </div>
-                <br />
-                <div>
-                    <input type="email" placeholder="Email" @bind="signUpEmail" />
-                </div>
-                <br />
-                <div>
-                    <input type="password" placeholder="Password" @bind="signUpPassword" />
-                </div>
-                <br />
-                <div>
-                    <input type="text" placeholder="Phone" @bind="signUpPhone" />
-                </div>
-                <br />
-                <div>
-                    <button @onclick="RegisterUser">Sign Up</button>
-                    <button @onclick="ToggleSignUp" style="margin-left:10px;">Back to Sign In</button>
+            <div style="background-color: rgb(255, 255, 255); padding: 30px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                <div class="form-block signup">
+                    <h1>Sign up</h1>
+                    @if (!string.IsNullOrEmpty(errorMessage))
+                    {
+                        <p style="color: red">@errorMessage</p>
+                    }
+                    <div>
+                        <input type="text" placeholder="Name" @bind="signUpName" />
+                    </div>
+                    <br />
+                    <div>
+                        <input type="email" placeholder="Email" @bind="signUpEmail" />
+                    </div>
+                    <br />
+                    <div>
+                        <input type="password" placeholder="Password" @bind="signUpPassword" />
+                    </div>
+                    <br />
+                    <div>
+                        <input type="text" placeholder="Phone" @bind="signUpPhone" />
+                    </div>
+                    <br />
+                    <div>
+                        <button @onclick="RegisterUser">Sign Up</button>
+                        <button @onclick="ToggleSignUp" style="margin-left:10px;">Back to Sign In</button>
+                    </div>
                 </div>
             </div>
         }
