@@ -1,19 +1,50 @@
 ﻿@page "/Booklist"
 @using Library.Data
-@inject User_Employee_Service UserService
-@inject NavigationManager Navigation
+@inject AuthService AuthService
+@inject BookRepository BookRepository
 
-<PageTitle>User Data</PageTitle>
+<PageTitle>Book List</PageTitle>
 
-<h1>Book List</h1>
-<p>Welcome to the book list page!</p>
+@if (!AuthService.IsAuthenticated)
+{
+    <p>Please <a href="/login">log in</a> to see the book list.</p>
+}
+else
+{
+    <h1>Welcome, @AuthService.LoggedInUser.Name!</h1>
 
-<button class="btn btn-primary mb-3" @onclick="GoToLogin">Go to Login</button>
+    <h2>Available Books</h2>
+    @if (books == null)
+    {
+        <p>Loading books...</p>
+    }
+    else if (books.Count == 0)
+    {
+        <p>No books found.</p>
+    }
+    else
+    {
+        <ul>
+            @foreach (var book in books)
+            {
+                <li>
+                    <strong>@book.Title</strong> by @book.Author<br />
+                    Genre: @book.Genre<br />
+                    @book.Summary
+                </li>
+            }
+        </ul>
+    }
+}
 
 @code {
+    private List<Book> books;
 
-    private void GoToLogin()
+    protected override void OnInitialized()
     {
-        Navigation.NavigateTo("/login");
+        if (AuthService.IsAuthenticated)
+        {
+            books = BookRepository.GetAllBooks();
+        }
     }
 }
