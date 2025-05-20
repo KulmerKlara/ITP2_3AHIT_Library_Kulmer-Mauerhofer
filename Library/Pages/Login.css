@@ -61,3 +61,22 @@ button {
 button:hover {
 	background-color: #0056b3;
 }
+
+  .split-container {
+        display: flex;
+        width: 100vw;
+        height: 100vh;
+    }
+
+    .half {
+        width: 50%;
+        display: flex;
+        justify-content: center;       /* Horizontal zentriert */
+        align-items: flex-start;       /* Oben ausgerichtet */
+        padding-top: 100px;            /* Abstand vom oberen Rand */
+    }
+
+    .form-block {
+        width: 80%;
+        max-width: 400px;
+    }

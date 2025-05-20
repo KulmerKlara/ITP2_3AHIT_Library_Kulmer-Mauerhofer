@@ -1,0 +1,19 @@
+﻿@page "/Booklist"
+@using Library.Data
+@inject User_Employee_Service UserService
+@inject NavigationManager Navigation
+
+<PageTitle>User Data</PageTitle>
+
+<h1>Book List</h1>
+<p>Welcome to the book list page!</p>
+
+<button class="btn btn-primary mb-3" @onclick="GoToLogin">Go to Login</button>
+
+@code {
+
+    private void GoToLogin()
+    {
+        Navigation.NavigateTo("/login");
+    }
+}

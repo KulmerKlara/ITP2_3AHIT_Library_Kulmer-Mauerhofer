@@ -2,10 +2,89 @@
 @using Library.Data
 @inject UserRepository UserRepository
 
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
+<link href="css/login.css" rel="stylesheet" />
+
+<!-- Container mit geteiltem Hintergrund -->
+<div style="display: flex; height: 100vh;">
+
+    <!-- Linke Hälfte: Blau -->
+    <div style="flex: 1; background-color: #ADD8E6; display: flex; align-items: center; justify-content: center;">
+        @if (!showSignUp)
+        {
+            <div class="form-block login">
+                <h1>Sign in</h1>
+                <div class="social-container">
+                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+                @if (!string.IsNullOrEmpty(errorMessage))
+                {
+                    <p style="color: red">@errorMessage</p>
+                }
+                <div>
+                    <input type="text" placeholder="Username or Email" @bind="signUpName" />
+                </div>
+                <br />
+                <div>
+                    <input type="password" placeholder="Password" @bind="signUpPassword" required />
+                </div>
+                <br />
+                <button @onclick="SignIn">Sign In</button>
+                @if (signInSuccess)
+                {
+                    <p style="color: green">Login successful!</p>
+                    <button @onclick="GoToBooklist">Go to your book list</button>
+                }
+
+                <div style="margin-top: 10px;">
+                    <button @onclick="ToggleSignUp">Sign Up</button>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Rechte Hälfte: Weiß -->
+    <div style="flex: 1; background-color: white; display: flex; align-items: center; justify-content: center;">
+        @if (showSignUp)
+        { 
+            <div class="form-block signup">
+                <h1>Sign up</h1>
+                @if (!string.IsNullOrEmpty(errorMessage))
+                {
+                    <p style="color: red">@errorMessage</p>
+                }
+                <div>
+                    <input type="text" placeholder="Name" @bind="signUpName" />
+                </div>
+                <br />
+                <div>
+                    <input type="email" placeholder="Email" @bind="signUpEmail" />
+                </div>
+                <br />
+                <div>
+                    <input type="password" placeholder="Password" @bind="signUpPassword" />
+                </div>
+                <br />
+                <div>
+                    <input type="text" placeholder="Phone" @bind="signUpPhone" />
+                </div>
+                <br />
+                <div>
+                    <button @onclick="RegisterUser">Sign Up</button>
+                    <button @onclick="ToggleSignUp" style="margin-left:10px;">Back to Sign In</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@inject NavigationManager NavigationManager
+
 @code {
     private bool showSignUp = false;
 
-    // Registrierungsfelder
     private string signUpName;
     private string signUpEmail;
     private string signUpPassword;
@@ -48,83 +127,9 @@
             errorMessage = "Invalid username or password.";
         }
     }
-}
 
-<div class="container" style="display: flex; justify-content: space-between; align-items: flex-start;">
-    <div class="form-block login" style="width: 45%; display: @(showSignUp ? "none" : "block");">
-        <h1>Sign in</h1>
-        <div class="social-container">
-            <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-            <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-            <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
-        </div>
-        @if (!string.IsNullOrEmpty(errorMessage))
-        {
-            <p style="color: red">@errorMessage</p>
-        }
-        <div>
-            <input type="text" placeholder="Username or Email" @bind="signUpName" />
-        </div>
-
-        <br />
-
-        <div>
-            <input type="password" placeholder="Password" @bind="signUpPassword" required />
-        </div>
-
-        <br />
-
-        <button @onclick="SignIn">Sign In</button>
-
-        @if (signInSuccess)
-        {
-            <p style="color: green">Login successful!</p>
-        }
-    </div>
-</div>
-
-    <div>
-        <div>
-            <button @onclick="ToggleSignUp">Sign Up</button>
-        </div>
-    </div>
-
-    @if (showSignUp)
+    private void GoToBooklist()
     {
-    <div class="form-block signup" style="width: 45%;">
-        <h1>Create Account</h1>
-
-        @if (!string.IsNullOrEmpty(errorMessage))
-        {
-            <p style="color: red">@errorMessage</p>
-        }
-
-        <div>
-            <input type="text" placeholder="Name" @bind="signUpName" />
-        </div>
-        
-        <br />
-        
-        <div>
-            <input type="email" placeholder="Email" @bind="signUpEmail" />
-        </div>
-        
-        <br />
-        
-        <div>
-            <input type="password" placeholder="Password" @bind="signUpPassword" />
-        </div>
-        
-        <br />
-
-        <div>
-            <input type="text" placeholder="Phone" @bind="signUpPhone" />
-        </div>
-
-        <br />
-        
-        <div>
-            <button @onclick="RegisterUser">Sign Up</button>
-        </div>
-    </div>
+        NavigationManager.NavigateTo("/booklist");
     }
+}
