@@ -2,7 +2,6 @@
 @using Library.Data
 @inject UserRepository UserRepository
 
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
 <link href="css/login.css" rel="stylesheet" />
 
 <!-- Container mit geteiltem Hintergrund -->
@@ -12,34 +11,36 @@
     <div style="flex: 1; background-color: #ADD8E6; display: flex; align-items: center; justify-content: center;">
         @if (!showSignUp)
         {
-            <div class="form-block login">
-                <h1>Sign in</h1>
-                <div class="social-container">
-                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
-                </div>
-                @if (!string.IsNullOrEmpty(errorMessage))
-                {
-                    <p style="color: red">@errorMessage</p>
-                }
-                <div>
-                    <input type="text" placeholder="Username or Email" @bind="signUpName" />
-                </div>
-                <br />
-                <div>
-                    <input type="password" placeholder="Password" @bind="signUpPassword" required />
-                </div>
-                <br />
-                <button @onclick="SignIn">Sign In</button>
-                @if (signInSuccess)
-                {
-                    <p style="color: green">Welcome @signUpName!</p>
-                    <button @onclick="GoToBooklist">Go to your book list</button>
-                }
+            <div style="background-color: rgb(255, 255, 255); padding: 30px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                <div class="form-block login">
+                    <h1>Sign in</h1>
+                    <div class="social-container">
+                        <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+                        <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                    @if (!string.IsNullOrEmpty(errorMessage))
+                    {
+                        <p style="color: red">@errorMessage</p>
+                    }
+                    <div>
+                        <input type="text" placeholder="Username or Email" @bind="signUpName" />
+                    </div>
+                    <br />
+                    <div>
+                        <input type="password" placeholder="Password" @bind="signUpPassword" required />
+                    </div>
+                    <br />
+                    <button @onclick="SignIn">Sign In</button>
+                    @if (signInSuccess)
+                    {
+                        <p style="color: green">Welcome @signUpName!</p>
+                        <button @onclick="GoToBooklist">Go to your book list</button>
+                    }
 
-                <div style="margin-top: 10px;">
-                    <button @onclick="ToggleSignUp">Sign Up</button>
+                    <div style="margin-top: 10px;">
+                        <button @onclick="ToggleSignUp">Sign Up</button>
+                    </div>
                 </div>
             </div>
         }
