@@ -278,23 +278,26 @@ https://css-tricks.com/perfect-full-page-background-image/?utm_source=chatgpt.co
 }
 
 .profile-circle[b-zzry4awsgr] {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: #4a90e2; /* Blau, anpassbar */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    position: absolute;
-    top: 5px;
-    right: 60px; /* Abstand vom rechten Rand, um nicht mit dem Toggler zu kollidieren */
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    cursor: pointer;
-    transition: transform 0.2s ease;
-    z-index: 10;
+    position: relative;
 }
 
-.profile-circle:hover[b-zzry4awsgr] {
-    transform: scale(1.1);
+.profile-popup[b-zzry4awsgr] {
+    display: none;
+    position: absolute;
+    top: 50px;
+    right: 0;
+    background-color: #fff;
+    color: #333;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    white-space: nowrap;
+    min-width: 120px;
+    z-index: 20;
+    font-size: 0.9rem;
 }
+
+.profile-popup[b-zzry4awsgr] {
+    z-index: 9999;
+}
+

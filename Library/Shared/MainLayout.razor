@@ -9,16 +9,17 @@
         <a class="nav-button" href="bookList">Book list</a>
         <a class="nav-button" href="login">Sign in</a>
 
-        <div class="profile-circle"></div>  <!-- Hier der runde Kreis -->
+        <div class="profile-circle"></div>  <!-- Der runde Kreis -->
     </div>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-        </div>
+    <div class="page-content"> <!-- NEU: eigener Bereich für Seiteninhalt -->
+        <main>
+            <div class="top-row px-4">
+            </div>
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
+            <article class="content px-4">
+                @Body
+            </article>
+        </main>
+    </div>
 </div>

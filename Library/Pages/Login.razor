@@ -6,16 +6,18 @@
 <link href="css/login.css" rel="stylesheet" />
 
 <!-- 
-    Login.razor
-    - Implements a split-screen login/sign-up page.
-    - Left side: Sign In form (blue background), right side: Sign Up form (blue background when active).
-    - Uses local state to toggle between forms.
-    - Handles user registration and authentication using injected repositories/services.
+    This component provides a login and sign-up interface.
+    The page is split into two halves: 
+    - The left side shows the sign-in form (blue background).
+    - The right side shows the sign-up form (blue background) when toggled.
+    State is managed with the 'showSignUp' boolean.
+    Error messages are displayed for failed login or duplicate registration.
+    On successful login, a welcome message and navigation button are shown.
 -->
 
 <div style="display: flex; height: 100vh;">
 
-    <!-- Left: Sign In -->
+    <!-- Left: Sign In Form -->
     <div style="flex: 1; background-color: @(showSignUp ? "white" : "#ADD8E6"); display: flex; align-items: center; justify-content: center;">
         @if (!showSignUp)
         {
@@ -42,8 +44,7 @@
                         <p style="color: green">Welcome @signUpName!</p>
                         <button @onclick="GoToBooklist">Go to your book list</button>
                     }
-
-                    <div style="margin-top: 10px;"></div>
+                    <div style="margin-top: 10px;">
                         <button @onclick="ToggleSignUp">Sign Up</button>
                     </div>
                 </div>
@@ -51,11 +52,20 @@
         }
     </div>
 
-    <!-- Right: Sign Up -->
+    <!-- Right: Sign Up Form -->
     <div style="flex: 1; background-color: @(showSignUp ? "#ADD8E6" : "white"); display: flex; align-items: center; justify-content: center;">
         @if (showSignUp)
         { 
             <div style="background-color: rgb(255, 255, 255); padding: 30px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                <div class="form-block signup">
+                    <h1>Sign up</h1>
+                    @* Show error if registration fails *@
+                    @if (!string.IsNullOrEmpty(errorMessage))
+                    {
+                        <p style="color: red">@errorMessage</p>
+                    }
+                    <div>
+                        <input type="text" placeholder="Name" @bind="signUpName" />
                     </div>
                     <br />
                     <div>
@@ -83,6 +93,7 @@
 @inject NavigationManager NavigationManager
 
 @code {
+    // State variables for toggling forms and storing user input
     private bool showSignUp = false;
 
     private string signUpName;
@@ -92,12 +103,14 @@
     private string errorMessage;
     private bool signInSuccess = false;
 
+    // Toggle between sign-in and sign-up forms
     private void ToggleSignUp()
     {
         showSignUp = !showSignUp;
         errorMessage = "";
     }
 
+    // Register a new user if username is not taken
     private void RegisterUser()
     {
         var existingUser = UserRepository.GetUserByName(signUpName);
@@ -113,12 +126,13 @@
         showSignUp = false;
     }
 
+    // Sign in if credentials are correct
     private void SignIn()
     {
         var user = UserRepository.GetUserByName(signUpName);
         if (user != null && user.Password == signUpPassword)
         {
-            AuthService.SetUser(user); // Benutzer merken
+            AuthService.SetUser(user); // Remember user
             signInSuccess = true;
             errorMessage = "";
         }
@@ -129,6 +143,7 @@
         }
     }
 
+    // Navigate to book list after successful login
     private void GoToBooklist()
     {
         NavigationManager.NavigateTo("/booklist");

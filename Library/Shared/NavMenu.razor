@@ -2,7 +2,14 @@
     <div class="container-fluid position-relative">
         <a class="navbar-brand" href="">Library</a>
 
-        <div class="profile-circle"></div>  <!-- Rundes Feld, kein Bild -->
+        <div class="profile-circle">
+            <div class="profile-popup">
+                <p class="mb-1">Profil</p>
+                <a href="/settings">Einstellungen</a><br />
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+
 
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
