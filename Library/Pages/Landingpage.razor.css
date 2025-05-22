@@ -1,4 +1,4 @@
-/* Hintergrundbild */
+/* Background image */
 .background-container {
 background-image: url('/images/image1_lp.png');
     background-size: cover;
@@ -101,7 +101,7 @@ h1 {
 https://css-tricks.com/perfect-full-page-background-image/?utm_source=chatgpt.com*/
 .book-image-placeholder {
     width: 250px;
-    height: 0px;
+    height: auto; 
     background-color: #ccc;
     border-radius: 0px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
