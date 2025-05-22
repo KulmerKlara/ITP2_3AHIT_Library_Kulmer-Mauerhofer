@@ -38,3 +38,9 @@ CREATE TABLE Loans (
     FOREIGN KEY (UserID) REFERENCES Users(UserID),
     FOREIGN KEY (BookID) REFERENCES Books(BookID)
 );
+
+
+INSERT INTO Users (Name, Email, Password, Role, Phone, Address)
+VALUES 
+  ('Employee1', 'employee1@example.com', 'password1', 'Employee', '123-456-7890', 'Address 1'),
+  ('Employee2', 'employee2@example.com', 'password2', 'Employee', '098-765-4321', 'Address 2');

@@ -2,35 +2,129 @@
 @using Library.Data
 @inject UserRepository UserRepository
 
-<div class="container">
-    <div class="form-wrapper">
-        <div class="form-block login">
-            <h1>Sign in</h1>
-            <div class="social-container">
-                <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-                <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-                <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
-            </div>
-            <span>or use your account</span>
-            <input type="email" placeholder="Email" />
-            <input type="password" placeholder="Password" />
-            <a href="#">Forgot your password?</a>
-            <button>Sign In</button>
+@code {
+    private bool showSignUp = false;
+
+    // Registrierungsfelder
+    private string signUpName;
+    private string signUpEmail;
+    private string signUpPassword;
+    private string signUpPhone;
+    private string errorMessage;
+    private bool signInSuccess = false;
+
+    private void ToggleSignUp()
+    {
+        showSignUp = !showSignUp;
+        errorMessage = "";
+    }
+
+    private void RegisterUser()
+    {
+        var existingUser = UserRepository.GetUserByName(signUpName);
+        if (existingUser != null)
+        {
+            errorMessage = "Benutzername ist bereits vergeben.";
+            return;
+        }
+
+        var user = new User(0, signUpName, signUpEmail, signUpPassword, signUpPhone, "Customer");
+        UserRepository.AddUser(user);
+        errorMessage = "";
+        showSignUp = false;
+    }
+
+    private void SignIn()
+    {
+        var user = UserRepository.GetUserByName(signUpName);
+        if (user != null && user.Password == signUpPassword)
+        {
+            signInSuccess = true;
+            errorMessage = "";
+        }
+        else
+        {
+            signInSuccess = false;
+            errorMessage = "Invalid username or password.";
+        }
+    }
+}
+
+<div class="container" style="display: flex; justify-content: space-between; align-items: flex-start;">
+    <div class="form-block login" style="width: 45%; display: @(showSignUp ? "none" : "block");">
+        <h1>Sign in</h1>
+        <div class="social-container">
+            <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+            <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <p style="color: red">@errorMessage</p>
+        }
+        <div>
+            <input type="text" placeholder="Username or Email" @bind="signUpName" />
         </div>
 
-        <div class="form-block signup"></div>
-            <h1>Create Account</h1>
-            <div class="social-container">
-                <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-                <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-                <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
-            </div>
-            <span>or use your email for registration</span>
-            <input type="text" placeholder="Name" />
-            <input type="email" placeholder="Email" />
-            <input type="password" placeholder="Password" />
-            <button>Sign Up</button>
+        <br />
+
+        <div>
+            <input type="password" placeholder="Password" @bind="signUpPassword" required />
+        </div>
+
+        <br />
+
+        <button @onclick="SignIn">Sign In</button>
+
+        @if (signInSuccess)
+        {
+            <p style="color: green">Login successful!</p>
+        }
+    </div>
+</div>
+
+    <div>
+        <div>
+            <button @onclick="ToggleSignUp">Sign Up</button>
         </div>
     </div>
 
+    @if (showSignUp)
+    {
+    <div class="form-block signup" style="width: 45%;">
+        <h1>Create Account</h1>
 
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <p style="color: red">@errorMessage</p>
+        }
+
+        <div>
+            <input type="text" placeholder="Name" @bind="signUpName" />
+        </div>
+        
+        <br />
+        
+        <div>
+            <input type="email" placeholder="Email" @bind="signUpEmail" />
+        </div>
+        
+        <br />
+        
+        <div>
+            <input type="password" placeholder="Password" @bind="signUpPassword" />
+        </div>
+        
+        <br />
+
+        <div>
+            <input type="text" placeholder="Phone" @bind="signUpPhone" />
+        </div>
+
+        <br />
+        
+        <div>
+            <button @onclick="RegisterUser">Sign Up</button>
+        </div>
+    </div>
+    }
