@@ -1,74 +1,78 @@
 ﻿@page "/"
 @inject NavigationManager NavigationManager
-
+ 
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Components
+@using Library.Shared
+ 
 <PageTitle>Index</PageTitle>
-
+ 
 <div class="background-container">
     <div class="overlay">
         <h1>Welcome to your ONLINE BOOKSHELF</h1>
-
+ 
         <div class="search-wrapper">
-            <div class="search-bar">        
-                <input type="search" placeholder="Search for a book" @bind="searchTerm" />
-                <button @onclick="SearchBooks">Search</button>
+            <div class="search-bar">
+                <input type="search" placeholder="Search for a book" />
+                <span class="icon">&#10006;</span>
             </div>
         </div>
-
+ 
         <p>Welcome to your new app.</p>
-
+ 
         <div class="book-carousel">
             <div class="arrow left-arrow" @onclick="MoveLeft">&#10094;</div>
-
-            <div class="book-preview-bar">
-                @for (int i = currentIndex; i < currentIndex + itemsPerPage && i < totalItems; i++)
-                {
-                    <div class="book-preview-item" @onclick="() => NavigateToGenrePage(genres[i])">
-                        <div class="book-image-placeholder"></div>
-                        <div class="genre-label">@genres[i]</div> 
-                    </div>
-                }
-            </div>
-
+ 
+            @{
+                var genreList = genreImages.Keys.ToList();
+            }
+            @for (int i = currentIndex; i < currentIndex + itemsPerPage && i < genreList.Count; i++)
+            {
+                var genre = genreList[i];
+                <div class="book-preview-item" @onclick="() => NavigateToGenrePage(genre)">
+                    <img src="@genreImages[genre]" alt="@genre" class="book-image-placeholder" />
+                    <div class="genre-label">@genre</div>
+                </div>
+            }
+ 
             <div class="arrow right-arrow" @onclick="MoveRight">&#10095;</div>
         </div>
-
+ 
         <SurveyPrompt Title="How is Blazor working for you?" />
     </div>
 </div>
-
+ 
 @code {
     private int currentIndex = 0;
     private const int itemsPerPage = 3;
-    private const int totalItems = 10;
-
-    private List<string> genres = new()
+ 
+    private Dictionary<string, string> genreImages = new()
     {
-        "Romane", "Krimis", "Thriller", "Fantasy", "Science Fiction",
-        "Horror", "Reise", "Jugendbuch", "Kinderbuch", "Sachbuch"
+        { "Romane", "/images/1_Romane.png" },
+        { "Krimis", "/images/2_Krimis.png" },
+        { "Thriller", "/images/3_Thriller.png" },
+        { "Fantasy", "/images/4_Fantasy.png" },
+        { "Science Fiction", "/images/5_ScienceFiction.png" },
+        { "Horror", "/images/6_Horror.png" },
+        { "Reise", "/images/7_Reise.png" },
+        { "Jugendbuch", "/images/8_Jugendbuch.png" },
+        { "Kinderbuch", "/images/9_Kinderbuch.png" },
+        { "Sachbuch", "/images/10_Sachbuch.jpg" }
     };
-
-    private string searchTerm = string.Empty;
-
+ 
     private void MoveLeft()
     {
         if (currentIndex > 0) currentIndex--;
     }
-
+ 
     private void MoveRight()
     {
-        if (currentIndex < totalItems - itemsPerPage) currentIndex++;
+        if (currentIndex < genreImages.Count - itemsPerPage) currentIndex++;
     }
-
+ 
     private void NavigateToGenrePage(string genre)
     {
-        NavigationManager.NavigateTo($"/genrespage");
-    }
-
-    private void SearchBooks()
-    {
-        if (!string.IsNullOrWhiteSpace(searchTerm))
-        {
-            NavigationManager.NavigateTo($"/searchresults/{searchTerm}");
-        }
+        NavigationManager.NavigateTo($"/genrespage/{Uri.EscapeDataString(genre)}");
     }
 }
+ 
