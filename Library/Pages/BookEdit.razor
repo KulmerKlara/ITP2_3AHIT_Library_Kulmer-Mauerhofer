@@ -1,0 +1,49 @@
+@page "/employee"
+@using Library.Data
+@inject UserRepository UserRepository
+@inject AuthService AuthService
+@inject BookRepository BookRepository
+
+<h3>Alle Bücher in der Bibliothek</h3>
+
+@if (books == null)
+{
+    <p>Lade Bücher...</p>
+}
+else if (books.Count == 0)
+{
+    <p>Keine Bücher gefunden.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Titel</th>
+                <th>Autor</th>
+                <th>Genre</th>
+                <th>Verfügbar</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var book in books)
+        {
+            <tr>
+                <td>@book.Title</td>
+                <td>@book.Author</td>
+                <td>@book.Genre</td>
+                <td>@(book.IsAvailable ? "Ja" : "Nein")</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Book> books;
+
+    protected override void OnInitialized()
+    {
+        books = BookRepository.GetAllBooks();
+    }
+}
