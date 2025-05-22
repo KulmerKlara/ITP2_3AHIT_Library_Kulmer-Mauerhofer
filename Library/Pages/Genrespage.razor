@@ -3,6 +3,9 @@
 @inject BookRepository BookRepo
 @using Microsoft.AspNetCore.Components
 
+<PageTitle>Genre: @Genre</PageTitle>
+
+
 <h3>Genre: @Genre</h3>
 
 @if (books == null)
@@ -15,12 +18,20 @@ else if (books.Count == 0)
 }
 else
 {
-    <ul>
+    <div class="grid-container">
         @foreach (var book in books)
         {
             <li><strong>@book.Title</strong> by @book.Author</li>
+            <div class="book-card">
+                <div class="placeholder-container">Bildplatzhalter</div>
+                <div class="book-text">
+                    <p class="author">@book.Author</p>
+                    <p class="title"><strong>@book.Title</strong></p>
+                    <p class="genre">Genre: @book.Genre</p>
+                </div>
+            </div>
         }
-    </ul>
+    </div>
 }
 
 @code {

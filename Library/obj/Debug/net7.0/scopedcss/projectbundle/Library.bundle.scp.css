@@ -1,5 +1,5 @@
 /* _content/Library/Pages/Landingpage.razor.rz.scp.css */
-/* Hintergrundbild */
+/* Background image */
 .background-container[b-57c5ksc2ws] {
 background-image: url('/images/image1_lp.png');
     background-size: cover;
@@ -102,7 +102,7 @@ h1[b-57c5ksc2ws] {
 https://css-tricks.com/perfect-full-page-background-image/?utm_source=chatgpt.com*/
 .book-image-placeholder[b-57c5ksc2ws] {
     width: 250px;
-    height: 250px;
+    height: auto; 
     background-color: #ccc;
     border-radius: 0px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
@@ -136,6 +136,8 @@ https://css-tricks.com/perfect-full-page-background-image/?utm_source=chatgpt.co
     position: sticky;
     top: 0;
     z-index: 10;
+
+    position: relative; /* Für absolutes Positionieren vom Kreis */
 }
 
 .nav-button[b-83zf23ogl0] {
@@ -154,6 +156,25 @@ https://css-tricks.com/perfect-full-page-background-image/?utm_source=chatgpt.co
     color: black;
 }
 
+.profile-circle[b-83zf23ogl0] {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #4a90e2; /* Blau, kannst du ändern */
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    z-index: 15;
+}
+
+.profile-circle:hover[b-83zf23ogl0] {
+    transform: translateY(-50%) scale(1.1);
+}
+
 @media (max-width: 640px) {
     .topbar[b-83zf23ogl0] {
         flex-wrap: wrap;
@@ -161,9 +182,25 @@ https://css-tricks.com/perfect-full-page-background-image/?utm_source=chatgpt.co
         padding: 0.5rem;
     }
 
-    .nav-button[b-83zf23ogl0] {
-        margin-bottom: 0.5rem;
+    .profile-circle[b-83zf23ogl0] {
+        width: 100px;          /* Breite = 5x Höhe */
+        height: 20px;          /* Höhe */
+        border-radius: 10px;   /* Rundungen an den Ecken */
+        background-color: #4a90e2;
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        cursor: pointer;
+        transition: transform 0.2s ease;
+        z-index: 15;
     }
+    
+    .profile-circle:hover[b-83zf23ogl0] {
+        transform: translateY(-50%) scale(1.05);
+    }    
+    
 }
 /* _content/Library/Shared/NavMenu.razor.rz.scp.css */
 .navbar-toggler[b-zzry4awsgr] {
@@ -173,6 +210,11 @@ https://css-tricks.com/perfect-full-page-background-image/?utm_source=chatgpt.co
 .top-row[b-zzry4awsgr] {
     height: 3.5rem;
     background-color: rgba(0,0,0,0.4);
+    position: relative; /* wichtig für .profile-circle */
+}
+
+.container-fluid[b-zzry4awsgr] {
+    position: relative; /* wichtig für .profile-circle */
 }
 
 .navbar-brand[b-zzry4awsgr] {
@@ -191,22 +233,22 @@ https://css-tricks.com/perfect-full-page-background-image/?utm_source=chatgpt.co
     padding-bottom: 0.5rem;
 }
 
-    .nav-item:first-of-type[b-zzry4awsgr] {
-        padding-top: 1rem;
-    }
+.nav-item:first-of-type[b-zzry4awsgr] {
+    padding-top: 1rem;
+}
 
-    .nav-item:last-of-type[b-zzry4awsgr] {
-        padding-bottom: 1rem;
-    }
+.nav-item:last-of-type[b-zzry4awsgr] {
+    padding-bottom: 1rem;
+}
 
-    .nav-item[b-zzry4awsgr]  a {
-        color: #d7d7d7;
-        border-radius: 4px;
-        height: 3rem;
-        display: flex;
-        align-items: center;
-        line-height: 3rem;
-    }
+.nav-item[b-zzry4awsgr]  a {
+    color: #d7d7d7;
+    border-radius: 4px;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    line-height: 3rem;
+}
 
 .nav-item[b-zzry4awsgr]  a.active {
     background-color: rgba(255,255,255,0.25);
@@ -234,3 +276,28 @@ https://css-tricks.com/perfect-full-page-background-image/?utm_source=chatgpt.co
         overflow-y: auto;
     }
 }
+
+.profile-circle[b-zzry4awsgr] {
+    position: relative;
+}
+
+.profile-popup[b-zzry4awsgr] {
+    display: none;
+    position: absolute;
+    top: 50px;
+    right: 0;
+    background-color: #fff;
+    color: #333;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    white-space: nowrap;
+    min-width: 120px;
+    z-index: 20;
+    font-size: 0.9rem;
+}
+
+.profile-popup[b-zzry4awsgr] {
+    z-index: 9999;
+}
+

@@ -13,6 +13,10 @@ builder.Services.AddSingleton<User_Employee_Service>();
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddSingleton<BookRepository>(); // HIER hinzugefügt
 
+// Authentifizierung
+builder.Services.AddScoped<AuthService>();
+builder.Services.AddSingleton<UserBookListRepository>();
+
 var app = builder.Build();
 
 Database.Initialize();

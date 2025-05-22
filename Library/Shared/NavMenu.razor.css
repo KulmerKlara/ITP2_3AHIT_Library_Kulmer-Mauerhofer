@@ -5,6 +5,11 @@
 .top-row {
     height: 3.5rem;
     background-color: rgba(0,0,0,0.4);
+    position: relative; /* wichtig für .profile-circle */
+}
+
+.container-fluid {
+    position: relative; /* wichtig für .profile-circle */
 }
 
 .navbar-brand {
@@ -23,22 +28,22 @@
     padding-bottom: 0.5rem;
 }
 
-    .nav-item:first-of-type {
-        padding-top: 1rem;
-    }
+.nav-item:first-of-type {
+    padding-top: 1rem;
+}
 
-    .nav-item:last-of-type {
-        padding-bottom: 1rem;
-    }
+.nav-item:last-of-type {
+    padding-bottom: 1rem;
+}
 
-    .nav-item ::deep a {
-        color: #d7d7d7;
-        border-radius: 4px;
-        height: 3rem;
-        display: flex;
-        align-items: center;
-        line-height: 3rem;
-    }
+.nav-item ::deep a {
+    color: #d7d7d7;
+    border-radius: 4px;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    line-height: 3rem;
+}
 
 .nav-item ::deep a.active {
     background-color: rgba(255,255,255,0.25);
@@ -66,3 +71,28 @@
         overflow-y: auto;
     }
 }
+
+.profile-circle {
+    position: relative;
+}
+
+.profile-popup {
+    display: none;
+    position: absolute;
+    top: 50px;
+    right: 0;
+    background-color: #fff;
+    color: #333;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    white-space: nowrap;
+    min-width: 120px;
+    z-index: 20;
+    font-size: 0.9rem;
+}
+
+.profile-popup {
+    z-index: 9999;
+}
+
