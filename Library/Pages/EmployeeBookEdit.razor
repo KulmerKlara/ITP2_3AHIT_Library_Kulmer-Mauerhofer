@@ -3,13 +3,15 @@
 @inject UserRepository UserRepository
 @inject AuthService AuthService
 @inject BookRepository BookRepository
+<br>
+<br>
+<br>
 
-<meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <body><button class="plus-button">+</button></body>
-  <title>Plus-Kreis oben links</title>
+<link href="EmployeeBookEdit.razor.css" rel="stylesheet" />
+
 <h3>Alle Bücher in der Bibliothek</h3>
-  
+
+<button class="plus-button">+</button>
 
 @if (books == null)
 {
@@ -42,7 +44,6 @@ else
         }
         </tbody>
     </table>
-    
 }
 
 @code {
