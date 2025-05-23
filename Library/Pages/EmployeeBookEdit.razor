@@ -4,44 +4,44 @@
 @inject AuthService AuthService
 @inject BookRepository BookRepository
 
-<link href="EmployeeBookEdit.razor.css" rel="stylesheet" />
+<div class="page-wrapper">
+    <h3>Alle Bücher in der Bibliothek</h3>
 
-<h3>Alle Bücher in der Bibliothek</h3>
+    <button class="plus-button">+</button>
 
-<button class="plus-button">+</button>
-
-@if (books == null)
-{
-    <p>Lade Bücher...</p>
-}
-else if (books.Count == 0)
-{
-    <p>Keine Bücher gefunden.</p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Titel</th>
-                <th>Autor</th>
-                <th>Genre</th>
-                <th>Verfügbar</th>
-            </tr>
-        </thead>
-        <tbody>
-        @foreach (var book in books)
-        {
-            <tr>
-                <td>@book.Title</td>
-                <td>@book.Author</td>
-                <td>@book.Genre</td>
-                <td>@(book.IsAvailable ? "Ja" : "Nein")</td>
-            </tr>
-        }
-        </tbody>
-    </table>
-}
+    @if (books == null)
+    {
+        <p>Lade Bücher...</p>
+    }
+    else if (books.Count == 0)
+    {
+        <p>Keine Bücher gefunden.</p>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Titel</th>
+                    <th>Autor</th>
+                    <th>Genre</th>
+                    <th>Verfügbar</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var book in books)
+            {
+                <tr>
+                    <td>@book.Title</td>
+                    <td>@book.Author</td>
+                    <td>@book.Genre</td>
+                    <td>@(book.IsAvailable ? "Ja" : "Nein")</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+</div>
 
 @code {
     private List<Book> books;
