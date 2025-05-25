@@ -17,11 +17,6 @@ builder.Services.AddSingleton<BookRepository>(); // HIER hinzugefügt
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddSingleton<UserBookListRepository>();
 
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("EmployeeOnly", policy => policy.RequireRole("employee"));
-});
-
 var app = builder.Build();
 app.UseAuthentication();
 app.UseAuthorization();

@@ -1,44 +1,35 @@
-using System.Text.Json;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage; // Server Blazor
-// Für WASM: using Microsoft.AspNetCore.Components.WebAssembly.ProtectedBrowserStorage;
-
 namespace Library.Data
 {
+    /// <summary>
+    /// Service for managing authentication state in the application.
+    /// </summary>
     public class AuthService
     {
-        private readonly ProtectedLocalStorage _localStorage;
-        private const string UserStorageKey = "loggedInUser";
-
+        /// <summary>
+        /// Gets the currently logged-in user. Null if no user is logged in.
+        /// </summary>
         public User LoggedInUser { get; private set; }
 
-        public bool IsAuthenticated => LoggedInUser != null;
-
-        public AuthService(ProtectedLocalStorage localStorage)
-        {
-            _localStorage = localStorage;
-        }
-
-        public async Task InitializeAsync()
-        {
-            var result = await _localStorage.GetAsync<string>(UserStorageKey);
-            if (result.Success && !string.IsNullOrEmpty(result.Value))
-            {
-                LoggedInUser = JsonSerializer.Deserialize<User>(result.Value);
-            }
-        }
-
-        public async Task SetUserAsync(User user)
+        /// <summary>
+        /// Sets the currently logged-in user.
+        /// </summary>
+        /// <param name="user">The user to set as logged in.</param>
+        public void SetUser(User user)
         {
             LoggedInUser = user;
-            var json = JsonSerializer.Serialize(user);
-            await _localStorage.SetAsync(UserStorageKey, json);
         }
 
-        public async Task LogoutAsync()
+        /// <summary>
+        /// Logs out the current user.
+        /// </summary>
+        public void Logout()
         {
             LoggedInUser = null;
-            await _localStorage.DeleteAsync(UserStorageKey);
         }
+
+        /// <summary>
+        /// Gets a value indicating whether a user is authenticated.
+        /// </summary>
+        public bool IsAuthenticated => LoggedInUser != null;
     }
 }
