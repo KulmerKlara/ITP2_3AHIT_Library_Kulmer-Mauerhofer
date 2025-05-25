@@ -3,44 +3,42 @@
 @inject BookRepository BookRepo
 @using Microsoft.AspNetCore.Components
 
-<PageTitle>Genre: @Genre</PageTitle>
+@code {
+    [Parameter] public string Genre { get; set; }
+    private List<Book> books;
 
+    protected override async Task OnParametersSetAsync()
+    {
+        books = await Task.FromResult(BookRepo.GetBooksByGenre(Genre));
+    }
 
-<h3>Genre: @Genre</h3>
+    private void ShowBookDetails(Book book)
+    {
+        // Optional: Zeige Details oder öffne ein Modal
+    }
+}
+
+<h3>@Genre Bücher</h3>
 
 @if (books == null)
 {
-    <p>Loading books for "@Genre"...</p>
+    <p>Lade Bücher...</p>
 }
 else if (books.Count == 0)
 {
-    <p>No books found for genre: "@Genre"</p>
+    <p>Keine Bücher im Genre "@Genre" gefunden.</p>
 }
 else
 {
-    <div class="grid-container">
+    <div class="book-grid">
         @foreach (var book in books)
         {
-            <div class="book-card">
-                <div class="placeholder-container">Bildplatzhalter</div>
-                <div class="book-text">
-                    <p class="author">@book.Author</p>
-                    <p class="title"><strong>@book.Title</strong></p>
-                    <p class="genre">Genre: @book.Genre</p>
-                </div>
+            <div class="book-card" @onclick="() => ShowBookDetails(book)">
+                <h4>@book.Title</h4>
+                <p><strong>Autor:</strong> @book.Author</p>
+                <p><strong>Genre:</strong> @book.Genre</p>
             </div>
         }
     </div>
 }
 
-@code {
-    [Parameter]
-    public string Genre { get; set; }
-
-    private List<Book> books;
-
-    protected override void OnParametersSet()
-    {
-        books = BookRepo.GetBooksByGenre(Genre);
-    }
-}
