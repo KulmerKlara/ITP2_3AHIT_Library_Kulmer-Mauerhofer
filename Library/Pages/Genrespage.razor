@@ -119,7 +119,7 @@ else
 
         // Buch als nicht verfügbar markieren
         selectedBook.IsAvailable = false;
-        BookRepo.UpdateBook(selectedBook); // <- Stelle sicher, dass es diese Methode im BookRepository gibt
+        BookRepo.Availability(selectedBook); //gibt
 
         addToListMessage = $"Buch '{selectedBook.Title}' wurde zur Booklist hinzugefügt.";
     }
