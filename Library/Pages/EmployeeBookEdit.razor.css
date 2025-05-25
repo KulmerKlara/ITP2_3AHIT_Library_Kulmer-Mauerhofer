@@ -2,6 +2,81 @@
   padding-top: 1cm;
 }
 
+.header-box {
+    background-color: #f0f0f0;  /* hellgrau */
+    padding: 10px 20px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+    user-select: none;
+    margin-bottom: 20px;
+}
+
+.header-box h3 {
+    margin: 0;
+    flex-grow: 1;
+    font-weight: 600;
+    font-size: 1.4rem;
+}
+
+.dropdown-arrow {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.4rem;
+    padding: 4px;
+    transition: transform 0.3s ease;
+    color: #333;
+}
+
+.dropdown-arrow:focus {
+    outline: 2px solid #2f88a0;
+    outline-offset: 2px;
+}
+
+/* Dreht den Pfeil wenn geöffnet */
+.dropdown-arrow.open span {
+    transform: rotate(180deg);
+    display: inline-block;
+}
+
+/* Klasse für dynamische Pfeil-Drehung */
+.dropdown-arrow span {
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: white;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    border-radius: 6px;
+    margin-top: 6px;
+    z-index: 100;
+    min-width: 180px;
+    display: flex;
+    flex-direction: column;
+}
+
+.dropdown-menu button {
+    background: none;
+    border: none;
+    padding: 10px 16px;
+    text-align: left;
+    cursor: pointer;
+    font-size: 1rem;
+    color: #333;
+    transition: background-color 0.2s ease;
+}
+
+.dropdown-menu button:hover {
+    background-color: #e0e0e0;
+}
+
 .plus-button {
   position: absolute;
   top: 90px;
