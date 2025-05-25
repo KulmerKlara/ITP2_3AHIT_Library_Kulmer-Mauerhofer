@@ -107,16 +107,23 @@ else
 
         var userId = AuthService.LoggedInUser.Id;
 
-        // Verhindere doppelte Einträge (optional, falls nicht schon in Repository geprüft)
+        // Optional: doppelte Einträge verhindern
         if (UserBookListRepository.IsBookAlreadyInUserList(userId, selectedBook.BookId))
         {
             addToListMessage = $"Buch '{selectedBook.Title}' ist bereits in deiner Booklist.";
             return;
         }
 
+        // Buch zur Booklist hinzufügen
         UserBookListRepository.AddBookToUserList(userId, selectedBook.BookId);
+
+        // Buch als nicht verfügbar markieren
+        selectedBook.IsAvailable = false;
+        BookRepo.UpdateBook(selectedBook); // <- Stelle sicher, dass es diese Methode im BookRepository gibt
+
         addToListMessage = $"Buch '{selectedBook.Title}' wurde zur Booklist hinzugefügt.";
     }
+
 }
 
 <style>
