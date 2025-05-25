@@ -1,38 +1,9 @@
 ﻿@page "/genrespage/{Genre}"
 @using Library.Data
 @inject BookRepository BookRepo
+@inject AuthService AuthService
+@inject UserBookListRepository UserBookListRepository
 @using Microsoft.AspNetCore.Components
-
-@code {
-    [Parameter] public string Genre { get; set; }
-    private List<Book> books;
-
-    private bool showDetails = false;
-    private Book selectedBook;
-
-    protected override async Task OnParametersSetAsync()
-    {
-        books = await Task.FromResult(BookRepo.GetBooksByGenre(Genre));
-    }
-
-    private void ShowBookDetails(Book book)
-    {
-        selectedBook = book;
-        showDetails = true;
-    }
-
-    private void CloseDetails()
-    {
-        showDetails = false;
-        selectedBook = null;
-    }
-
-    private void AddToBooklist()
-    {
-        // Logik zum Hinzufügen zur Booklist hier ergänzen
-        Console.WriteLine($"Buch '{selectedBook.Title}' zur Booklist hinzugefügt.");
-    }
-}
 
 <h3>@Genre Bücher</h3>
 
@@ -47,16 +18,16 @@ else if (books.Count == 0)
 else
 {  
     <div class="book-grid">
-          @foreach (var book in books)
-          {
-                <div class="book-card" @onclick="() => ShowBookDetails(book)">
-                    <div class="book-image-placeholder">
-                        Bild kommt hier hin
-                    </div>
-                    <div class="book-title">@book.Title</div>
+        @foreach (var book in books)
+        {
+            <div class="book-card" @onclick="() => ShowBookDetails(book)">
+                <div class="book-image-placeholder">
+                    Bild kommt hier hin
                 </div>
-          }
-     </div>
+                <div class="book-title">@book.Title</div>
+            </div>
+        }
+    </div>
 }
 
 @if (showDetails && selectedBook != null)
@@ -88,9 +59,55 @@ else
 
             <div class="modal-footer">
                 <button class="add-btn" @onclick="AddToBooklist">Add to Booklist</button>
+                @if (!string.IsNullOrEmpty(addToListMessage))
+                {
+                    <p style="color: green; margin-top:10px;">@addToListMessage</p>
+                }
             </div>
         </div>
     </div>
+}
+
+@code {
+    [Parameter] public string Genre { get; set; }
+    private List<Book> books;
+
+    private bool showDetails = false;
+    private Book selectedBook;
+
+    private string addToListMessage;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        books = await Task.FromResult(BookRepo.GetBooksByGenre(Genre));
+        addToListMessage = null;
+    }
+
+    private void ShowBookDetails(Book book)
+    {
+        selectedBook = book;
+        showDetails = true;
+        addToListMessage = null;
+    }
+
+    private void CloseDetails()
+    {
+        showDetails = false;
+        selectedBook = null;
+        addToListMessage = null;
+    }
+
+    private void AddToBooklist()
+    {
+        if (!AuthService.IsAuthenticated)
+        {
+            addToListMessage = "Bitte erst anmelden, um Bücher hinzuzufügen.";
+            return;
+        }
+
+        UserBookListRepository.AddBookToUserList(AuthService.LoggedInUser.Id, selectedBook.BookId);
+        addToListMessage = $"Buch '{selectedBook.Title}' wurde zur Booklist hinzugefügt.";
+    }
 }
 
 <style>
