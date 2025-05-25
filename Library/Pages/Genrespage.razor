@@ -97,32 +97,33 @@ else
         addToListMessage = null;
     }
 
-    private void AddToBooklist()
+   private void AddToBooklist()
+{
+    if (!AuthService.IsAuthenticated || AuthService.LoggedInUser == null)
     {
-        if (!AuthService.IsAuthenticated || AuthService.LoggedInUser == null)
-        {
-            addToListMessage = "Bitte erst anmelden, um Bücher hinzuzufügen.";
-            return;
-        }
-
-        var userId = AuthService.LoggedInUser.Id;
-
-        // Optional: doppelte Einträge verhindern
-        if (UserBookListRepository.IsBookAlreadyInUserList(userId, selectedBook.BookId))
-        {
-            addToListMessage = $"Buch '{selectedBook.Title}' ist bereits in deiner Booklist.";
-            return;
-        }
-
-        // Buch zur Booklist hinzufügen
-        UserBookListRepository.AddBookToUserList(userId, selectedBook.BookId);
-
-        // Buch als nicht verfügbar markieren
-        selectedBook.IsAvailable = false;
-        BookRepo.Availability(selectedBook); //gibt
-
-        addToListMessage = $"Buch '{selectedBook.Title}' wurde zur Booklist hinzugefügt.";
+        addToListMessage = "Bitte erst anmelden, um Bücher hinzuzufügen.";
+        return;
     }
+
+    var userId = AuthService.LoggedInUser.Id;
+
+    if (UserBookListRepository.IsBookAlreadyInUserList(userId, selectedBook.BookId))
+    {
+        addToListMessage = $"Buch '{selectedBook.Title}' ist bereits in deiner Booklist.";
+        return;
+    }
+
+    UserBookListRepository.AddBookToUserList(userId, selectedBook.BookId);
+
+    // Setze Buch auf nicht verfügbar und Rückgabedatum
+    selectedBook.IsAvailable = false;
+    selectedBook.GiveBackDate = DateTime.Today.AddDays(7);
+
+    // Änderungen in DB speichern
+    BookRepo.UpdateBook(selectedBook);
+
+    addToListMessage = $"Buch '{selectedBook.Title}' wurde zur Booklist hinzugefügt. Rückgabe bis: {selectedBook.GiveBackDate?.ToString("dd.MM.yyyy")}";
+}
 
 }
 
