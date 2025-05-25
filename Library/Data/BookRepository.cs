@@ -11,8 +11,8 @@ namespace Library.Data
             using var conn = Database.GetConnection();
             using var cmd = new SQLiteCommand(conn)
             {
-                CommandText = @"INSERT INTO Books (Title, Author, Genre, Summary, IsAvailable) 
-                                VALUES (@Title, @Author, @Genre, @Summary, @IsAvailable)"
+                CommandText = @"INSERT INTO Books (Title, Author, Genre, Summary, IsAvailable, GiveBackDate) 
+                                VALUES (@Title, @Author, @Genre, @Summary, @IsAvailable, @GiveBackDate)"
             };
 
             cmd.Parameters.AddWithValue("@Title", book.Title);
@@ -20,6 +20,7 @@ namespace Library.Data
             cmd.Parameters.AddWithValue("@Genre", book.Genre);
             cmd.Parameters.AddWithValue("@Summary", book.Summary);
             cmd.Parameters.AddWithValue("@IsAvailable", book.IsAvailable ? 1 : 0);
+            cmd.Parameters.AddWithValue("@GiveBackDate", book.GiveBackDate?.ToString("yyyy-MM-dd") ?? (object)DBNull.Value);
             cmd.ExecuteNonQuery();
         }
 
@@ -38,12 +39,14 @@ namespace Library.Data
                     reader["Author"].ToString(),
                     reader["Genre"].ToString(),
                     reader["Summary"].ToString(),
-                    Convert.ToBoolean(reader["IsAvailable"])
+                    Convert.ToBoolean(reader["IsAvailable"]),
+                    reader["GiveBackDate"] == DBNull.Value ? null : (DateTime?)Convert.ToDateTime(reader["GiveBackDate"])
                 ));
             }
 
             return books;
         }
+
         public List<Book> GetBooksByGenre(string genre)
         {
             var books = new List<Book>();
@@ -60,13 +63,13 @@ namespace Library.Data
                     reader["Author"].ToString(),
                     reader["Genre"].ToString(),
                     reader["Summary"].ToString(),
-                    Convert.ToBoolean(reader["IsAvailable"])
+                    Convert.ToBoolean(reader["IsAvailable"]),
+                    reader["GiveBackDate"] == DBNull.Value ? null : (DateTime?)Convert.ToDateTime(reader["GiveBackDate"])
                 ));
             }
 
             return books;
         }
-
 
         public static List<Book> SearchBooks(string searchTerm)
         {
@@ -74,12 +77,11 @@ namespace Library.Data
             using var conn = Database.GetConnection();
             using var cmd = new SQLiteCommand(conn);
 
-            // Suche mit LIKE und Platzhaltern, case insensitive für Titel, Autor und Genre
-            cmd.CommandText = @"SELECT BookID, Title, Author, Genre, Summary, IsAvailable 
-                    FROM Books 
-                    WHERE Title LIKE @searchTerm 
-                       OR Author LIKE @searchTerm 
-                       OR Genre LIKE @searchTerm";
+            cmd.CommandText = @"SELECT BookID, Title, Author, Genre, Summary, IsAvailable, GiveBackDate
+                                FROM Books 
+                                WHERE Title LIKE @searchTerm 
+                                   OR Author LIKE @searchTerm 
+                                   OR Genre LIKE @searchTerm";
             cmd.Parameters.AddWithValue("@searchTerm", $"%{searchTerm}%");
 
             using var reader = cmd.ExecuteReader();
@@ -91,12 +93,14 @@ namespace Library.Data
                     reader.GetString(2),
                     reader.IsDBNull(3) ? null : reader.GetString(3),
                     reader.IsDBNull(4) ? null : reader.GetString(4),
-                    reader.GetBoolean(5)
+                    reader.GetBoolean(5),
+                    reader["GiveBackDate"] == DBNull.Value ? null : (DateTime?)Convert.ToDateTime(reader["GiveBackDate"])
                 ));
             }
 
             return results;
         }
+
         public void UpdateBook(Book updatedBook)
         {
             using var conn = Database.GetConnection();
@@ -108,7 +112,8 @@ namespace Library.Data
                     Author = @Author,
                     Genre = @Genre,
                     Summary = @Summary,
-                    IsAvailable = @IsAvailable
+                    IsAvailable = @IsAvailable,
+                    GiveBackDate = @GiveBackDate
                 WHERE BookID = @BookID;
             ";
 
@@ -117,6 +122,7 @@ namespace Library.Data
             cmd.Parameters.AddWithValue("@Genre", updatedBook.Genre);
             cmd.Parameters.AddWithValue("@Summary", updatedBook.Summary);
             cmd.Parameters.AddWithValue("@IsAvailable", updatedBook.IsAvailable ? 1 : 0);
+            cmd.Parameters.AddWithValue("@GiveBackDate", updatedBook.GiveBackDate?.ToString("yyyy-MM-dd") ?? (object)DBNull.Value);
             cmd.Parameters.AddWithValue("@BookID", updatedBook.BookId);
 
             cmd.ExecuteNonQuery();
