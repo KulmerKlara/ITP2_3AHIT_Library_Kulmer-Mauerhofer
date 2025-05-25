@@ -4,6 +4,7 @@
 @inject AuthService AuthService
 @inject BookRepository BookRepository
 
+
 <div class="page-wrapper" style="margin-left:70px;">
     <h3>Alle Bücher in der Bibliothek</h3>
 
@@ -20,27 +21,15 @@
     }
     else
     {
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Titel</th>
-                    <th>Autor</th>
-                    <th>Genre</th>
-                    <th>Verfügbar</th>
-                </tr>
-            </thead>
-            <tbody>
+        <div class="book-grid">
             @foreach (var book in books)
             {
-                <tr>
-                    <td>@book.Title</td>
-                    <td>@book.Author</td>
-                    <td>@book.Genre</td>
-                    <td>@(book.IsAvailable ? "Ja" : "Nein")</td>
-                </tr>
+                <div class="book-card">
+                    <div class="book-image-placeholder"></div>
+                    <div class="title-placeholder">@book.Title</div>
+                </div>
             }
-            </tbody>
-        </table>
+        </div>
     }
 </div>
 
@@ -52,3 +41,4 @@
         books = BookRepository.GetAllBooks();
     }
 }
+
