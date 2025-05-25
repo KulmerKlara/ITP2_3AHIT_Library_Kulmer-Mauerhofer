@@ -7,57 +7,51 @@
 
 @if (!AuthService.IsAuthenticated)
 {
-    // If the user is not authenticated, prompt them to log in
     <p>Please <a href="/login">log in</a> to see your book list.</p>
 }
 else
 {
-    // Show the user's book list
     <h1>Your Book List, @AuthService.LoggedInUser.Name</h1>
 
     @if (books == null)
     {
-        // Show loading message while books are being loaded
         <p>Loading your books...</p>
     }
     else if (books.Count == 0)
     {
-        // Inform the user if their list is empty
         <p>Your list is empty.</p>
     }
     else
     {
-        // Display the list of books
-        <ul>
+        <div class="book-grid">
             @foreach (var book in books)
             {
-                <li>
-                    <strong>@book.Title</strong> by @book.Author<br />
-                    Genre: @book.Genre<br />
-                    @book.Summary<br />
-                    <!-- Button to remove a book from the list -->
-                    <button @onclick="() => RemoveFromList(book.BookId)">Remove</button>
-                </li>
+                <div class="book-card">
+                    <div class="book-image-placeholder">
+                        Bild kommt hier hin
+                    </div>
+                    <div class="book-title">@book.Title</div>
+                    <div class="book-author"><strong>Autor:</strong> @book.Author</div>
+                    <div class="book-genre"><strong>Genre:</strong> @book.Genre</div>
+                    <div class="book-summary">@book.Summary</div>
+                    <button class="remove-btn" @onclick="() => RemoveFromList(book.BookId)">Remove</button>
+                </div>
             }
-        </ul>
+        </div>
     }
 }
 
 @code {
-    // List to hold the user's books
     private List<Book> books;
 
-    // Called when the component is initialized
     protected override void OnInitialized()
     {
         if (AuthService.IsAuthenticated)
         {
-            // Load the user's book list
             books = UserBookListRepository.GetUserBookList(AuthService.LoggedInUser.Id);
         }
     }
 
-    // Removes a book from the user's list and refreshes the list
     private void RemoveFromList(int bookId)
     {
         UserBookListRepository.RemoveBookFromUserList(AuthService.LoggedInUser.Id, bookId);
