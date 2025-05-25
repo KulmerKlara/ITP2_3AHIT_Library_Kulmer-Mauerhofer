@@ -99,13 +99,22 @@ else
 
     private void AddToBooklist()
     {
-        if (!AuthService.IsAuthenticated)
+        if (!AuthService.IsAuthenticated || AuthService.LoggedInUser == null)
         {
             addToListMessage = "Bitte erst anmelden, um Bücher hinzuzufügen.";
             return;
         }
 
-        UserBookListRepository.AddBookToUserList(AuthService.LoggedInUser.Id, selectedBook.BookId);
+        var userId = AuthService.LoggedInUser.Id;
+
+        // Verhindere doppelte Einträge (optional, falls nicht schon in Repository geprüft)
+        if (UserBookListRepository.IsBookAlreadyInUserList(userId, selectedBook.BookId))
+        {
+            addToListMessage = $"Buch '{selectedBook.Title}' ist bereits in deiner Booklist.";
+            return;
+        }
+
+        UserBookListRepository.AddBookToUserList(userId, selectedBook.BookId);
         addToListMessage = $"Buch '{selectedBook.Title}' wurde zur Booklist hinzugefügt.";
     }
 }
