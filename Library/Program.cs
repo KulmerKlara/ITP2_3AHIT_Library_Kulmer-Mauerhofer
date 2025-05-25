@@ -15,6 +15,7 @@ builder.Services.AddSingleton<BookRepository>(); // HIER hinzugefügt
 
 // Authentifizierung
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddSingleton<UserRepository>();
 builder.Services.AddSingleton<UserBookListRepository>();
 
 var app = builder.Build();

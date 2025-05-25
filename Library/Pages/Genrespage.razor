@@ -97,17 +97,52 @@ else
         addToListMessage = null;
     }
 
-    private void AddToBooklist()
+ private void AddToBooklist()
+{
+    if (!AuthService.IsAuthenticated || AuthService.LoggedInUser == null)
     {
-        if (!AuthService.IsAuthenticated)
-        {
-            addToListMessage = "Bitte erst anmelden, um Bücher hinzuzufügen.";
-            return;
-        }
-
-        UserBookListRepository.AddBookToUserList(AuthService.LoggedInUser.Id, selectedBook.BookId);
-        addToListMessage = $"Buch '{selectedBook.Title}' wurde zur Booklist hinzugefügt.";
+        addToListMessage = "Bitte erst anmelden, um Bücher hinzuzufügen.";
+        return;
     }
+
+    var userId = AuthService.LoggedInUser.Id;
+
+    // Lade das Buch nochmal aus der DB, um aktuellen Status zu prüfen
+    var bookFromDb = BookRepo.GetAllBooks().FirstOrDefault(b => b.BookId == selectedBook.BookId);
+    if (bookFromDb == null)
+    {
+        addToListMessage = "Buch konnte nicht gefunden werden.";
+        return;
+    }
+
+    if (!bookFromDb.IsAvailable)
+    {
+        addToListMessage = $"Buch '{bookFromDb.Title}' ist aktuell nicht verfügbar und kann nicht hinzugefügt werden.";
+        return;
+    }
+
+    if (UserBookListRepository.IsBookAlreadyInUserList(userId, selectedBook.BookId))
+    {
+        addToListMessage = $"Buch '{selectedBook.Title}' ist bereits in deiner Booklist.";
+        return;
+    }
+
+    UserBookListRepository.AddBookToUserList(userId, selectedBook.BookId);
+
+    // Buch auf nicht verfügbar setzen und Rückgabedatum vergeben
+    bookFromDb.IsAvailable = false;
+    bookFromDb.GiveBackDate = DateTime.Today.AddDays(7);
+
+    // Änderungen in der DB speichern
+    BookRepo.UpdateBook(bookFromDb);
+
+    // UI aktualisieren, damit Status korrekt angezeigt wird
+    selectedBook.IsAvailable = false;
+    selectedBook.GiveBackDate = bookFromDb.GiveBackDate;
+
+    addToListMessage = $"Buch '{selectedBook.Title}' wurde zur Booklist hinzugefügt. Rückgabe bis: {selectedBook.GiveBackDate?.ToString("dd.MM.yyyy")}";
+}
+
 }
 
 <style>

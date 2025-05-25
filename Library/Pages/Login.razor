@@ -42,7 +42,8 @@
                     @if (signInSuccess)
                     {
                         <p style="color: green">Welcome @signUpName!</p>
-                        <button @onclick="() => GoToBooklist(UserRepository.GetUserByName(signUpName))">Go to your book list</button>
+                        <button @onclick="() => GoToOtherPage(UserRepository.GetUserByName(signUpName))">Go to your book list</button>
+                        <button @onclick="() => GoToOtherPage(UserRepository.GetUserByName(signUpName))">Go back to home</button>
                     }
                     <div style="margin-top: 10px;">
                         <button @onclick="ToggleSignUp">Sign Up</button>
@@ -141,10 +142,11 @@
             signInSuccess = false;
             errorMessage = "Invalid username or password.";
         }
+        
     }
 
     // Navigate to book list after successful login
-    private void GoToBooklist(User user)
+    private void GoToOtherPage(User user)
     {
         if (user.Role == "Employee")
         {
@@ -154,6 +156,9 @@
         {
             NavigationManager.NavigateTo("/booklist");
         }
-        
+        if (user.Role == "Employee" || user.Role == "Customer")
+        {
+            NavigationManager.NavigateTo("/");
+        }
     }
 }
