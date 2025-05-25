@@ -1,52 +1,214 @@
-.page-wrapper {
-  padding-top: 1cm;
+.modal-content input.input-field,
+.modal-content textarea.input-field,
+.modal-content .form-input {
+    background-color: #fafafa;  /* Heller Hintergrund */
+    border: 1.5px solid #ccc;    /* Dezente Rahmenfarbe */
+    border-radius: 10px;         /* Rundere Ecken */
+    padding: 10px 14px;          /* Mehr Innenabstand */
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+    resize: vertical;            /* Textarea kann in der Höhe angepasst werden */
+    width: 100%;                /* volle Breite */
+    box-sizing: border-box;     /* Padding + Border zählen zur Breite */
 }
 
+.modal-content input.input-field:focus,
+.modal-content textarea.input-field:focus,
+.modal-content .form-input:focus {
+    border-color: #2f88a0;      /* Fokusfarbe */
+    box-shadow: 0 0 8px rgba(47,136,160, 0.5);
+    outline: none;
+}
+
+.modal-content label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #444;
+}
+
+/* Formular als Grid mit 2 Spalten */
+.modal-content form {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 2 Spalten mit gleicher Breite */
+    gap: 16px 24px; /* Abstand: 16px vertikal, 24px horizontal */
+}
+
+/* Jedes direkte div im Formular ist eine Spalte, flex für Label+Input */
+.modal-content form > div {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Zusammenfassung (Textarea) nimmt beide Spalten ein */
+.modal-content form > div:nth-last-child(3) {
+    grid-column: 1 / -1;
+}
+
+.modal-content button[type="submit"],
+.modal-content button[type="button"] {
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    background-color: #2f88a0;
+    color: white;
+    transition: background-color 0.3s ease;
+    margin-right: 12px;
+}
+
+.modal-content button[type="submit"]:hover {
+    background-color: #1f5f6d;
+}
+
+.modal-content button[type="button"]:hover {
+    background-color: #666;
+}
+
+.page-wrapper {
+    padding-top: 1cm;
+}
+
+.header-box {
+    background-color: #f0f0f0;  /* hellgrau */
+    padding: 10px 20px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    user-select: none;
+    margin-bottom: 20px;
+    position: relative;
+    cursor: pointer;
+}
+
+.header-box h3 {
+    margin: 0;
+    flex-grow: 1;
+    font-weight: 600;
+    font-size: 1.4rem;
+}
+
+.dropdown-selected {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 1rem;
+    color: #333;
+    user-select: none;
+}
+
+.filter-dropdown {
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background-color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    min-width: 180px;
+    transition: border-color 0.3s ease;
+}
+
+.filter-dropdown:hover {
+    border-color: #2f88a0;
+}
+
+.filter-dropdown:focus {
+    outline: none;
+    border-color: #2f88a0;
+    box-shadow: 0 0 5px #2f88a0;
+}
+
+.dropdown-arrow {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.4rem;
+    padding: 4px;
+    transition: transform 0.3s ease;
+    color: #333;
+}
+
+.dropdown-arrow:focus {
+    outline: 2px solid #2f88a0;
+    outline-offset: 2px;
+}
+
+/* Pfeil drehen, wenn Dropdown offen */
+.header-box[aria-expanded="true"] .dropdown-arrow,
+.dropdown-arrow.open span {
+    transform: rotate(180deg);
+    display: inline-block;
+}
+
+.dropdown-arrow span {
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: white;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    border-radius: 6px;
+    margin-top: 6px;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-width: 280px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.dropdown-menu button,
+.dropdown-item {
+    background: none;
+    border: none;
+    padding: 10px 16px;
+    text-align: left;
+    cursor: pointer;
+    font-size: 1rem;
+    color: #333;
+    transition: background-color 0.2s ease;
+}
+
+.dropdown-menu button:hover,
+.dropdown-menu button:focus,
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background-color: #e0e0e0;
+    outline: none;
+}
+
+/* Plus-Button */
 .plus-button {
-  position: absolute;
-  top: 90px;
-  left: 20px;
-  width: 50px;
-  height: 50px;
-  background-color: #2f88a0;
-  color: white;
-  font-size: 30px;
-  font-weight: bold;
-  border: none;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-  padding: 0;
+    position: absolute;
+    top: 90px;
+    left: 20px;
+    width: 50px;
+    height: 50px;
+    background-color: #2f88a0;
+    color: white;
+    font-size: 30px;
+    font-weight: bold;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    padding: 0;
 }
 
 .plus-button:hover {
-  background-color: #0056b3;
-}
-
-.minus-button {
-  position: absolute;
-  top: 160px;
-  left: 20px;
-  width: 50px;
-  height: 50px;
-  background-color: #2f88a0;
-  color: white;
-  font-size: 30px;
-  font-weight: bold;
-  border: none;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-}
-
-.minus-button:hover {
-  background-color: #0056b3;
+    background-color: #0056b3;
 }
 
 .book-grid {
@@ -73,6 +235,11 @@
     background-color: #ccc;
     border-radius: 4px;
     box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    font-size: 14px;
 }
 
 .title-placeholder {
@@ -102,7 +269,7 @@
 .modal-content {
     background-color: white;
     width: 50vw;
-    height: 50vh;
+    height: 80vh;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
@@ -132,17 +299,11 @@
     align-items: center;
     justify-content: center;
     font-size: 14px;
+    color: #666;
 }
 
 .book-info {
     flex-grow: 1;
-}
-.input-field {
-    width: 100%;
-    padding: 6px;
-    margin-bottom: 12px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
 }
 
 .book-detail-modal {
@@ -166,12 +327,12 @@
 .edit-button:hover {
     background-color: #0056b3;
 }
+
 .remove-button {
     position: absolute;
     bottom: 10px;
     left: 10px;
-    /* gleiche Styles wie .edit-button */
-    background-color: #f44336; /* z.B. rot für löschen */
+    background-color: #f44336; /* rot für löschen */
     color: white;
     border: none;
     padding: 6px 12px;
@@ -183,18 +344,27 @@
 .remove-button:hover {
     background-color: #d32f2f;
 }
-.remove-button {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-    /* gleiche Styles wie .edit-button */
-    background-color: #f44336; /* z.B. rot für löschen */
-    color: white;
-    border: none;
-    padding: 6px 12px;
-    cursor: pointer;
+
+/* Styling für Buch-Bild und Titel im Dropdown */
+.dropdown-item > div:first-child {
+    width: 40px;
+    height: 60px;
+    background-color: #ccc;
     border-radius: 4px;
-    font-weight: bold;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: #666;
+    flex-shrink: 0;
 }
 
-
+.dropdown-item > div:last-child {
+    margin-left: 10px;
+    font-size: 1rem;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
