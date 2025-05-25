@@ -92,13 +92,49 @@
             </div>
         </div>
     }
+
+    @if (isEditModalVisible && editableBook != null)
+    {
+        <div class="modal-backdrop" @onclick="CloseEditModal">
+            <div class="modal-content" @onclick:stopPropagation>
+                <h2>Buch bearbeiten</h2>
+                <EditForm Model="@editableBook" OnValidSubmit="@SaveEditedBook">
+                    <div>
+                        <label>Titel:</label>
+                        <InputText @bind-Value="editableBook.Title" class="input-field" />
+                    </div>
+                    <div>
+                        <label>Autor:</label>
+                        <InputText @bind-Value="editableBook.Author" class="input-field" />
+                    </div>
+                    <div>
+                        <label>Genre:</label>
+                        <InputText @bind-Value="editableBook.Genre" class="input-field" />
+                    </div>
+                    <div>
+                        <label>Zusammenfassung:</label>
+                        <InputTextArea @bind-Value="editableBook.Summary" class="input-field" />
+                    </div>
+                    <div>
+                        <label>Verfügbar:</label>
+                        <InputCheckbox @bind-Value="editableBook.IsAvailable" />
+                    </div>
+                    <button type="submit">Speichern</button>
+                    <button type="button" @onclick="CloseEditModal">Abbrechen</button>
+                </EditForm>
+            </div>
+        </div>
+    }
 </div>
 
 @code {
     private List<Book> books;
     private bool isMinusModalVisible = false;
     private bool isPlusModalVisible = false;
+    private bool isEditModalVisible = false;
+
     private Book selectedBook;
+    private Book editableBook;
     private Book newBook = new Book(0, "", "", "", "", true);
 
     protected override void OnInitialized()
@@ -113,7 +149,7 @@
     private void HidePlusModal()
     {
         isPlusModalVisible = false;
-        newBook = new Book(0, "", "", "", "", true); // reset
+        newBook = new Book(0, "", "", "", "", true);
     }
 
     private void ShowBookDetails(Book book)
@@ -128,8 +164,27 @@
 
     private void EditBook(Book book)
     {
-        // TODO: Edit-Modal oder Weiterleitung zur Bearbeitungsseite
-        Console.WriteLine($"Edit {book.Title}");
+        editableBook = new Book(book.BookId, book.Title, book.Author, book.Genre, book.Summary, book.IsAvailable);
+        isEditModalVisible = true;
+    }
+
+    private void CloseEditModal()
+    {
+        isEditModalVisible = false;
+        editableBook = null;
+    }
+
+    private void SaveEditedBook()
+    {
+        BookRepository.UpdateBook(editableBook);
+        books = BookRepository.GetAllBooks();
+
+        if (selectedBook != null && selectedBook.BookId == editableBook.BookId)
+        {
+            selectedBook = books.FirstOrDefault(b => b.BookId == editableBook.BookId);
+        }
+
+        CloseEditModal();
     }
 
     private void AddBook()
