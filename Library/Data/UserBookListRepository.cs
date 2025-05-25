@@ -76,5 +76,12 @@ namespace Library.Data
 
             return books;
         }
+
+        public bool IsBookAlreadyInUserList(int userId, int bookId)
+        {
+            var userBookList = GetUserBookList(userId);
+            return userBookList.Any(entry => entry.BookId == bookId);
+        }
+
     }
 }
