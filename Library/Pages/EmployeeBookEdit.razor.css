@@ -1,5 +1,6 @@
 .modal-content input.input-field,
-.modal-content textarea.input-field {
+.modal-content textarea.input-field,
+.modal-content .form-input {
     background-color: #fafafa;  /* Heller Hintergrund */
     border: 1.5px solid #ccc;    /* Dezente Rahmenfarbe */
     border-radius: 10px;         /* Rundere Ecken */
@@ -8,10 +9,13 @@
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
     box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
     resize: vertical;            /* Textarea kann in der Höhe angepasst werden */
+    width: 100%;                /* volle Breite */
+    box-sizing: border-box;     /* Padding + Border zählen zur Breite */
 }
 
 .modal-content input.input-field:focus,
-.modal-content textarea.input-field:focus {
+.modal-content textarea.input-field:focus,
+.modal-content .form-input:focus {
     border-color: #2f88a0;      /* Fokusfarbe */
     box-shadow: 0 0 8px rgba(47,136,160, 0.5);
     outline: none;
@@ -22,6 +26,24 @@
     font-weight: 600;
     margin-bottom: 6px;
     color: #444;
+}
+
+/* Formular als Grid mit 2 Spalten */
+.modal-content form {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 2 Spalten mit gleicher Breite */
+    gap: 16px 24px; /* Abstand: 16px vertikal, 24px horizontal */
+}
+
+/* Jedes direkte div im Formular ist eine Spalte, flex für Label+Input */
+.modal-content form > div {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Zusammenfassung (Textarea) nimmt beide Spalten ein */
+.modal-content form > div:nth-last-child(3) {
+    grid-column: 1 / -1;
 }
 
 .modal-content button[type="submit"],
@@ -45,9 +67,8 @@
     background-color: #666;
 }
 
-
 .page-wrapper {
-  padding-top: 1cm;
+    padding-top: 1cm;
 }
 
 .header-box {
@@ -165,27 +186,27 @@
 
 /* Plus-Button */
 .plus-button {
-  position: absolute;
-  top: 90px;
-  left: 20px;
-  width: 50px;
-  height: 50px;
-  background-color: #2f88a0;
-  color: white;
-  font-size: 30px;
-  font-weight: bold;
-  border: none;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-  padding: 0;
+    position: absolute;
+    top: 90px;
+    left: 20px;
+    width: 50px;
+    height: 50px;
+    background-color: #2f88a0;
+    color: white;
+    font-size: 30px;
+    font-weight: bold;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    padding: 0;
 }
 
 .plus-button:hover {
-  background-color: #0056b3;
+    background-color: #0056b3;
 }
 
 .book-grid {
