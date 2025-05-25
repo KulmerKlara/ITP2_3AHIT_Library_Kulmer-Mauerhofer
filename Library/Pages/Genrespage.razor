@@ -40,7 +40,7 @@ else
 
     private List<Book> books;
 
-    protected override void OnInitialized()
+    protected override void OnParametersSet()
     {
         books = BookRepo.GetBooksByGenre(Genre);
     }
