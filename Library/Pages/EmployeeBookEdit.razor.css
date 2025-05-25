@@ -118,3 +118,51 @@
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+
+.book-detail-container {
+    display: flex;
+    gap: 20px;
+}
+
+.book-image-detail {
+    width: 150px;
+    height: 200px;
+    background-color: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+.book-info {
+    flex-grow: 1;
+}
+.input-field {
+    width: 100%;
+    padding: 6px;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.book-detail-modal {
+    position: relative;
+}
+
+.edit-button {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.edit-button:hover {
+    background-color: #0056b3;
+}

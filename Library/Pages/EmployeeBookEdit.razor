@@ -23,7 +23,7 @@
         <div class="book-grid">
             @foreach (var book in books)
             {
-                <div class="book-card">
+                <div class="book-card" @onclick="() => ShowBookDetails(book)">
                     <div class="book-image-placeholder"></div>
                     <div class="title-placeholder">@book.Title</div>
                 </div>
@@ -31,7 +31,6 @@
         </div>
     }
 
-    @* Minus Modal *@
     @if (isMinusModalVisible)
     {
         <div class="modal-backdrop" @onclick="HideMinusModal">
@@ -43,37 +42,53 @@
         </div>
     }
 
-    @* Plus Modal mit Formular *@
     @if (isPlusModalVisible)
     {
         <div class="modal-backdrop" @onclick="HidePlusModal">
             <div class="modal-content" @onclick:stopPropagation>
-                <h2>Neues Buch hinzufügen</h2>
-                <EditForm Model="newBook" OnValidSubmit="AddBook">
+                <h2>Buch hinzufügen</h2>
+                <EditForm Model="@newBook" OnValidSubmit="@AddBook">
                     <div>
-                        <label>Titel:</label><br />
-                        <InputText @bind-Value="newBook.Title" class="input-field" />
+                        <label>Titel:</label>
+                        <InputText @bind-Value="newBook.Title" class="form-input" />
                     </div>
                     <div>
-                        <label>Autor:</label><br />
-                        <InputText @bind-Value="newBook.Author" class="input-field" />
+                        <label>Autor:</label>
+                        <InputText @bind-Value="newBook.Author" class="form-input" />
                     </div>
                     <div>
-                        <label>Genre:</label><br />
-                        <InputText @bind-Value="newBook.Genre" class="input-field" />
+                        <label>Genre:</label>
+                        <InputText @bind-Value="newBook.Genre" class="form-input" />
                     </div>
                     <div>
-                        <label>Zusammenfassung:</label><br />
-                        <InputTextArea @bind-Value="newBook.Summary" class="input-field" />
+                        <label>Zusammenfassung:</label>
+                        <InputTextArea @bind-Value="newBook.Summary" class="form-input" />
                     </div>
-                    <div>
-                        <label>Verfügbar:</label>
-                        <InputCheckbox @bind-Value="newBook.IsAvailable" />
-                    </div>
-                    <br />
                     <button type="submit">Hinzufügen</button>
                     <button type="button" @onclick="HidePlusModal">Abbrechen</button>
                 </EditForm>
+            </div>
+        </div>
+    }
+
+    @if (selectedBook != null)
+    {
+        <div class="modal-backdrop" @onclick="CloseBookDetails">
+            <div class="modal-content book-detail-modal" @onclick:stopPropagation>
+                <button class="edit-button" @onclick="() => EditBook(selectedBook)">edit</button>
+                <div class="book-detail-container">
+                    <div class="book-image-detail">
+                        <div class="image-placeholder">[Bild]</div>
+                    </div>
+                    <div class="book-info">
+                        <h3>@selectedBook.Title</h3>
+                        <p><strong>Autor:</strong> @selectedBook.Author</p>
+                        <p><strong>Genre:</strong> @selectedBook.Genre</p>
+                        <p><strong>Zusammenfassung:</strong><br /> @selectedBook.Summary</p>
+                        <p><strong>Verfügbar:</strong> @(selectedBook.IsAvailable ? "Ja" : "Nein")</p>
+                        <button @onclick="CloseBookDetails">Schließen</button>
+                    </div>
+                </div>
             </div>
         </div>
     }
@@ -83,8 +98,7 @@
     private List<Book> books;
     private bool isMinusModalVisible = false;
     private bool isPlusModalVisible = false;
-
-    // Temporäres Buchmodell fürs Formular
+    private Book selectedBook;
     private Book newBook = new Book(0, "", "", "", "", true);
 
     protected override void OnInitialized()
@@ -95,18 +109,33 @@
     private void ShowMinusModal() => isMinusModalVisible = true;
     private void HideMinusModal() => isMinusModalVisible = false;
 
-    private void ShowPlusModal()
+    private void ShowPlusModal() => isPlusModalVisible = true;
+    private void HidePlusModal()
     {
-        newBook = new Book(0, "", "", "", "", true);
-        isPlusModalVisible = true;
+        isPlusModalVisible = false;
+        newBook = new Book(0, "", "", "", "", true); // reset
     }
 
-    private void HidePlusModal() => isPlusModalVisible = false;
+    private void ShowBookDetails(Book book)
+    {
+        selectedBook = book;
+    }
+
+    private void CloseBookDetails()
+    {
+        selectedBook = null;
+    }
+
+    private void EditBook(Book book)
+    {
+        // TODO: Edit-Modal oder Weiterleitung zur Bearbeitungsseite
+        Console.WriteLine($"Edit {book.Title}");
+    }
 
     private void AddBook()
     {
         BookRepository.AddBook(newBook);
-        books = BookRepository.GetAllBooks(); // Neu laden, um BookId mitzunehmen
+        books = BookRepository.GetAllBooks();
         HidePlusModal();
     }
 }
