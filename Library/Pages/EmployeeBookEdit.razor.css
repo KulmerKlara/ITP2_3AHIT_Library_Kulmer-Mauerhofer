@@ -22,6 +22,10 @@
   padding: 0;
 }
 
+.plus-button:hover {
+  background-color: #0056b3;
+}
+
 .minus-button {
   position: absolute;
   top: 160px;
@@ -42,6 +46,6 @@
   padding: 0;
 }
 
-.plus-button:hover {
+.minus-button:hover {
   background-color: #0056b3;
 }
