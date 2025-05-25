@@ -1,14 +1,26 @@
 @page "/employee"
 @using Library.Data
 @inject BookRepository BookRepository
+@using Microsoft.AspNetCore.Components.Web
 
 <div class="page-wrapper" style="margin-left:70px;">
-    <div class="header-box">
-        <h3>Alle Bücher in der Bibliothek</h3>
+    <div class="header-box" @onclick="ToggleDropdown" tabindex="0" @onkeydown="HandleKeyDown" aria-expanded="@isDropdownOpen.ToString().ToLower()">
+        <h3>Bücher in der Bibliothek</h3>
+        <div class="dropdown-selected">
+            @GetFilterLabel(currentFilter)
+            <span class="dropdown-arrow">&#9662;</span>
+        </div>
+
+        @if (isDropdownOpen)
+        {
+            <div class="dropdown-menu" @onclick:stopPropagation>
+                <button class="dropdown-item" @onclick="@(() => SelectFilter("all"))">Alle Bücher</button>
+                <button class="dropdown-item" @onclick="@(() => SelectFilter("borrowed"))">Ausgeliehene Bücher</button>
+            </div>
+        }
     </div>
 
     <button class="plus-button" @onclick="ShowPlusModal">+</button>
-    <button class="minus-button" @onclick="ShowMinusModal">-</button>
 
     @if (books == null)
     {
@@ -130,7 +142,10 @@
 </div>
 
 @code {
+    private bool isDropdownOpen = false;
+    private string currentFilter = "all";
     private List<Book> books;
+
     private bool isMinusModalVisible = false;
     private bool isPlusModalVisible = false;
     private bool isEditModalVisible = false;
@@ -141,7 +156,50 @@
 
     protected override void OnInitialized()
     {
-        books = BookRepository.GetAllBooks();
+        LoadBooks();
+    }
+
+    private void ToggleDropdown()
+    {
+        isDropdownOpen = !isDropdownOpen;
+    }
+
+    private void SelectFilter(string filter)
+    {
+        currentFilter = filter;
+        isDropdownOpen = false;
+        LoadBooks();
+        selectedBook = null;
+        StateHasChanged();
+    }
+
+    private string GetFilterLabel(string filter)
+    {
+        return filter switch
+        {
+            "borrowed" => "Ausgeliehene Bücher",
+            _ => "Alle Bücher",
+        };
+    }
+
+    private void HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter" || e.Key == " ")
+        {
+            ToggleDropdown();
+        }
+        else if (e.Key == "Escape")
+        {
+            isDropdownOpen = false;
+        }
+    }
+
+    private void LoadBooks()
+    {
+        if (currentFilter == "borrowed")
+            books = BookRepository.GetBorrowedBooks();
+        else
+            books = BookRepository.GetAllBooks();
     }
 
     private void ShowMinusModal() => isMinusModalVisible = true;
@@ -179,7 +237,7 @@
     private void SaveEditedBook()
     {
         BookRepository.UpdateBook(editableBook);
-        books = BookRepository.GetAllBooks();
+        LoadBooks();
 
         if (selectedBook != null && selectedBook.BookId == editableBook.BookId)
         {
@@ -192,14 +250,14 @@
     private void AddBook()
     {
         BookRepository.AddBook(newBook);
-        books = BookRepository.GetAllBooks();
+        LoadBooks();
         HidePlusModal();
     }
 
     private void RemoveBook(Book book)
     {
         BookRepository.DeleteBook(book.BookId);
-        books = BookRepository.GetAllBooks();
+        LoadBooks();
 
         if (selectedBook != null && selectedBook.BookId == book.BookId)
         {
