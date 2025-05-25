@@ -113,6 +113,9 @@
         <div class="modal-backdrop" @onclick="CloseEditModal">
             <div class="modal-content" @onclick:stopPropagation>
                 <h2>Buch bearbeiten</h2>
+                <div class="book-image-detail">
+                    <div class="image-placeholder">[Bild]</div>
+                </div>
                 <EditForm Model="@editableBook" OnValidSubmit="@SaveEditedBook">
                     <div>
                         <label>Titel:</label>
