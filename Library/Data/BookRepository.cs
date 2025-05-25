@@ -97,5 +97,41 @@ namespace Library.Data
 
             return results;
         }
+        public void UpdateBook(Book updatedBook)
+        {
+            using var conn = Database.GetConnection();
+            using var cmd = new SQLiteCommand(conn);
+
+            cmd.CommandText = @"
+                UPDATE Books
+                SET Title = @Title,
+                    Author = @Author,
+                    Genre = @Genre,
+                    Summary = @Summary,
+                    IsAvailable = @IsAvailable
+                WHERE BookID = @BookID;
+            ";
+
+            cmd.Parameters.AddWithValue("@Title", updatedBook.Title);
+            cmd.Parameters.AddWithValue("@Author", updatedBook.Author);
+            cmd.Parameters.AddWithValue("@Genre", updatedBook.Genre);
+            cmd.Parameters.AddWithValue("@Summary", updatedBook.Summary);
+            cmd.Parameters.AddWithValue("@IsAvailable", updatedBook.IsAvailable ? 1 : 0);
+            cmd.Parameters.AddWithValue("@BookID", updatedBook.BookId);
+
+            cmd.ExecuteNonQuery();
+        }
+
+        public void DeleteBook(int bookId)
+        {
+            using var conn = Database.GetConnection();
+            using var cmd = new SQLiteCommand(conn);
+
+            cmd.CommandText = "DELETE FROM Books WHERE BookID = @BookID;";
+            cmd.Parameters.AddWithValue("@BookID", bookId);
+
+            cmd.ExecuteNonQuery();
+        }
     }
 }
+

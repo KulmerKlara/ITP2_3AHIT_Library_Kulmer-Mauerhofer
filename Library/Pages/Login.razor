@@ -42,7 +42,7 @@
                     @if (signInSuccess)
                     {
                         <p style="color: green">Welcome @signUpName!</p>
-                        <button @onclick="GoToBooklist">Go to your book list</button>
+                        <button @onclick="() => GoToBooklist(UserRepository.GetUserByName(signUpName))">Go to your book list</button>
                     }
                     <div style="margin-top: 10px;">
                         <button @onclick="ToggleSignUp">Sign Up</button>
@@ -144,8 +144,16 @@
     }
 
     // Navigate to book list after successful login
-    private void GoToBooklist()
+    private void GoToBooklist(User user)
     {
-        NavigationManager.NavigateTo("/booklist");
+        if (user.Role == "Employee")
+        {
+            NavigationManager.NavigateTo("/employee");
+        }
+        else if (user.Role == "Customer")
+        {
+            NavigationManager.NavigateTo("/booklist");
+        }
+        
     }
 }

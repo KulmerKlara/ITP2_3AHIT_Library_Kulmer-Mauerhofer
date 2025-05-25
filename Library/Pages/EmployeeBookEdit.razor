@@ -1,0 +1,211 @@
+@page "/employee"
+@using Library.Data
+@inject UserRepository UserRepository
+@inject AuthService AuthService
+@inject BookRepository BookRepository
+
+<div class="page-wrapper" style="margin-left:70px;">
+    <h3>Alle Bücher in der Bibliothek</h3>
+
+    <button class="plus-button" @onclick="ShowPlusModal">+</button>
+    <button class="minus-button" @onclick="ShowMinusModal">-</button>
+
+    @if (books == null)
+    {
+        <p>Lade Bücher...</p>
+    }
+    else if (books.Count == 0)
+    {
+        <p>Keine Bücher gefunden.</p>
+    }
+    else
+    {
+        <div class="book-grid">
+            @foreach (var book in books)
+            {
+                <div class="book-card" @onclick="() => ShowBookDetails(book)">
+                    <div class="book-image-placeholder"></div>
+                    <div class="title-placeholder">@book.Title</div>
+                </div>
+            }
+        </div>
+    }
+
+    @if (isMinusModalVisible)
+    {
+        <div class="modal-backdrop" @onclick="HideMinusModal">
+            <div class="modal-content" @onclick:stopPropagation>
+                <h2>Minus-Modal</h2>
+                <p>Dies ist das Minus-Fenster.</p>
+                <button @onclick="HideMinusModal">Schließen</button>
+            </div>
+        </div>
+    }
+
+    @if (isPlusModalVisible)
+    {
+        <div class="modal-backdrop" @onclick="HidePlusModal">
+            <div class="modal-content" @onclick:stopPropagation>
+                <h2>Buch hinzufügen</h2>
+                <EditForm Model="@newBook" OnValidSubmit="@AddBook">
+                    <div>
+                        <label>Titel:</label>
+                        <InputText @bind-Value="newBook.Title" class="form-input" />
+                    </div>
+                    <div>
+                        <label>Autor:</label>
+                        <InputText @bind-Value="newBook.Author" class="form-input" />
+                    </div>
+                    <div>
+                        <label>Genre:</label>
+                        <InputText @bind-Value="newBook.Genre" class="form-input" />
+                    </div>
+                    <div>
+                        <label>Zusammenfassung:</label>
+                        <InputTextArea @bind-Value="newBook.Summary" class="form-input" />
+                    </div>
+                    <button type="submit">Hinzufügen</button>
+                    <button type="button" @onclick="HidePlusModal">Abbrechen</button>
+                </EditForm>
+            </div>
+        </div>
+    }
+
+    @if (selectedBook != null)
+    {
+        <div class="modal-backdrop" @onclick="CloseBookDetails">
+            <div class="modal-content book-detail-modal" @onclick:stopPropagation>
+                <button class="edit-button" @onclick="() => EditBook(selectedBook)">edit</button>
+
+                <!-- Remove-Button unten links -->
+                <button class="remove-button" @onclick="() => RemoveBook(selectedBook)">remove</button>
+
+                <div class="book-detail-container">
+                    <div class="book-image-detail">
+                        <div class="image-placeholder">[Bild]</div>
+                    </div>
+                    <div class="book-info">
+                        <h3>@selectedBook.Title</h3>
+                        <p><strong>Autor:</strong> @selectedBook.Author</p>
+                        <p><strong>Genre:</strong> @selectedBook.Genre</p>
+                        <p><strong>Zusammenfassung:</strong><br /> @selectedBook.Summary</p>
+                        <p><strong>Verfügbar:</strong> @(selectedBook.IsAvailable ? "Ja" : "Nein")</p>
+                        <button @onclick="CloseBookDetails">Schließen</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (isEditModalVisible && editableBook != null)
+    {
+        <div class="modal-backdrop" @onclick="CloseEditModal">
+            <div class="modal-content" @onclick:stopPropagation>
+                <h2>Buch bearbeiten</h2>
+                <EditForm Model="@editableBook" OnValidSubmit="@SaveEditedBook">
+                    <div>
+                        <label>Titel:</label>
+                        <InputText @bind-Value="editableBook.Title" class="input-field" />
+                    </div>
+                    <div>
+                        <label>Autor:</label>
+                        <InputText @bind-Value="editableBook.Author" class="input-field" />
+                    </div>
+                    <div>
+                        <label>Genre:</label>
+                        <InputText @bind-Value="editableBook.Genre" class="input-field" />
+                    </div>
+                    <div>
+                        <label>Zusammenfassung:</label>
+                        <InputTextArea @bind-Value="editableBook.Summary" class="input-field" />
+                    </div>
+                    <div>
+                        <label>Verfügbar:</label>
+                        <InputCheckbox @bind-Value="editableBook.IsAvailable" />
+                    </div>
+                    <button type="submit">Speichern</button>
+                    <button type="button" @onclick="CloseEditModal">Abbrechen</button>
+                </EditForm>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private List<Book> books;
+    private bool isMinusModalVisible = false;
+    private bool isPlusModalVisible = false;
+    private bool isEditModalVisible = false;
+
+    private Book selectedBook;
+    private Book editableBook;
+    private Book newBook = new Book(0, "", "", "", "", true);
+
+    protected override void OnInitialized()
+    {
+        books = BookRepository.GetAllBooks();
+    }
+
+    private void ShowMinusModal() => isMinusModalVisible = true;
+    private void HideMinusModal() => isMinusModalVisible = false;
+
+    private void ShowPlusModal() => isPlusModalVisible = true;
+    private void HidePlusModal()
+    {
+        isPlusModalVisible = false;
+        newBook = new Book(0, "", "", "", "", true);
+    }
+
+    private void ShowBookDetails(Book book)
+    {
+        selectedBook = book;
+    }
+
+    private void CloseBookDetails()
+    {
+        selectedBook = null;
+    }
+
+    private void EditBook(Book book)
+    {
+        editableBook = new Book(book.BookId, book.Title, book.Author, book.Genre, book.Summary, book.IsAvailable);
+        isEditModalVisible = true;
+    }
+
+    private void CloseEditModal()
+    {
+        isEditModalVisible = false;
+        editableBook = null;
+    }
+
+    private void SaveEditedBook()
+    {
+        BookRepository.UpdateBook(editableBook);
+        books = BookRepository.GetAllBooks();
+
+        if (selectedBook != null && selectedBook.BookId == editableBook.BookId)
+        {
+            selectedBook = books.FirstOrDefault(b => b.BookId == editableBook.BookId);
+        }
+
+        CloseEditModal();
+    }
+
+    private void AddBook()
+    {
+        BookRepository.AddBook(newBook);
+        books = BookRepository.GetAllBooks();
+        HidePlusModal();
+    }
+
+    private void RemoveBook(Book book)
+    {
+        BookRepository.DeleteBook(book.BookId);
+        books = BookRepository.GetAllBooks();
+
+        if (selectedBook != null && selectedBook.BookId == book.BookId)
+        {
+            selectedBook = null;
+        }
+    }
+}
