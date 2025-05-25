@@ -106,6 +106,15 @@ namespace Library.Data
                 books[index] = updatedBook;
             }
         }
-
+        public void DeleteBook(int bookId)
+        {
+            var books = new List<Book>();
+            var bookToDelete = books.FirstOrDefault(b => b.BookId == bookId);
+            if (bookToDelete != null)
+            {
+                books.Remove(bookToDelete);
+            }
+        }
     }
 }
+
