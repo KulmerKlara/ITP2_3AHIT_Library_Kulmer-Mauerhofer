@@ -121,6 +121,20 @@ namespace Library.Data
 
             cmd.ExecuteNonQuery();
         }
+        public void Availability(Book updatedBook)
+        {
+            var books = GetAllBooks();
+            var existingBook = books.FirstOrDefault(b => b.BookId == updatedBook.BookId);
+            if (existingBook != null)
+            {
+                existingBook.Title = updatedBook.Title;
+                existingBook.Author = updatedBook.Author;
+                existingBook.Genre = updatedBook.Genre;
+                existingBook.Summary = updatedBook.Summary;
+                existingBook.IsAvailable = updatedBook.IsAvailable;
+                // Bei Datenbankanbindung: Kontext speichern
+            }
+        }
 
         public void DeleteBook(int bookId)
         {
