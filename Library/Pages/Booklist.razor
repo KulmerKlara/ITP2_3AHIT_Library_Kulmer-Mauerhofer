@@ -27,15 +27,19 @@ else
             @foreach (var book in books)
             {
                 <div class="book-card">
-                    <div class="book-image-placeholder">
-                        Bild kommt hier hin
-                    </div>
-                    <div class="book-title">@book.Title</div>
-                    <div class="book-author"><strong>Autor:</strong> @book.Author</div>
-                    <div class="book-genre"><strong>Genre:</strong> @book.Genre</div>
-                    <div class="book-summary">@book.Summary</div>
-                    <button class="remove-btn" @onclick="() => RemoveFromList(book.BookId)">Remove</button>
-                </div>
+    <div class="book-image-placeholder">
+        Bild kommt hier hin
+    </div>
+    <div class="book-title-container">
+        <div class="book-title">@book.Title</div>
+    </div>
+
+    <div class="book-author"><strong>Autor:</strong> @book.Author</div>
+    <div class="book-genre"><strong>Genre:</strong> @book.Genre</div>
+    <div class="book-summary">@book.Summary</div>
+    <button class="remove-btn" @onclick="() => RemoveFromList(book.BookId)">Remove</button>
+</div>
+
             }
         </div>
     }
