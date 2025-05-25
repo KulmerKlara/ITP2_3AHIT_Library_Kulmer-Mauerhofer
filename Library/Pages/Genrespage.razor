@@ -26,6 +26,12 @@
         showDetails = false;
         selectedBook = null;
     }
+
+    private void AddToBooklist()
+    {
+        // Logik zum Hinzufügen zur Booklist hier ergänzen
+        Console.WriteLine($"Buch '{selectedBook.Title}' zur Booklist hinzugefügt.");
+    }
 }
 
 <h3>@Genre Bücher</h3>
@@ -78,6 +84,10 @@ else
 
             <div class="info-field">
                 <strong>Verfügbar:</strong> @(selectedBook.IsAvailable ? "Ja" : "Nein")
+            </div>
+
+            <div class="modal-footer">
+                <button class="add-btn" @onclick="AddToBooklist">Add to Booklist</button>
             </div>
         </div>
     </div>
@@ -149,17 +159,19 @@ else
     z-index: 9999;
 }
 
-/* Modal Content ca. halb so breit wie die Seite, max 600px */
+/* Modal Content ca. halb so breit wie die Seite, max 600px, etwas höher */
 .modal-content {
     background-color: white;
     border-radius: 12px;
     padding: 24px 32px;
     width: 50vw;
     max-width: 600px;
-    max-height: 80vh;
+    max-height: 90vh; /* höher als vorher */
     overflow-y: auto;
     box-shadow: 0 8px 24px rgba(0,0,0,0.3);
     position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Close Button oben rechts */
@@ -191,5 +203,30 @@ else
 
 .info-field h2 {
     margin: 0;
+}
+
+/* Footer Bereich für den Button */
+.modal-footer {
+    margin-top: auto; /* schiebt den Footer nach unten */
+    padding-top: 12px;
+    border-top: 1px solid #ddd;
+    display: flex;
+    justify-content: center;
+}
+
+/* Stil für den Add to Booklist Button */
+.add-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.add-btn:hover {
+    background-color: #0056b3;
 }
 </style>
