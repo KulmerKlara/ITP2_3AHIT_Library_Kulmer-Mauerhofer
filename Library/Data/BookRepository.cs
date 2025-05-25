@@ -99,21 +99,38 @@ namespace Library.Data
         }
         public void UpdateBook(Book updatedBook)
         {
-            var books = new List<Book>();
-            var index = books.FindIndex(b => b.BookId == updatedBook.BookId);
-            if (index != -1)
-            {
-                books[index] = updatedBook;
-            }
+            using var conn = Database.GetConnection();
+            using var cmd = new SQLiteCommand(conn);
+
+            cmd.CommandText = @"
+                UPDATE Books
+                SET Title = @Title,
+                    Author = @Author,
+                    Genre = @Genre,
+                    Summary = @Summary,
+                    IsAvailable = @IsAvailable
+                WHERE BookID = @BookID;
+            ";
+
+            cmd.Parameters.AddWithValue("@Title", updatedBook.Title);
+            cmd.Parameters.AddWithValue("@Author", updatedBook.Author);
+            cmd.Parameters.AddWithValue("@Genre", updatedBook.Genre);
+            cmd.Parameters.AddWithValue("@Summary", updatedBook.Summary);
+            cmd.Parameters.AddWithValue("@IsAvailable", updatedBook.IsAvailable ? 1 : 0);
+            cmd.Parameters.AddWithValue("@BookID", updatedBook.BookId);
+
+            cmd.ExecuteNonQuery();
         }
+
         public void DeleteBook(int bookId)
         {
-            var books = new List<Book>();
-            var bookToDelete = books.FirstOrDefault(b => b.BookId == bookId);
-            if (bookToDelete != null)
-            {
-                books.Remove(bookToDelete);
-            }
+            using var conn = Database.GetConnection();
+            using var cmd = new SQLiteCommand(conn);
+
+            cmd.CommandText = "DELETE FROM Books WHERE BookID = @BookID;";
+            cmd.Parameters.AddWithValue("@BookID", bookId);
+
+            cmd.ExecuteNonQuery();
         }
     }
 }
