@@ -1,11 +1,11 @@
 @page "/employee"
 @using Library.Data
-@inject UserRepository UserRepository
-@inject AuthService AuthService
 @inject BookRepository BookRepository
 
 <div class="page-wrapper" style="margin-left:70px;">
-    <h3>Alle Bücher in der Bibliothek</h3>
+    <div class="header-box">
+        <h3>Alle Bücher in der Bibliothek</h3>
+    </div>
 
     <button class="plus-button" @onclick="ShowPlusModal">+</button>
     <button class="minus-button" @onclick="ShowMinusModal">-</button>
@@ -76,8 +76,6 @@
         <div class="modal-backdrop" @onclick="CloseBookDetails">
             <div class="modal-content book-detail-modal" @onclick:stopPropagation>
                 <button class="edit-button" @onclick="() => EditBook(selectedBook)">edit</button>
-
-                <!-- Remove-Button unten links -->
                 <button class="remove-button" @onclick="() => RemoveBook(selectedBook)">remove</button>
 
                 <div class="book-detail-container">
