@@ -97,5 +97,15 @@ namespace Library.Data
 
             return results;
         }
+        public void UpdateBook(Book updatedBook)
+        {
+            var books = new List<Book>();
+            var index = books.FindIndex(b => b.BookId == updatedBook.BookId);
+            if (index != -1)
+            {
+                books[index] = updatedBook;
+            }
+        }
+
     }
 }
