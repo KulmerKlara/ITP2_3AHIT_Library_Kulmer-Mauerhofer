@@ -31,6 +31,7 @@
         </div>
     }
 
+    @* Minus Modal *@
     @if (isMinusModalVisible)
     {
         <div class="modal-backdrop" @onclick="HideMinusModal">
@@ -42,13 +43,37 @@
         </div>
     }
 
+    @* Plus Modal mit Formular *@
     @if (isPlusModalVisible)
     {
         <div class="modal-backdrop" @onclick="HidePlusModal">
             <div class="modal-content" @onclick:stopPropagation>
-                <h2>Plus-Modal</h2>
-                <p>Dies ist das Plus-Fenster.</p>
-                <button @onclick="HidePlusModal">Schließen</button>
+                <h2>Neues Buch hinzufügen</h2>
+                <EditForm Model="newBook" OnValidSubmit="AddBook">
+                    <div>
+                        <label>Titel:</label><br />
+                        <InputText @bind-Value="newBook.Title" class="input-field" />
+                    </div>
+                    <div>
+                        <label>Autor:</label><br />
+                        <InputText @bind-Value="newBook.Author" class="input-field" />
+                    </div>
+                    <div>
+                        <label>Genre:</label><br />
+                        <InputText @bind-Value="newBook.Genre" class="input-field" />
+                    </div>
+                    <div>
+                        <label>Zusammenfassung:</label><br />
+                        <InputTextArea @bind-Value="newBook.Summary" class="input-field" />
+                    </div>
+                    <div>
+                        <label>Verfügbar:</label>
+                        <InputCheckbox @bind-Value="newBook.IsAvailable" />
+                    </div>
+                    <br />
+                    <button type="submit">Hinzufügen</button>
+                    <button type="button" @onclick="HidePlusModal">Abbrechen</button>
+                </EditForm>
             </div>
         </div>
     }
@@ -59,28 +84,29 @@
     private bool isMinusModalVisible = false;
     private bool isPlusModalVisible = false;
 
+    // Temporäres Buchmodell fürs Formular
+    private Book newBook = new Book(0, "", "", "", "", true);
+
     protected override void OnInitialized()
     {
         books = BookRepository.GetAllBooks();
     }
 
-    private void ShowMinusModal()
-    {
-        isMinusModalVisible = true;
-    }
-
-    private void HideMinusModal()
-    {
-        isMinusModalVisible = false;
-    }
+    private void ShowMinusModal() => isMinusModalVisible = true;
+    private void HideMinusModal() => isMinusModalVisible = false;
 
     private void ShowPlusModal()
     {
+        newBook = new Book(0, "", "", "", "", true);
         isPlusModalVisible = true;
     }
 
-    private void HidePlusModal()
+    private void HidePlusModal() => isPlusModalVisible = false;
+
+    private void AddBook()
     {
-        isPlusModalVisible = false;
+        BookRepository.AddBook(newBook);
+        books = BookRepository.GetAllBooks(); // Neu laden, um BookId mitzunehmen
+        HidePlusModal();
     }
 }
