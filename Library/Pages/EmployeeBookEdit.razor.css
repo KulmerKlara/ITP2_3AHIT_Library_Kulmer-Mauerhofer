@@ -166,3 +166,35 @@
 .edit-button:hover {
     background-color: #0056b3;
 }
+.remove-button {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    /* gleiche Styles wie .edit-button */
+    background-color: #f44336; /* z.B. rot für löschen */
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.remove-button:hover {
+    background-color: #d32f2f;
+}
+.remove-button {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    /* gleiche Styles wie .edit-button */
+    background-color: #f44336; /* z.B. rot für löschen */
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+

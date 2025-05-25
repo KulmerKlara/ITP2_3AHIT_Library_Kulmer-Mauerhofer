@@ -76,6 +76,10 @@
         <div class="modal-backdrop" @onclick="CloseBookDetails">
             <div class="modal-content book-detail-modal" @onclick:stopPropagation>
                 <button class="edit-button" @onclick="() => EditBook(selectedBook)">edit</button>
+
+                <!-- Remove-Button unten links -->
+                <button class="remove-button" @onclick="() => RemoveBook(selectedBook)">remove</button>
+
                 <div class="book-detail-container">
                     <div class="book-image-detail">
                         <div class="image-placeholder">[Bild]</div>
@@ -192,5 +196,16 @@
         BookRepository.AddBook(newBook);
         books = BookRepository.GetAllBooks();
         HidePlusModal();
+    }
+
+    private void RemoveBook(Book book)
+    {
+        BookRepository.DeleteBook(book.BookId);
+        books = BookRepository.GetAllBooks();
+
+        if (selectedBook != null && selectedBook.BookId == book.BookId)
+        {
+            selectedBook = null;
+        }
     }
 }
