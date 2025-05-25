@@ -4,12 +4,11 @@
 @inject AuthService AuthService
 @inject BookRepository BookRepository
 
-
 <div class="page-wrapper" style="margin-left:70px;">
     <h3>Alle Bücher in der Bibliothek</h3>
 
-    <button class="plus-button">+</button>
-    <button class="minus-button" @onclick="ShowModal">-</button>
+    <button class="plus-button" @onclick="ShowPlusModal">+</button>
+    <button class="minus-button" @onclick="ShowMinusModal">-</button>
 
     @if (books == null)
     {
@@ -32,13 +31,24 @@
         </div>
     }
 
-    @if (isModalVisible)
+    @if (isMinusModalVisible)
     {
-        <div class="modal-backdrop" @onclick="HideModal">
+        <div class="modal-backdrop" @onclick="HideMinusModal">
             <div class="modal-content" @onclick:stopPropagation>
-                <h2>Modal Inhalt</h2>
-                <p>Hier kannst du beliebigen Inhalt einfügen.</p>
-                <button @onclick="HideModal">Schließen</button>
+                <h2>Minus-Modal</h2>
+                <p>Dies ist das Minus-Fenster.</p>
+                <button @onclick="HideMinusModal">Schließen</button>
+            </div>
+        </div>
+    }
+
+    @if (isPlusModalVisible)
+    {
+        <div class="modal-backdrop" @onclick="HidePlusModal">
+            <div class="modal-content" @onclick:stopPropagation>
+                <h2>Plus-Modal</h2>
+                <p>Dies ist das Plus-Fenster.</p>
+                <button @onclick="HidePlusModal">Schließen</button>
             </div>
         </div>
     }
@@ -46,20 +56,31 @@
 
 @code {
     private List<Book> books;
-    private bool isModalVisible = false;
+    private bool isMinusModalVisible = false;
+    private bool isPlusModalVisible = false;
 
     protected override void OnInitialized()
     {
         books = BookRepository.GetAllBooks();
     }
 
-    private void ShowModal()
+    private void ShowMinusModal()
     {
-        isModalVisible = true;
+        isMinusModalVisible = true;
     }
 
-    private void HideModal()
+    private void HideMinusModal()
     {
-        isModalVisible = false;
+        isMinusModalVisible = false;
+    }
+
+    private void ShowPlusModal()
+    {
+        isPlusModalVisible = true;
+    }
+
+    private void HidePlusModal()
+    {
+        isPlusModalVisible = false;
     }
 }
