@@ -7,6 +7,9 @@
     [Parameter] public string Genre { get; set; }
     private List<Book> books;
 
+    private bool showDetails = false;
+    private Book selectedBook;
+
     protected override async Task OnParametersSetAsync()
     {
         books = await Task.FromResult(BookRepo.GetBooksByGenre(Genre));
@@ -14,7 +17,14 @@
 
     private void ShowBookDetails(Book book)
     {
-        // Optional: Zeige Details oder öffne ein Modal
+        selectedBook = book;
+        showDetails = true;
+    }
+
+    private void CloseDetails()
+    {
+        showDetails = false;
+        selectedBook = null;
     }
 }
 
@@ -29,16 +39,128 @@ else if (books.Count == 0)
     <p>Keine Bücher im Genre "@Genre" gefunden.</p>
 }
 else
-{
+{  
     <div class="book-grid">
-        @foreach (var book in books)
-        {
-            <div class="book-card" @onclick="() => ShowBookDetails(book)">
-                <h4>@book.Title</h4>
-                <p><strong>Autor:</strong> @book.Author</p>
-                <p><strong>Genre:</strong> @book.Genre</p>
-            </div>
-        }
+          @foreach (var book in books)
+          {
+                <div class="book-card" @onclick="() => ShowBookDetails(book)">
+                    <div class="book-image-placeholder">
+                        Bild kommt hier hin
+                    </div>
+                    <div class="book-title">@book.Title</div>
+                </div>
+          }
+     </div>
+}
+
+@if (showDetails && selectedBook != null)
+{
+    <div class="modal-overlay" @onclick="CloseDetails">
+        <div class="modal-content" @onclick:stopPropagation>
+            <button class="close-btn" @onclick="CloseDetails">×</button>
+            <h2>@selectedBook.Title</h2>
+            <p><strong>Autor:</strong> @selectedBook.Author</p>
+            <p><strong>Genre:</strong> @selectedBook.Genre</p>
+            <p><strong>Zusammenfassung:</strong></p>
+            <p>@selectedBook.Summary</p>
+            <p><strong>Verfügbar:</strong> @(selectedBook.IsAvailable ? "Ja" : "Nein")</p>
+        </div>
     </div>
 }
 
+<style>
+.book-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 20px;
+    justify-content: flex-start;
+}
+
+/* Große Karte mit hellgrauem Hintergrund (leicht dunkler als weiß) */
+.book-card {
+    width: 250px;
+    background-color: #f0f0f0; /* etwas dunkler als weiß */
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+/* Hover-Effekt bleibt */
+.book-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+/* Graues Feld für Bild mit abgerundeten Kanten */
+.book-image-placeholder {
+    width: 100%;
+    height: 300px;
+    background-color: #cccccc; /* graues Feld */
+    border-radius: 12px; /* abgerundete Ecken */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #444;
+    font-size: 16px;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+/* Titel im großen hellgrauen Feld */
+.book-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+}
+
+/* Modal Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+/* Modal Content ca. halb so breit wie die Seite, max 600px */
+.modal-content {
+    background-color: white;
+    border-radius: 12px;
+    padding: 24px 32px;
+    width: 50vw;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    position: relative;
+}
+
+/* Close Button oben rechts */
+.close-btn {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    border: none;
+    background: none;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #666;
+}
+
+.close-btn:hover {
+    color: #000;
+}
+</style>
