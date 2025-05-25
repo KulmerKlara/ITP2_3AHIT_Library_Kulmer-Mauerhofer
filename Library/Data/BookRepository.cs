@@ -158,7 +158,7 @@ namespace Library.Data
             var books = new List<Book>();
             using var conn = Database.GetConnection();
             using var cmd = new SQLiteCommand(@"
-        SELECT b.BookID, b.Title, b.Author, b.Genre, b.Summary, b.IsAvailable
+        SELECT b.BookID, b.Title, b.Author, b.Genre, b.Summary, b.IsAvailable, l.DueDate
         FROM Books b
         INNER JOIN Loans l ON b.BookID = l.BookID
         WHERE l.ReturnedDate IS NULL
@@ -173,12 +173,14 @@ namespace Library.Data
                     reader["Author"].ToString(),
                     reader["Genre"].ToString(),
                     reader["Summary"].ToString(),
-                    Convert.ToBoolean(reader["IsAvailable"])
+                    Convert.ToBoolean(reader["IsAvailable"]),
+                    reader["DueDate"] == DBNull.Value ? null : (DateTime?)Convert.ToDateTime(reader["DueDate"])
                 ));
             }
 
             return books;
         }
+
 
         public List<Book> GetAvailableBooks()
         {
@@ -200,7 +202,8 @@ namespace Library.Data
                     reader["Author"].ToString(),
                     reader["Genre"].ToString(),
                     reader["Summary"].ToString(),
-                    Convert.ToBoolean(reader["IsAvailable"])
+                    Convert.ToBoolean(reader["IsAvailable"]),
+                    reader["GiveBackDate"] == DBNull.Value ? null : (DateTime?)Convert.ToDateTime(reader["GiveBackDate"])
                 ));
             }
 
