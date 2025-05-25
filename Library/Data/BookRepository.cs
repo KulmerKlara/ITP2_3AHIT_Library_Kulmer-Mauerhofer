@@ -132,6 +132,61 @@ namespace Library.Data
 
             cmd.ExecuteNonQuery();
         }
+
+        public List<Book> GetBorrowedBooks()
+        {
+            var books = new List<Book>();
+            using var conn = Database.GetConnection();
+            using var cmd = new SQLiteCommand(@"
+        SELECT b.BookID, b.Title, b.Author, b.Genre, b.Summary, b.IsAvailable
+        FROM Books b
+        INNER JOIN Loans l ON b.BookID = l.BookID
+        WHERE l.ReturnedDate IS NULL
+    ", conn);
+            using var reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                books.Add(new Book(
+                    Convert.ToInt32(reader["BookID"]),
+                    reader["Title"].ToString(),
+                    reader["Author"].ToString(),
+                    reader["Genre"].ToString(),
+                    reader["Summary"].ToString(),
+                    Convert.ToBoolean(reader["IsAvailable"])
+                ));
+            }
+
+            return books;
+        }
+
+        public List<Book> GetAvailableBooks()
+        {
+            var books = new List<Book>();
+            using var conn = Database.GetConnection();
+            using var cmd = new SQLiteCommand(@"
+        SELECT * FROM Books 
+        WHERE BookID NOT IN (
+            SELECT BookID FROM Loans WHERE ReturnedDate IS NULL
+        )
+    ", conn);
+            using var reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                books.Add(new Book(
+                    Convert.ToInt32(reader["BookID"]),
+                    reader["Title"].ToString(),
+                    reader["Author"].ToString(),
+                    reader["Genre"].ToString(),
+                    reader["Summary"].ToString(),
+                    Convert.ToBoolean(reader["IsAvailable"])
+                ));
+            }
+
+            return books;
+        }
+
     }
 }
 
