@@ -8,15 +8,18 @@ public class Book
     public string Genre { get; set; }
     public string Summary { get; set; }
     public bool IsAvailable { get; set; } = true;
+    public DateTime? GiveBackDate { get; set; }
 
-    public Book(int bookId, string title, string author, string genre, string summary, bool isAvailable = true)
+    public Book(int bookId, string title, string author, string genre, string summary, bool isAvailable = true, DateTime? giveBackDate = null)
     {
-
         BookId = bookId;
         Title = title;
         Author = author;
         Genre = genre;
         Summary = summary;
         IsAvailable = isAvailable;
+        GiveBackDate = giveBackDate;
     }
+
+
 }
