@@ -31,15 +31,43 @@
     }
     else
     {
-        <div class="book-grid">
-            @foreach (var book in books)
-            {
-                <div class="book-card" @onclick="() => ShowBookDetails(book)">
-                    <div class="book-image-placeholder"></div>
-                    <div class="title-placeholder">@book.Title</div>
-                </div>
-            }
-        </div>
+        @if (currentFilter == "borrowed")
+        {
+            <h3>Ausgeliehene Bücher</h3>
+            <table class="borrowed-books-table" style="width:100%; border-collapse: collapse; border: 1px solid black;">
+                <thead>
+                    <tr>
+                        <th>Titel</th>
+                        <th>Autor</th>
+                        <th>Genre</th>
+                        <th>Fällig am</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var book in books)
+                    {
+                        <tr>
+                            <td>@book.Title</td>
+                            <td>@book.Author</td>
+                            <td>@book.Genre</td>
+                            <td>@(book.GiveBackDate.HasValue ? book.GiveBackDate.Value.ToString("dd.MM.yyyy") : "Unbekannt")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="book-grid">
+                @foreach (var book in books)
+                {
+                    <div class="book-card" @onclick="() => ShowBookDetails(book)">
+                        <div class="book-image-placeholder"></div>
+                        <div class="title-placeholder">@book.Title</div>
+                    </div>
+                }
+            </div>
+        }
     }
 
     @if (isMinusModalVisible)
