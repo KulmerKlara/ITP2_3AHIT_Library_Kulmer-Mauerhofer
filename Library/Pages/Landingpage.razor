@@ -12,16 +12,22 @@
         <h1>Welcome to your ONLINE BOOKSHELF</h1>
 
         <div class="search-wrapper">
-            <div class="search-bar">
-                <input type="search" 
-                       placeholder="Search by title, author or genre"
-                       @bind="searchQuery"
-                       @onkeydown="HandleKeyDown" />
-                <span class="icon" @onclick="ClearSearch">&#10006;</span>
-            </div>
-        </div>
+        <div class="search-bar" style="position: relative;">
+            <input type="search"
+                placeholder="Search by title, author or genre"
+                @bind="searchQuery"
+                @onkeydown="HandleKeyDown"
+                style="padding-right: 24px;" />
 
-        <p>Welcome to your new app.</p>
+            <span class="icon"
+                style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); cursor: pointer;"
+                @onclick="ClearSearch">
+                &#10006;
+            </span>
+        </div>
+    </div>
+
+
 
         <div class="book-carousel">
             <div class="arrow left-arrow" @onclick="MoveLeft">&#10094;</div>
