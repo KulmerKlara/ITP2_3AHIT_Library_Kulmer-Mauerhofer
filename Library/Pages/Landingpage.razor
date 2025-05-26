@@ -7,23 +7,25 @@
  
 
 <PageTitle>Index</PageTitle>
- 
 <div class="background-container">
     <div class="overlay">
         <h1>Welcome to your ONLINE BOOKSHELF</h1>
- 
+
         <div class="search-wrapper">
             <div class="search-bar">
-                <input type="search" placeholder="Search for a book" />
-                <span class="icon">&#10006;</span>
+                <input type="search" 
+                       placeholder="Search by title, author or genre"
+                       @bind="searchQuery"
+                       @onkeydown="HandleKeyDown" />
+                <span class="icon" @onclick="ClearSearch">&#10006;</span>
             </div>
         </div>
- 
+
         <p>Welcome to your new app.</p>
- 
+
         <div class="book-carousel">
             <div class="arrow left-arrow" @onclick="MoveLeft">&#10094;</div>
- 
+
             @{
                 var genreList = genreImages.Keys.ToList();
             }
@@ -35,18 +37,20 @@
                     <div class="genre-label">@genre</div>
                 </div>
             }
- 
+
             <div class="arrow right-arrow" @onclick="MoveRight">&#10095;</div>
         </div>
- 
+
         <SurveyPrompt Title="How is Blazor working for you?" />
     </div>
 </div>
- 
+
 @code {
     private int currentIndex = 0;
     private const int itemsPerPage = 3;
- 
+
+    private string searchQuery = string.Empty;
+
     private Dictionary<string, string> genreImages = new()
     {
         { "Romane", "/images/1_Romane.png" },
@@ -60,20 +64,33 @@
         { "Kinderbuch", "/images/9_Kinderbuch.png" },
         { "Sachbuch", "/images/10_Sachbuch.jpg" }
     };
- 
+
     private void MoveLeft()
     {
         if (currentIndex > 0) currentIndex--;
     }
- 
+
     private void MoveRight()
     {
         if (currentIndex < genreImages.Count - itemsPerPage) currentIndex++;
     }
- 
+
     private void NavigateToGenrePage(string genre)
     {
         NavigationManager.NavigateTo($"/genrespage/{Uri.EscapeDataString(genre)}");
+    }
+
+    private void ClearSearch()
+    {
+        searchQuery = string.Empty;
+    }
+
+    private void HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter" && !string.IsNullOrWhiteSpace(searchQuery))
+        {
+            NavigationManager.NavigateTo($"/SearchBarResults/{Uri.EscapeDataString(searchQuery)}");
+        }
     }
 }
  
