@@ -52,13 +52,21 @@
                             Go back to home
                         </button>
                     }
-                    <div style="margin-top: 10px;">
-                        <button 
-                            @onclick="ToggleSignUp"
-                            style="background-color: #e0e0e0; color: #333; border: none; border-radius: 8px; padding: 8px 20px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.06); transition: background 0.2s;">
-                            Sign Up
-                        </button>
-                    </div>
+                            <!-- Move the button outside the form and place it in the right half, centered vertically and horizontally -->
+                        }
+                    <!-- Centered Sign Up button in the right half when not showing sign up form -->
+                    @if (!showSignUp)
+                    {
+                        <div style="position: absolute; right: 0; top: 0; width: 50vw; height: 100vh; display: flex; align-items: center; justify-content: center; pointer-events: none;">
+                            <div style="pointer-events: auto;">
+                                <button 
+                                    @onclick="ToggleSignUp"
+                                    style="background-color: #e0e0e0; color: #333; border: none; border-radius: 8px; padding: 12px 32px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.06); transition: background 0.2s; font-size: 1.2em;">
+                                    Sign Up
+                                </button>
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
         }
