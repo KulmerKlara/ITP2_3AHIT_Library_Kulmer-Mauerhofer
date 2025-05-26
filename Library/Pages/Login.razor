@@ -89,8 +89,16 @@
                     </div>
                     <br />
                     <div>
-                        <button @onclick="RegisterUser">Sign Up</button>
-                        <button @onclick="ToggleSignUp" style="margin-left:10px;">Back to Sign In</button>
+                        <button 
+                            @onclick="RegisterUser"
+                            style="background-color: #e0e0e0; color: #333; border: none; border-radius: 8px; padding: 8px 20px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.06); transition: background 0.2s;">
+                            Sign Up
+                        </button>
+                        <button 
+                            @onclick="ToggleSignUp"
+                            style="background-color: #e0e0e0; color: #333; border: none; border-radius: 8px; padding: 8px 20px; margin-left: 10px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.06); transition: background 0.2s;">
+                            Sign In
+                        </button>
                     </div>
                 </div>
             </div>
