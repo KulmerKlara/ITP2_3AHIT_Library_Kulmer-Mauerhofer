@@ -87,23 +87,22 @@
                         <p style="color: red">@errorMessage</p>
                     }
                     <div>
-                        <input type="text" placeholder="Name" @bind="signUpName" />
+                        <input type="text" placeholder="Name" @bind="signUpName" style="border-radius: 8px; border: 1px solid #ccc; padding: 8px;" />
                     </div>
                     <br />
                     <div>
-                        <input type="email" placeholder="Email" @bind="signUpEmail" />
+                        <input type="email" placeholder="Email" @bind="signUpEmail" style="border-radius: 8px; border: 1px solid #ccc; padding: 8px;" />
                     </div>
                     <br />
                     <div>
-                        <input type="password" placeholder="Password" @bind="signUpPassword" />
+                        <input type="password" placeholder="Password" @bind="signUpPassword" style="border-radius: 8px; border: 1px solid #ccc; padding: 8px;" />
                     </div>
                     <br />
                     <div>
-                        <input type="text" placeholder="Phone" @bind="signUpPhone" />
+                        <input type="text" placeholder="Phone" @bind="signUpPhone" style="border-radius: 8px; border: 1px solid #ccc; padding: 8px;" />
                     </div>
                     <br />
-                    <div>
-                        <button 
+                    <div><button 
                             @onclick="RegisterUser"
                             style="background-color: #e0e0e0; color: #333; border: none; border-radius: 8px; padding: 8px 20px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.06); transition: background 0.2s;">
                             Sign Up
