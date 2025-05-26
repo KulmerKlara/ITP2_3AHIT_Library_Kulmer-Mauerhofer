@@ -49,6 +49,7 @@ else
             <p><strong>Autor:</strong> @selectedBook.Author</p>
             <p><strong>Zusammenfassung:</strong> @selectedBook.Summary</p>
             <p><strong>Rückgabedatum:</strong> @(selectedBook.GiveBackDate?.ToString("dd.MM.yyyy") ?? "Keine Angabe")</p>
+            <button class="remove-btn" @onclick="() => RemoveFromList(selectedBook.BookId)">Remove from List</button>
         </div>
     </div>
 }
