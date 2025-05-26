@@ -42,8 +42,11 @@
                     @if (signInSuccess)
                     {
                         <p style="color: green">Welcome @signUpName!</p>
-                        <button @onclick="() => GoToOtherPage(UserRepository.GetUserByName(signUpName))">Go to your book list</button>
-                        <button @onclick="() => GoToOtherPage(UserRepository.GetUserByName(signUpName))">Go back to home</button>
+                        <button 
+                            @onclick="() => GoToOtherPage(UserRepository.GetUserByName(signUpName))"
+                            style="background-color: #e0e0e0; color: #333; border: none; border-radius: 8px; padding: 8px 20px; margin-top: 10px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.06); transition: background 0.2s;">
+                            Go back to home
+                        </button>
                     }
                     <div style="margin-top: 10px;">
                         <button @onclick="ToggleSignUp">Sign Up</button>
