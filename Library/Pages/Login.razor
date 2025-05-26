@@ -37,7 +37,11 @@
                         <input type="password" placeholder="Password" @bind="signUpPassword" required />
                     </div>
                     <br />
-                    <button @onclick="SignIn">Sign In</button>
+                    <button 
+                        @onclick="SignIn"
+                        style="background-color: #e0e0e0; color: #333; border: none; border-radius: 8px; padding: 8px 20px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.06); transition: background 0.2s;">
+                        Sign In
+                    </button>
                     @* Show success and navigation if login succeeds *@
                     @if (signInSuccess)
                     {
