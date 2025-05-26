@@ -1,47 +1,50 @@
-.grid-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 1rem;
-    padding: 1rem;
-}
-
-.book-card {
-    border: 1px solid #ccc;
-    border-radius: 12px;
-    padding: 0.5rem;
-    text-align: center;
-    background-color: white;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.placeholder-container {
+.book-grid {
     display: flex;
-    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 20px;
+    justify-content: flex-start;
+}
+
+/* Große Karte mit hellgrauem Hintergrund (leicht dunkler als weiß) */
+.book-card {
+    width: 250px;
+    background-color: #f0f0f0; /* etwas dunkler als weiß */
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    height: 100px;
-    background-color: #f0f0f0;
-    border: 1px dashed #ccc;
-    color: #888;
-    font-style: italic;
-}
-
-.book-text .author {
-    font-size: 0.9rem;
-    color: #333;
-}
-
-.book-text .title {
-    font-weight: bold;
-    font-size: 1rem;
-    color: #000;
-}
-
-.back-button {
-    margin-top: 2rem;
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    border-radius: 6px;
-    background-color: #ddd;
-    border: none;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
     cursor: pointer;
+}
+
+/* Hover-Effekt bleibt */
+.book-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+/* Graues Feld für Bild mit abgerundeten Kanten */
+.book-image-placeholder {
+    width: 100%;
+    height: 300px;
+    background-color: #cccccc; /* graues Feld */
+    border-radius: 12px; /* abgerundete Ecken */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #444;
+    font-size: 16px;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+/* Titel im großen hellgrauen Feld */
+.book-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
 }

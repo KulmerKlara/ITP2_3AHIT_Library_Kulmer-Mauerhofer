@@ -72,7 +72,7 @@
 }
 
 .header-box {
-    background-color: #f0f0f0;  /* hellgrau */
+    background-color: #f0f0f0;
     padding: 10px 20px;
     border-radius: 8px;
     display: flex;
@@ -82,7 +82,12 @@
     margin-bottom: 20px;
     position: relative;
     cursor: pointer;
+
+    width: 100%;
+    max-width: 25%; /* <- Neu hinzugefügt */
+    min-width: 200px; /* Optional für kleinere Bildschirme */
 }
+
 
 .header-box h3 {
     margin: 0;

@@ -1,11 +1,11 @@
-﻿@page "/genrespage/{Genre}"
+﻿@page "/genrespage/{Genre?}"
 @using Library.Data
 @inject BookRepository BookRepo
 @inject AuthService AuthService
 @inject UserBookListRepository UserBookListRepository
 @using Microsoft.AspNetCore.Components
 
-<h3>@Genre Bücher</h3>
+<h3>@(string.IsNullOrEmpty(Genre) ? "Alle Bücher" : $"{Genre} Bücher")</h3>
 
 @if (books == null)
 {
@@ -13,7 +13,7 @@
 }
 else if (books.Count == 0)
 {
-    <p>Keine Bücher im Genre "@Genre" gefunden.</p>
+    <p>Keine Bücher @(string.IsNullOrEmpty(Genre) ? "" : $"im Genre \"{Genre}\" ")gefunden.</p>
 }
 else
 {  
@@ -69,7 +69,7 @@ else
 }
 
 @code {
-    [Parameter] public string Genre { get; set; }
+    [Parameter] public string? Genre { get; set; }
     private List<Book> books;
 
     private bool showDetails = false;
@@ -79,7 +79,14 @@ else
 
     protected override async Task OnParametersSetAsync()
     {
-        books = await Task.FromResult(BookRepo.GetBooksByGenre(Genre));
+        if (string.IsNullOrEmpty(Genre))
+        {
+            books = await Task.FromResult(BookRepo.GetAllBooks());
+        }
+        else
+        {
+            books = await Task.FromResult(BookRepo.GetBooksByGenre(Genre));
+        }
         addToListMessage = null;
     }
 
@@ -97,52 +104,51 @@ else
         addToListMessage = null;
     }
 
- private void AddToBooklist()
-{
-    if (!AuthService.IsAuthenticated || AuthService.LoggedInUser == null)
+    private void AddToBooklist()
     {
-        addToListMessage = "Bitte erst anmelden, um Bücher hinzuzufügen.";
-        return;
+        if (!AuthService.IsAuthenticated || AuthService.LoggedInUser == null)
+        {
+            addToListMessage = "Bitte erst anmelden, um Bücher hinzuzufügen.";
+            return;
+        }
+
+        var userId = AuthService.LoggedInUser.Id;
+
+        // Lade das Buch nochmal aus der DB, um aktuellen Status zu prüfen
+        var bookFromDb = BookRepo.GetAllBooks().FirstOrDefault(b => b.BookId == selectedBook.BookId);
+        if (bookFromDb == null)
+        {
+            addToListMessage = "Buch konnte nicht gefunden werden.";
+            return;
+        }
+
+        if (!bookFromDb.IsAvailable)
+        {
+            addToListMessage = $"Buch '{bookFromDb.Title}' ist aktuell nicht verfügbar und kann nicht hinzugefügt werden.";
+            return;
+        }
+
+        if (UserBookListRepository.IsBookAlreadyInUserList(userId, selectedBook.BookId))
+        {
+            addToListMessage = $"Buch '{selectedBook.Title}' ist bereits in deiner Booklist.";
+            return;
+        }
+
+        UserBookListRepository.AddBookToUserList(userId, selectedBook.BookId);
+
+        // Buch auf nicht verfügbar setzen und Rückgabedatum vergeben
+        bookFromDb.IsAvailable = false;
+        bookFromDb.GiveBackDate = DateTime.Today.AddDays(7);
+
+        // Änderungen in der DB speichern
+        BookRepo.UpdateBook(bookFromDb);
+
+        // UI aktualisieren, damit Status korrekt angezeigt wird
+        selectedBook.IsAvailable = false;
+        selectedBook.GiveBackDate = bookFromDb.GiveBackDate;
+
+        addToListMessage = $"Buch '{selectedBook.Title}' wurde zur Booklist hinzugefügt. Rückgabe bis: {selectedBook.GiveBackDate?.ToString("dd.MM.yyyy")}";
     }
-
-    var userId = AuthService.LoggedInUser.Id;
-
-    // Lade das Buch nochmal aus der DB, um aktuellen Status zu prüfen
-    var bookFromDb = BookRepo.GetAllBooks().FirstOrDefault(b => b.BookId == selectedBook.BookId);
-    if (bookFromDb == null)
-    {
-        addToListMessage = "Buch konnte nicht gefunden werden.";
-        return;
-    }
-
-    if (!bookFromDb.IsAvailable)
-    {
-        addToListMessage = $"Buch '{bookFromDb.Title}' ist aktuell nicht verfügbar und kann nicht hinzugefügt werden.";
-        return;
-    }
-
-    if (UserBookListRepository.IsBookAlreadyInUserList(userId, selectedBook.BookId))
-    {
-        addToListMessage = $"Buch '{selectedBook.Title}' ist bereits in deiner Booklist.";
-        return;
-    }
-
-    UserBookListRepository.AddBookToUserList(userId, selectedBook.BookId);
-
-    // Buch auf nicht verfügbar setzen und Rückgabedatum vergeben
-    bookFromDb.IsAvailable = false;
-    bookFromDb.GiveBackDate = DateTime.Today.AddDays(7);
-
-    // Änderungen in der DB speichern
-    BookRepo.UpdateBook(bookFromDb);
-
-    // UI aktualisieren, damit Status korrekt angezeigt wird
-    selectedBook.IsAvailable = false;
-    selectedBook.GiveBackDate = bookFromDb.GiveBackDate;
-
-    addToListMessage = $"Buch '{selectedBook.Title}' wurde zur Booklist hinzugefügt. Rückgabe bis: {selectedBook.GiveBackDate?.ToString("dd.MM.yyyy")}";
-}
-
 }
 
 <style>

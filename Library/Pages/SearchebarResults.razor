@@ -1,0 +1,51 @@
+@page "/SearchBarResults/{searchTerm}"
+@inject NavigationManager NavigationManager
+@inject BookRepository BookRepository
+
+@using Library.Data
+@using System.Web
+
+<h3>Suchergebnisse für: "@searchTerm"</h3>
+
+@if (searchResults == null)
+{
+    <p>Suche läuft...</p>
+}
+else if (!searchResults.Any())
+{
+    <p>Keine Bücher gefunden.</p>
+}
+else
+{
+    <div class="book-grid">
+        @foreach (var book in searchResults)
+        {
+            <div class="book-card" @onclick="() => NavigateToBookDetail(book.BookId)">
+                <div class="book-image-placeholder">
+                    Bild nicht verfügbar
+                </div>
+                <div class="book-title">@book.Title</div>
+                <div><em>von @book.Author</em></div>
+                <div>@book.Genre</div>
+                <p>@book.Summary</p>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string searchTerm { get; set; }
+
+    private List<Book> searchResults;
+
+    protected override void OnParametersSet()
+    {
+        searchResults = BookRepository.SearchBooks(Uri.UnescapeDataString(searchTerm));
+    }
+
+    private void NavigateToBookDetail(int bookId)
+    {
+        NavigationManager.NavigateTo($"/bookdetail/{bookId}");
+    }
+}

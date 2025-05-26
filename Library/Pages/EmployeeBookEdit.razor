@@ -5,9 +5,8 @@
 
 <div class="page-wrapper" style="margin-left:70px;">
     <div class="header-box" @onclick="ToggleDropdown" tabindex="0" @onkeydown="HandleKeyDown" aria-expanded="@isDropdownOpen.ToString().ToLower()">
-        <h3>Bücher in der Bibliothek</h3>
         <div class="dropdown-selected">
-            @GetFilterLabel(currentFilter)
+            <h3>@GetFilterLabel(currentFilter)</h3>
             <span class="dropdown-arrow">&#9662;</span>
         </div>
 
@@ -21,7 +20,6 @@
     </div>
 
     <button class="plus-button" @onclick="ShowPlusModal">+</button>
-    <button class="minus-button" @onclick="ShowMinusModal">-</button>
 
     @if (books == null)
     {
@@ -33,15 +31,43 @@
     }
     else
     {
-        <div class="book-grid">
-            @foreach (var book in books)
-            {
-                <div class="book-card" @onclick="() => ShowBookDetails(book)">
-                    <div class="book-image-placeholder"></div>
-                    <div class="title-placeholder">@book.Title</div>
-                </div>
-            }
-        </div>
+        @if (currentFilter == "borrowed")
+        {
+            <h3>Ausgeliehene Bücher</h3>
+            <table class="borrowed-books-table" style="width:100%; border-collapse: collapse; border: 1px solid black;">
+                <thead>
+                    <tr>
+                        <th>Titel</th>
+                        <th>Autor</th>
+                        <th>Genre</th>
+                        <th>Fällig am</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var book in books)
+                    {
+                        <tr>
+                            <td>@book.Title</td>
+                            <td>@book.Author</td>
+                            <td>@book.Genre</td>
+                            <td>@(book.GiveBackDate.HasValue ? book.GiveBackDate.Value.ToString("dd.MM.yyyy") : "Unbekannt")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="book-grid">
+                @foreach (var book in books)
+                {
+                    <div class="book-card" @onclick="() => ShowBookDetails(book)">
+                        <div class="book-image-placeholder"></div>
+                        <div class="title-placeholder">@book.Title</div>
+                    </div>
+                }
+            </div>
+        }
     }
 
     @if (isMinusModalVisible)
