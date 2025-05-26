@@ -17,16 +17,20 @@ else if (!searchResults.Any())
 }
 else
 {
-    <ul>
+    <div class="book-grid">
         @foreach (var book in searchResults)
         {
-            <li>
-                <strong>@book.Title</strong> von @book.Author – @book.Genre
-                <br />
-                <em>@book.Summary</em>
-            </li>
+            <div class="book-card" @onclick="() => NavigateToBookDetail(book.BookId)">
+                <div class="book-image-placeholder">
+                    Bild nicht verfügbar
+                </div>
+                <div class="book-title">@book.Title</div>
+                <div><em>von @book.Author</em></div>
+                <div>@book.Genre</div>
+                <p>@book.Summary</p>
+            </div>
         }
-    </ul>
+    </div>
 }
 
 @code {
@@ -37,7 +41,11 @@ else
 
     protected override void OnParametersSet()
     {
-        // Suche durchführen mit Repository
         searchResults = BookRepository.SearchBooks(Uri.UnescapeDataString(searchTerm));
+    }
+
+    private void NavigateToBookDetail(int bookId)
+    {
+        NavigationManager.NavigateTo($"/bookdetail/{bookId}");
     }
 }
