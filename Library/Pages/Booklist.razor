@@ -110,4 +110,30 @@ else
         books = UserBookListRepository.GetUserBookList(AuthService.LoggedInUser.Id);  // Liste neu laden
         StateHasChanged();  // UI-Aktualisierung erzwingen
     }
+
+    private int extendDays = 1; // Standard auf 1 Tag setzen
+
+// Methode zur Verlängerung des Rückgabedatums
+private void ExtendGiveBackDate()
+{
+    if (selectedBook != null)
+    {
+        try
+        {
+                UserBookListRepository.ExtendGiveBackDate(AuthService.LoggedInUser.Id, selectedBook.BookId, extendDays);
+
+                // Liste und ausgewähltes Buch aktualisieren
+                books = UserBookListRepository.GetUserBookList(AuthService.LoggedInUser.Id);
+                selectedBook = books.FirstOrDefault(b => b.BookId == selectedBook.BookId);
+
+                StateHasChanged();  // UI-Aktualisierung
+            }
+            catch (Exception ex)
+            {
+                // Fehlerbehandlung (optional erweitern)
+                Console.WriteLine("Fehler beim Verlängern: " + ex.Message);
+            }
+        }
+    }
+
 }
