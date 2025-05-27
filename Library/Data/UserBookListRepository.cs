@@ -79,8 +79,13 @@ namespace Library.Data
 
         public bool IsBookAlreadyInUserList(int userId, int bookId)
         {
-            var userBookList = GetUserBookList(userId);
-            return userBookList.Any(entry => entry.BookId == bookId);
+            using var conn = Database.GetConnection();
+            using var cmd = new SQLiteCommand("SELECT COUNT(1) FROM UserBookList WHERE UserID = @UserID AND BookID = @BookID", conn);
+            cmd.Parameters.AddWithValue("@UserID", userId);
+            cmd.Parameters.AddWithValue("@BookID", bookId);
+
+            var count = Convert.ToInt32(cmd.ExecuteScalar());
+            return count > 0;
         }
 
     }
