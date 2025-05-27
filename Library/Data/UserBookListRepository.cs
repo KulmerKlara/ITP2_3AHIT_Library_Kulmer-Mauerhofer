@@ -56,11 +56,13 @@ namespace Library.Data
             var books = new List<Book>();
             using var conn = Database.GetConnection();
             using var cmd = new SQLiteCommand(@"
-                SELECT b.BookID, b.Title, b.Author, b.Genre, b.Summary, b.IsAvailable
-                FROM Books b
-                JOIN UserBookList ul ON b.BookID = ul.BookID
-                WHERE ul.UserID = @UserID", conn);
+        SELECT b.BookID, b.Title, b.Author, b.Genre, b.Summary, b.IsAvailable, ul.GiveBackDate
+        FROM Books b
+        JOIN UserBookList ul ON b.BookID = ul.BookID
+        WHERE ul.UserID = @UserID", conn);
+
             cmd.Parameters.AddWithValue("@UserID", userId);
+
             using var reader = cmd.ExecuteReader();
 
             while (reader.Read())
@@ -71,12 +73,14 @@ namespace Library.Data
                     reader["Author"].ToString(),
                     reader["Genre"].ToString(),
                     reader["Summary"].ToString(),
-                    Convert.ToBoolean(reader["IsAvailable"])
+                    Convert.ToBoolean(reader["IsAvailable"]),
+                    reader["GiveBackDate"] == DBNull.Value ? null : (DateTime?)Convert.ToDateTime(reader["GiveBackDate"])
                 ));
             }
 
             return books;
         }
+
 
         public bool IsBookAlreadyInUserList(int userId, int bookId)
         {
