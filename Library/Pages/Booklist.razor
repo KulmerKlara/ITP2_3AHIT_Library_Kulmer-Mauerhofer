@@ -1,28 +1,33 @@
-﻿@page "/booklist"
-@using Library.Data
-@inject AuthService AuthService
-@inject UserBookListRepository UserBookListRepository
+﻿@page "/booklist"  // Definiert die URL-Routing-Adresse für diese Seite
+@using Library.Data  // Importiert den Namespace, der Zugriff auf Datenstrukturen wie Book erlaubt
+@inject AuthService AuthService  // Blazor-DI: Zugriff auf Authentifizierungsinformationen
+@inject UserBookListRepository UserBookListRepository  // Blazor-DI: Zugriff auf benutzerspezifische Buchlisten
 
-<PageTitle>Your Book List</PageTitle>
+<PageTitle>Your Book List</PageTitle>  // Setzt den Seitentitel im Browser-Tab
 
+<!-- Wenn der Benutzer nicht eingeloggt ist, wird ein Hinweis angezeigt -->
 @if (!AuthService.IsAuthenticated)
 {
     <p>Please <a href="/login">log in</a> to see your book list.</p>
 }
 else
 {
+    <!-- Benutzer ist eingeloggt: Anzeige seiner Bücherliste -->
     <h1>Your Book List, @AuthService.LoggedInUser.Name</h1>
 
+    <!-- Ladeanzeige, falls Liste noch geladen wird -->
     @if (books == null)
     {
         <p>Loading your books...</p>
     }
+    <!-- Hinweis, wenn die Liste leer ist -->
     else if (books.Count == 0)
     {
         <p>Your list is empty.</p>
     }
     else
     {
+        <!-- Darstellung der Buchkarten im Grid-Layout -->
         <div class="book-grid">
             @foreach (var book in books)
             {
@@ -39,6 +44,7 @@ else
     }
 }
 
+<!-- Modal-Fenster zur Anzeige von Buchdetails -->
 @if (showDetails && selectedBook != null)
 {
     <div class="modal-overlay" @onclick="CloseDetails">
@@ -49,41 +55,50 @@ else
             <p><strong>Autor:</strong> @selectedBook.Author</p>
             <p><strong>Zusammenfassung:</strong> @selectedBook.Summary</p>
             <p><strong>Rückgabedatum:</strong> @(selectedBook.GiveBackDate?.ToString("dd.MM.yyyy") ?? "Keine Angabe")</p>
+
+            <!-- Entfernt das Buch aus der Liste -->
             <button class="remove-btn" @onclick="() => RemoveFromList(selectedBook.BookId)">Remove from List</button>
         </div>
     </div>
 }
 
 @code {
+    // Liste der Bücher, die dem aktuellen Benutzer zugeordnet sind
     private List<Book> books;
 
+    // Steuerung des Detailmodals
     private bool showDetails = false;
     private Book selectedBook;
 
+    // Wird beim Initialisieren der Komponente aufgerufen
     protected override void OnInitialized()
     {
+        // Wenn der Benutzer eingeloggt ist, wird dessen Bücherliste geladen
         if (AuthService.IsAuthenticated)
         {
             books = UserBookListRepository.GetUserBookList(AuthService.LoggedInUser.Id);
         }
     }
 
+    // Öffnet das Modal mit Buchdetails
     private void ShowBookDetails(Book book)
     {
         selectedBook = book;
         showDetails = true;
     }
 
+    // Schließt das Modal
     private void CloseDetails()
     {
         showDetails = false;
         selectedBook = null;
     }
 
+    // Entfernt das Buch aus der Liste und lädt die Liste neu
     private void RemoveFromList(int bookId)
     {
         UserBookListRepository.RemoveBookFromUserList(AuthService.LoggedInUser.Id, bookId);
-        books = UserBookListRepository.GetUserBookList(AuthService.LoggedInUser.Id);
-        StateHasChanged();
+        books = UserBookListRepository.GetUserBookList(AuthService.LoggedInUser.Id);  // Liste neu laden
+        StateHasChanged();  // UI-Aktualisierung erzwingen
     }
 }

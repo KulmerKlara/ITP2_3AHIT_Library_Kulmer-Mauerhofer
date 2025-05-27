@@ -1,34 +1,48 @@
 ﻿@page "/"
 @inject NavigationManager NavigationManager
- 
+
 @using Microsoft.AspNetCore.Components.Web
 @using Microsoft.AspNetCore.Components
 @using Library.Shared
- 
 
+<!-- Setzt den Seitentitel für den Browser-Tab -->
 <PageTitle>Index</PageTitle>
+
+<!-- Hauptcontainer mit Hintergrundbild und Overlay -->
 <div class="background-container">
     <div class="overlay">
         <h1>Welcome to your ONLINE BOOKSHELF</h1>
 
+        <!-- Suchleiste mit eingebautem "X" zum Leeren der Eingabe -->
         <div class="search-wrapper">
-            <div class="search-bar">
-                <input type="search" 
-                       placeholder="Search by title, author or genre"
-                       @bind="searchQuery"
-                       @onkeydown="HandleKeyDown" />
-                <span class="icon" @onclick="ClearSearch">&#10006;</span>
+            <div class="search-bar" style="position: relative;">
+                <!-- Suchfeld mit Zwei-Wege-Bindung und Enter-Handling -->
+                <input type="search"
+                    placeholder="Search by title, author or genre"
+                    @bind="searchQuery"
+                    @onkeydown="HandleKeyDown"
+                    style="padding-right: 24px;" />
+
+                <!-- "X"-Icon, um das Suchfeld zu leeren (immer sichtbar) -->
+                <span class="icon"
+                    style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); cursor: pointer;"
+                    @onclick="ClearSearch">
+                    &#10006;
+                </span>
             </div>
         </div>
 
-        <p>Welcome to your new app.</p>
-
+        <!-- Karussell zur Anzeige von Buchgenres -->
         <div class="book-carousel">
+            <!-- Linker Pfeil zum Zurückblättern -->
             <div class="arrow left-arrow" @onclick="MoveLeft">&#10094;</div>
 
+            @* Erstellt eine Liste der Genres aus dem Dictionary *@
             @{
                 var genreList = genreImages.Keys.ToList();
             }
+
+            @* Zeigt `itemsPerPage` viele Genre-Kacheln im Karussell an *@
             @for (int i = currentIndex; i < currentIndex + itemsPerPage && i < genreList.Count; i++)
             {
                 var genre = genreList[i];
@@ -38,19 +52,21 @@
                 </div>
             }
 
+            <!-- Rechter Pfeil zum Weiterblättern -->
             <div class="arrow right-arrow" @onclick="MoveRight">&#10095;</div>
         </div>
 
-        <SurveyPrompt Title="How is Blazor working for you?" />
+        <!-- Optionaler SurveyPrompt -->
     </div>
 </div>
 
+<!-- C# Code-Block mit Logik für das UI -->
 @code {
-    private int currentIndex = 0;
-    private const int itemsPerPage = 3;
+    private int currentIndex = 0;                // Aktueller Index im Karussell
+    private const int itemsPerPage = 3;          // Anzahl der sichtbaren Genres gleichzeitig
+    private string searchQuery = string.Empty;   // Gebundener Suchtext
 
-    private string searchQuery = string.Empty;
-
+    // Dictionary mit Genres als Schlüssel und Bildpfaden als Werte
     private Dictionary<string, string> genreImages = new()
     {
         { "Romane", "/images/1_Romane.png" },
@@ -65,26 +81,31 @@
         { "Sachbuch", "/images/10_Sachbuch.jpg" }
     };
 
+    // Blättert im Karussell nach links
     private void MoveLeft()
     {
         if (currentIndex > 0) currentIndex--;
     }
 
+    // Blättert im Karussell nach rechts
     private void MoveRight()
     {
         if (currentIndex < genreImages.Count - itemsPerPage) currentIndex++;
     }
 
+    // Navigiert zur Genre-spezifischen Seite
     private void NavigateToGenrePage(string genre)
     {
         NavigationManager.NavigateTo($"/genrespage/{Uri.EscapeDataString(genre)}");
     }
 
+    // Leert das Suchfeld
     private void ClearSearch()
     {
         searchQuery = string.Empty;
     }
 
+    // Behandelt die Enter-Taste für die Suche
     private void HandleKeyDown(KeyboardEventArgs e)
     {
         if (e.Key == "Enter" && !string.IsNullOrWhiteSpace(searchQuery))
@@ -93,4 +114,3 @@
         }
     }
 }
- 

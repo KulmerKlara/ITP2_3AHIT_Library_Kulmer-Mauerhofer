@@ -13,7 +13,11 @@ namespace Library.Data
             conn.Open();
             return conn;
         }
-
+        private static SQLiteConnection _testConnection;
+        public static void OverrideConnection(SQLiteConnection connection)
+        {
+            _testConnection = connection;
+        }
         public static void Initialize()
         {
             if (!File.Exists(_dbPath))
