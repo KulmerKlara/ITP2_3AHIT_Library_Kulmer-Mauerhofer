@@ -82,48 +82,40 @@ namespace Library.Data
                                 WHERE Title LIKE @searchTerm 
                                    OR Author LIKE @searchTerm 
                                    OR Genre LIKE @searchTerm";
-            cmd.Parameters.AddWithValue("@searchTerm", $"%{searchTerm}%");
+            cmd.Parameters.AddWithValue("@searchTerm", "%" + searchTerm + "%");
 
             using var reader = cmd.ExecuteReader();
             while (reader.Read())
             {
                 results.Add(new Book(
-                    reader.GetInt32(0),
-                    reader.GetString(1),
-                    reader.GetString(2),
-                    reader.IsDBNull(3) ? null : reader.GetString(3),
-                    reader.IsDBNull(4) ? null : reader.GetString(4),
-                    reader.GetBoolean(5),
+                    Convert.ToInt32(reader["BookID"]),
+                    reader["Title"].ToString(),
+                    reader["Author"].ToString(),
+                    reader["Genre"].ToString(),
+                    reader["Summary"].ToString(),
+                    Convert.ToBoolean(reader["IsAvailable"]),
                     reader["GiveBackDate"] == DBNull.Value ? null : (DateTime?)Convert.ToDateTime(reader["GiveBackDate"])
                 ));
             }
-
             return results;
         }
 
-        public void UpdateBook(Book updatedBook)
+        public void UpdateBook(Book book)
         {
             using var conn = Database.GetConnection();
             using var cmd = new SQLiteCommand(conn);
 
-            cmd.CommandText = @"
-                UPDATE Books
-                SET Title = @Title,
-                    Author = @Author,
-                    Genre = @Genre,
-                    Summary = @Summary,
-                    IsAvailable = @IsAvailable,
-                    GiveBackDate = @GiveBackDate
-                WHERE BookID = @BookID;
-            ";
-
-            cmd.Parameters.AddWithValue("@Title", updatedBook.Title);
-            cmd.Parameters.AddWithValue("@Author", updatedBook.Author);
-            cmd.Parameters.AddWithValue("@Genre", updatedBook.Genre);
-            cmd.Parameters.AddWithValue("@Summary", updatedBook.Summary);
-            cmd.Parameters.AddWithValue("@IsAvailable", updatedBook.IsAvailable ? 1 : 0);
-            cmd.Parameters.AddWithValue("@GiveBackDate", updatedBook.GiveBackDate?.ToString("yyyy-MM-dd") ?? (object)DBNull.Value);
-            cmd.Parameters.AddWithValue("@BookID", updatedBook.BookId);
+            cmd.CommandText = @"UPDATE Books 
+                                SET Title = @Title, Author = @Author, Genre = @Genre, Summary = @Summary, 
+                                    IsAvailable = @IsAvailable, GiveBackDate = @GiveBackDate 
+                                WHERE BookID = @BookID";
+            cmd.Parameters.AddWithValue("@Title", book.Title);
+            cmd.Parameters.AddWithValue("@Author", book.Author);
+            cmd.Parameters.AddWithValue("@Genre", book.Genre);
+            cmd.Parameters.AddWithValue("@Summary", book.Summary);
+            cmd.Parameters.AddWithValue("@IsAvailable", book.IsAvailable ? 1 : 0);
+            cmd.Parameters.AddWithValue("@GiveBackDate", book.GiveBackDate?.ToString("yyyy-MM-dd") ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@BookID", book.BookId);
 
             cmd.ExecuteNonQuery();
         }
