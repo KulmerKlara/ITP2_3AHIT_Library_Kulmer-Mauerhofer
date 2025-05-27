@@ -14,16 +14,17 @@ namespace Library.Data
         /// </summary>
         /// <param name="userId">The ID of the user.</param>
         /// <param name="bookId">The ID of the book.</param>
-        public void AddBookToUserList(int userId, int bookId)
+        public void AddBookToUserList(int userId, int bookId, DateTime giveBackDate)
         {
             using var conn = Database.GetConnection();
             using var cmd = new SQLiteCommand(conn)
             {
-                CommandText = @"INSERT OR IGNORE INTO UserBookList (UserID, BookID) 
-                                VALUES (@UserID, @BookID)"
+                CommandText = @"INSERT OR IGNORE INTO UserBookList (UserID, BookID, GiveBackDate) 
+                                VALUES (@UserID, @BookID, @GiveBackDate)"
             };
             cmd.Parameters.AddWithValue("@UserID", userId);
             cmd.Parameters.AddWithValue("@BookID", bookId);
+            cmd.Parameters.AddWithValue("@GiveBackDate", giveBackDate.ToString("yyyy-MM-dd"));
             cmd.ExecuteNonQuery();
         }
 
