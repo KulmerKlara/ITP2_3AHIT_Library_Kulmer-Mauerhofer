@@ -1,9 +1,10 @@
-﻿@page "/booklist"  // Definiert die URL-Routing-Adresse für diese Seite
-@using Library.Data  // Importiert den Namespace, der Zugriff auf Datenstrukturen wie Book erlaubt
-@inject AuthService AuthService  // Blazor-DI: Zugriff auf Authentifizierungsinformationen
-@inject UserBookListRepository UserBookListRepository  // Blazor-DI: Zugriff auf benutzerspezifische Buchlisten
+﻿@page "/booklist" // Definiert die URL-Routing-Adresse für diese Seite
+@using Library.Data // Importiert den Namespace, der Zugriff auf Datenstrukturen wie Book erlaubt
+@inject AuthService AuthService // Blazor-DI: Zugriff auf Authentifizierungsinformationen
+@inject UserBookListRepository UserBookListRepository // Blazor-DI: Zugriff auf benutzerspezifische Buchlisten
+@inject BookRepository BookRepository // Blazor-DI: Zugriff auf Buchdatenbank
 
-<PageTitle>Your Book List</PageTitle>  // Setzt den Seitentitel im Browser-Tab
+<PageTitle>Your Book List</PageTitle> // Setzt den Seitentitel im Browser-Tab
 
 <!-- Wenn der Benutzer nicht eingeloggt ist, wird ein Hinweis angezeigt -->
 @if (!AuthService.IsAuthenticated)
@@ -65,40 +66,6 @@ else
                 @onclick="() => RemoveFromList(selectedBook.BookId)">
                 Remove from List
             </button>
-
-            <!-- Rückgabedatum verlängern -->
-            <div style="margin-top: 1rem;">
-                @if (!showExtendOptions)
-                {
-                    <button 
-                        class="extend-toggle-btn"
-                        style="background-color: #e0e0e0; color: #333; border: none; border-radius: 6px; padding: 6px 12px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.06); transition: background 0.2s; font-size: 1em;"
-                        @onclick="() => showExtendOptions = true">
-                        Verlängern &#x25BC;
-                    </button>
-                }
-                else
-                {
-                    <div style="display: flex; align-items: center; gap: 0.5rem;">
-                        <select @bind="extendDays"
-                                style="background-color: #e0e0e0; color: #333; border: none; border-radius: 6px; padding: 6px 12px; font-size: 1em; box-shadow: 0 2px 4px rgba(0,0,0,0.06);">
-                            <option disabled selected>Verlängern um...</option>
-                            @for (int i = 1; i <= 4; i++)
-                            {
-                                <option value="@i">@i Tag(i)</option>
-                            }
-                        </select>
-
-                        <button 
-                            style="background-color: #e0e0e0; color: #333; border: none; border-radius: 6px; padding: 6px 12px; font-size: 1em; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.06);"
-                            @onclick="ExtendGiveBackDate">
-                            Bestätigen
-                        </button>
-                    </div>
-                }
-            </div>
-
-
         </div>
 
         </div>

@@ -133,6 +133,17 @@ namespace Library.Data
                 // Bei Datenbankanbindung: Kontext speichern
             }
         }
+        public void SetBookAvailability(int bookId, bool isAvailable)
+        {
+            var books = GetAllBooks();
+            var book = books.FirstOrDefault(b => b.BookId == bookId);
+            if (book != null)
+            {
+                book.IsAvailable = isAvailable;
+                // Wenn du mit einer Datenbank arbeitest, hier speichern
+            }
+        }
+
 
         public void DeleteBook(int bookId)
         {
