@@ -1,9 +1,10 @@
-﻿@page "/booklist"  // Definiert die URL-Routing-Adresse für diese Seite
-@using Library.Data  // Importiert den Namespace, der Zugriff auf Datenstrukturen wie Book erlaubt
-@inject AuthService AuthService  // Blazor-DI: Zugriff auf Authentifizierungsinformationen
-@inject UserBookListRepository UserBookListRepository  // Blazor-DI: Zugriff auf benutzerspezifische Buchlisten
+﻿@page "/booklist" // Definiert die URL-Routing-Adresse für diese Seite
+@using Library.Data // Importiert den Namespace, der Zugriff auf Datenstrukturen wie Book erlaubt
+@inject AuthService AuthService // Blazor-DI: Zugriff auf Authentifizierungsinformationen
+@inject UserBookListRepository UserBookListRepository // Blazor-DI: Zugriff auf benutzerspezifische Buchlisten
+@inject BookRepository BookRepository // Blazor-DI: Zugriff auf Buchdatenbank
 
-<PageTitle>Your Book List</PageTitle>  // Setzt den Seitentitel im Browser-Tab
+<PageTitle>Your Book List</PageTitle> // Setzt den Seitentitel im Browser-Tab
 
 <!-- Wenn der Benutzer nicht eingeloggt ist, wird ein Hinweis angezeigt -->
 @if (!AuthService.IsAuthenticated)
@@ -57,14 +58,13 @@ else
             <p><strong>Rückgabedatum:</strong> @(selectedBook.GiveBackDate?.ToString("dd.MM.yyyy") ?? "Keine Angabe")</p>
 
             <!-- Entfernt das Buch aus der Liste -->
-           <div >
-            <button 
-                class="remove-btn"
-                style="background-color: #e0e0e0; color: #333; border: none; border-radius: 6px; padding: 6px 12px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.06); transition: background 0.2s; font-size: 1em;"
-                @onclick="() => RemoveFromList(selectedBook.BookId)">
-                Remove from List
-            </button>
-        </div>
+            <div>
+                <button class="remove-btn"
+                    style="background-color: #e0e0e0; color: #333; border: none; border-radius: 6px; padding: 6px 12px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.06); transition: background 0.2s; font-size: 1em;"
+                    @onclick="() => RemoveFromList(selectedBook.BookId)">
+                    Remove from List
+                </button>
+            </div>
 
         </div>
     </div>
@@ -106,7 +106,13 @@ else
     private void RemoveFromList(int bookId)
     {
         UserBookListRepository.RemoveBookFromUserList(AuthService.LoggedInUser.Id, bookId);
-        books = UserBookListRepository.GetUserBookList(AuthService.LoggedInUser.Id);  // Liste neu laden
-        StateHasChanged();  // UI-Aktualisierung erzwingen
+
+        // Buch wieder verfügbar machen
+        BookRepository.SetBookAvailability(bookId, true);
+
+        books = UserBookListRepository.GetUserBookList(AuthService.LoggedInUser.Id);
+        showDetails = false;
+        selectedBook = null;
+        StateHasChanged();
     }
 }
