@@ -90,12 +90,14 @@ CREATE TABLE IF NOT EXISTS Loans (
 );";
                 cmd.ExecuteNonQuery();
 
+                // Neu: GiveBackDate-Spalte in UserBookList
                 cmd.CommandText = @"
 CREATE TABLE IF NOT EXISTS UserBookList (
     ListID INTEGER PRIMARY KEY AUTOINCREMENT,
     UserID INTEGER NOT NULL,
     BookID INTEGER NOT NULL,
     AddedAt DATE NOT NULL DEFAULT (DATE('now')),
+    GiveBackDate DATE,
     FOREIGN KEY (UserID) REFERENCES Users(UserID),
     FOREIGN KEY (BookID) REFERENCES Books(BookID),
     UNIQUE(UserID, BookID)
@@ -128,7 +130,7 @@ WHERE NOT EXISTS(SELECT 1 FROM Books WHERE Title = 'Faust');
             }
             else
             {
-                // Migration: Falls GiveBackDate noch nicht existiert
+                // Migration: Falls GiveBackDate noch nicht in Books existiert
                 using var conn = GetConnection();
                 using var cmdCheck = new SQLiteCommand("PRAGMA table_info(Books);", conn);
                 using var reader = cmdCheck.ExecuteReader();
@@ -147,6 +149,26 @@ WHERE NOT EXISTS(SELECT 1 FROM Books WHERE Title = 'Faust');
                 {
                     using var cmdAlter = new SQLiteCommand("ALTER TABLE Books ADD COLUMN GiveBackDate DATE;", conn);
                     cmdAlter.ExecuteNonQuery();
+                }
+
+                // Migration: Falls GiveBackDate noch nicht in UserBookList existiert
+                using var cmdCheckUserBookList = new SQLiteCommand("PRAGMA table_info(UserBookList);", conn);
+                using var readerUserBookList = cmdCheckUserBookList.ExecuteReader();
+
+                bool giveBackDateExistsUserBookList = false;
+                while (readerUserBookList.Read())
+                {
+                    if (readerUserBookList["name"].ToString() == "GiveBackDate")
+                    {
+                        giveBackDateExistsUserBookList = true;
+                        break;
+                    }
+                }
+
+                if (!giveBackDateExistsUserBookList)
+                {
+                    using var cmdAlterUserBookList = new SQLiteCommand("ALTER TABLE UserBookList ADD COLUMN GiveBackDate DATE;", conn);
+                    cmdAlterUserBookList.ExecuteNonQuery();
                 }
             }
         }
