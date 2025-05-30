@@ -28,6 +28,24 @@ namespace Library.Data
             cmd.ExecuteNonQuery();
         }
 
+       /* /// <summary>
+        /// Sets the availability of a book in the database.
+        /// </summary>
+        /// <param name="bookId">The ID of the book.</param>
+        /// <param name="isAvailable">The new availability status.</param>
+        public void SetBookAvailability(int bookId, bool isAvailable)
+        {
+            using var conn = Database.GetConnection();
+            using var cmd = new SQLiteCommand(conn)
+            {
+                CommandText = @"UPDATE Books SET IsAvailable = @IsAvailable WHERE BookID = @BookID"
+            };
+            cmd.Parameters.AddWithValue("@IsAvailable", isAvailable);
+            cmd.Parameters.AddWithValue("@BookID", bookId);
+            cmd.ExecuteNonQuery();
+        }*/
+
+
         /// <summary>
         /// Removes a book from a user's book list.
         /// </summary>
@@ -36,14 +54,35 @@ namespace Library.Data
         public void RemoveBookFromUserList(int userId, int bookId)
         {
             using var conn = Database.GetConnection();
-            using var cmd = new SQLiteCommand(conn)
+            using var transaction = conn.BeginTransaction();
+
+            try
             {
-                CommandText = @"DELETE FROM UserBookList 
-                                WHERE UserID = @UserID AND BookID = @BookID"
-            };
-            cmd.Parameters.AddWithValue("@UserID", userId);
-            cmd.Parameters.AddWithValue("@BookID", bookId);
-            cmd.ExecuteNonQuery();
+            // Remove the book from the user's list
+            using (var cmd = new SQLiteCommand(conn))
+            {
+                cmd.CommandText = @"DELETE FROM UserBookList 
+                        WHERE UserID = @UserID AND BookID = @BookID";
+                cmd.Parameters.AddWithValue("@UserID", userId);
+                cmd.Parameters.AddWithValue("@BookID", bookId);
+                cmd.ExecuteNonQuery();
+            }
+
+            // Set the book as available again
+            using (var cmd = new SQLiteCommand(conn))
+            {
+                cmd.CommandText = @"UPDATE Books SET IsAvailable = 1 WHERE BookID = @BookID";
+                cmd.Parameters.AddWithValue("@BookID", bookId);
+                cmd.ExecuteNonQuery();
+            }
+
+            transaction.Commit();
+            }
+            catch
+            {
+            transaction.Rollback();
+            throw;
+            }
         }
 
         /// <summary>
