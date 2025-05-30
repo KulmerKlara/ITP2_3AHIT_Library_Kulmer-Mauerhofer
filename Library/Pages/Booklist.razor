@@ -72,16 +72,17 @@ else
                 {
                     <button 
                         class="extend-toggle-btn"
-                        style="background-color: #d0f0c0; color: #333; border: none; border-radius: 6px; padding: 6px 12px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.06); transition: background 0.2s; font-size: 1em;"
+                        style="background-color: #e0e0e0; color: #333; border: none; border-radius: 6px; padding: 6px 12px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.06); transition: background 0.2s; font-size: 1em;"
                         @onclick="() => showExtendOptions = true">
-                        Verlängern
+                        Verlängern &#x25BC;
                     </button>
                 }
                 else
                 {
-                    <div>
-                        <label for="extendDays">Anzahl Tage wählen:</label>
-                        <select id="extendDays" @bind="extendDays">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <select @bind="extendDays"
+                                style="background-color: #e0e0e0; color: #333; border: none; border-radius: 6px; padding: 6px 12px; font-size: 1em; box-shadow: 0 2px 4px rgba(0,0,0,0.06);">
+                            <option disabled selected>Verlängern um...</option>
                             @for (int i = 1; i <= 4; i++)
                             {
                                 <option value="@i">@i Tag(i)</option>
@@ -89,15 +90,15 @@ else
                         </select>
 
                         <button 
-                            class="extend-confirm-btn"
-                            style="margin-left: 10px; background-color: #d0f0c0; color: #333; border: none; border-radius: 6px; padding: 6px 12px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.06); transition: background 0.2s; font-size: 1em;"
+                            style="background-color: #e0e0e0; color: #333; border: none; border-radius: 6px; padding: 6px 12px; font-size: 1em; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.06);"
                             @onclick="ExtendGiveBackDate">
-                            Rückgabedatum verlängern
+                            Bestätigen
                         </button>
                     </div>
                 }
             </div>
-            
+
+
         </div>
 
         </div>
