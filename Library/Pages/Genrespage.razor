@@ -141,6 +141,7 @@ else
 
         // Buch auf nicht verfügbar setzen und Rückgabedatum vergeben
         bookFromDb.IsAvailable = false;
+        bookFromDb.GiveBackDate = DateTime.Today.AddDays(7);
         bookFromDb.GiveBackDate = giveBackDate;
 
         // Änderungen in der DB speichern
@@ -148,8 +149,10 @@ else
 
         // UI aktualisieren, damit Status korrekt angezeigt wird
         selectedBook.IsAvailable = false;
+        selectedBook.GiveBackDate = bookFromDb.GiveBackDate;
         selectedBook.GiveBackDate = giveBackDate;
 
+        addToListMessage = $"Buch '{selectedBook.Title}' wurde zur Booklist hinzugefügt. Rückgabe bis: {selectedBook.GiveBackDate?.ToString("dd.MM.yyyy")}";
         addToListMessage = $"Buch '{selectedBook.Title}' wurde zur Booklist hinzugefügt. Rückgabe bis: {giveBackDate:dd.MM.yyyy}";
     }
 }

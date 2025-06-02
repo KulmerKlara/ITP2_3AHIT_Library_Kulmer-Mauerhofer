@@ -57,14 +57,35 @@ else
             <p><strong>Zusammenfassung:</strong> @selectedBook.Summary</p>
             <p><strong>Rückgabedatum:</strong> @(selectedBook.GiveBackDate?.ToString("dd.MM.yyyy") ?? "Keine Angabe")</p>
 
+
             <!-- Entfernt das Buch aus der Liste -->
-            <div>
-                <button class="remove-btn"
-                    style="background-color: #e0e0e0; color: #333; border: none; border-radius: 6px; padding: 6px 12px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.06); transition: background 0.2s; font-size: 1em;"
-                    @onclick="() => RemoveFromList(selectedBook.BookId)">
-                    Remove from List
+           <div >
+            <button 
+                class="remove-btn"
+                style="background-color: #e0e0e0; color: #333; border: none; border-radius: 6px; padding: 6px 12px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.06); transition: background 0.2s; font-size: 1em;"
+                @onclick="() => RemoveFromList(selectedBook.BookId)">
+                Remove from List
+            </button>
+
+            More actions
+            <!-- Rückgabedatum verlängern -->
+            <div style="margin-top: 1rem;">
+                <label for="extendDays">Verlängern um:</label>
+                <select id="extendDays" @bind="extendDays">
+                    @for (int i = 1; i <= 4; i++)
+                    {
+                        <option value="@i">@i Tag(i)</option>
+                    }
+                </select>
+
+                <button 
+                    class="extend-btn"
+                    style="margin-left: 10px; background-color: #d0f0c0; color: #333; border: none; border-radius: 6px; padding: 6px 12px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.06); transition: background 0.2s; font-size: 1em;"
+                    @onclick="ExtendGiveBackDate">
+                    Extend Give Back Date
                 </button>
             </div>
+        </div>
 
         </div>
     </div>
@@ -106,13 +127,35 @@ else
     private void RemoveFromList(int bookId)
     {
         UserBookListRepository.RemoveBookFromUserList(AuthService.LoggedInUser.Id, bookId);
-
-        // Buch wieder verfügbar machen
-        BookRepository.SetBookAvailability(bookId, true);
-
-        books = UserBookListRepository.GetUserBookList(AuthService.LoggedInUser.Id);
-        showDetails = false;
-        selectedBook = null;
-        StateHasChanged();
+        books = UserBookListRepository.GetUserBookList(AuthService.LoggedInUser.Id);  // Liste neu laden
+        StateHasChanged();  // UI-Aktualisierung erzwingen
     }
+
+    private int extendDays = 1; // Standard auf 1 Tag setzen
+
+    private bool showExtendOptions = false; // Steuerung der Anzeige der Verlängerungsoptionen
+// Methode zur Verlängerung des Rückgabedatums
+private void ExtendGiveBackDate()
+{
+    
+    if (selectedBook != null)
+    {
+        try
+        {
+                UserBookListRepository.ExtendGiveBackDate(AuthService.LoggedInUser.Id, selectedBook.BookId, extendDays);
+
+                // Liste und ausgewähltes Buch aktualisieren
+                books = UserBookListRepository.GetUserBookList(AuthService.LoggedInUser.Id);
+                selectedBook = books.FirstOrDefault(b => b.BookId == selectedBook.BookId);
+
+                StateHasChanged();  // UI-Aktualisierung
+            }
+            catch (Exception ex)
+            {
+                // Fehlerbehandlung (optional erweitern)
+                Console.WriteLine("Fehler beim Verlängern: " + ex.Message);
+            }
+        }
+    }
+
 }
