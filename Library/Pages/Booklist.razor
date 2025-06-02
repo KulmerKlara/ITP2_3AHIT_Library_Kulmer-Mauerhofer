@@ -66,6 +66,25 @@ else
                 @onclick="() => RemoveFromList(selectedBook.BookId)">
                 Remove from List
             </button>
+
+            More actions
+            <!-- Rückgabedatum verlängern -->
+            <div style="margin-top: 1rem;">
+                <label for="extendDays">Verlängern um:</label>
+                <select id="extendDays" @bind="extendDays">
+                    @for (int i = 1; i <= 4; i++)
+                    {
+                        <option value="@i">@i Tag(i)</option>
+                    }
+                </select>
+
+                <button 
+                    class="extend-btn"
+                    style="margin-left: 10px; background-color: #d0f0c0; color: #333; border: none; border-radius: 6px; padding: 6px 12px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.06); transition: background 0.2s; font-size: 1em;"
+                    @onclick="ExtendGiveBackDate">
+                    Extend Give Back Date
+                </button>
+            </div>
         </div>
 
         </div>
