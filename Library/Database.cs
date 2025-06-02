@@ -5,13 +5,13 @@ namespace Library.Data
 {
     public static class Database
     {
-        private static readonly string _dbPath = "library.db";
+        private const string ConnectionString = "Data Source=library.db";
 
         public static SQLiteConnection GetConnection()
         {
-            var conn = new SQLiteConnection($"Data Source={_dbPath}");
-            conn.Open();
-            return conn;
+            var connection = new SQLiteConnection(ConnectionString);
+            connection.Open();
+            return connection;
         }
         private static SQLiteConnection _testConnection;
         public static void OverrideConnection(SQLiteConnection connection)
@@ -20,9 +20,9 @@ namespace Library.Data
         }
         public static void Initialize()
         {
-            if (!File.Exists(_dbPath))
+            if (!File.Exists(ConnectionString))
             {
-                SQLiteConnection.CreateFile(_dbPath);
+                SQLiteConnection.CreateFile(ConnectionString);
                 using var conn = GetConnection();
                 using var cmd = new SQLiteCommand(conn);
 
