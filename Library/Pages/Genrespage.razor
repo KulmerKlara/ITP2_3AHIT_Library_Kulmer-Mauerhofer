@@ -5,7 +5,23 @@
 @inject UserBookListRepository UserBookListRepository
 @using Microsoft.AspNetCore.Components
 
+
 <h3>@(string.IsNullOrEmpty(Genre) ? "Alle Bücher" : $"{Genre} Bücher")</h3>
+<div class="search-bar-container">
+    <input type="text" class="search-bar" placeholder="Buch suchen..." @bind="searchTerm" @bind:event="oninput" />
+</div>
+
+@code {
+    private string searchTerm = "";
+
+    private IEnumerable<Book> FilteredBooks =>
+        string.IsNullOrWhiteSpace(searchTerm)
+            ? books
+            : books?.Where(b =>
+                (!string.IsNullOrEmpty(b.Title) && b.Title.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) ||
+                (!string.IsNullOrEmpty(b.Author) && b.Author.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+            ) ?? Enumerable.Empty<Book>();
+}
 
 @if (books == null)
 {
