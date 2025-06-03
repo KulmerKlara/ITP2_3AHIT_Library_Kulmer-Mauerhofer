@@ -5,10 +5,14 @@
 @inject UserBookListRepository UserBookListRepository
 @using Microsoft.AspNetCore.Components
 
-
-<h3>@(string.IsNullOrEmpty(Genre) ? "Alle Bücher" : $"{Genre} Bücher")</h3>
-<div class="search-bar-container">
-    <input type="text" class="search-bar" placeholder="Buch suchen..." @bind="searchTerm" @bind:event="oninput" />
+<div style="display: flex; justify-content: center; margin-bottom: 24px;">
+    <input 
+        type="text" 
+        placeholder="Buch suchen..." 
+        @bind="searchTerm" 
+        @bind:event="oninput"
+        style="width: 50vw; max-width: 600px; padding: 12px 18px; font-size: 1.1rem; border-radius: 8px; border: 1px solid #bbb; box-shadow: 0 2px 8px rgba(0,0,0,0.04);"
+    />
 </div>
 
 @code {
@@ -34,7 +38,7 @@ else if (books.Count == 0)
 else
 {  
     <div class="book-grid">
-        @foreach (var book in books)
+        @foreach (var book in FilteredBooks)
         {
             <div class="book-card" @onclick="() => ShowBookDetails(book)">
                 <div class="book-image-placeholder">
@@ -172,7 +176,6 @@ else
         addToListMessage = $"Buch '{selectedBook.Title}' wurde zur Booklist hinzugefügt. Rückgabe bis: {giveBackDate:dd.MM.yyyy}";
     }
 }
-
 
 <style>
 .book-grid {
