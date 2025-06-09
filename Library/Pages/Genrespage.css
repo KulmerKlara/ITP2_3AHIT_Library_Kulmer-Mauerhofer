@@ -9,15 +9,73 @@
 /* Große Karte mit hellgrauem Hintergrund (leicht dunkler als weiß) */
 .book-card {
     width: 250px;
-    background-color: #f0f0f0; /* etwas dunkler als weiß */
+    background-color: #f9f9f9; 
     border-radius: 12px;
     padding: 16px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     align-items: center;
-    transition: transform 0.2s ease, box-shadow 0.3s ease;
-    cursor: pointer;
+    gap: 12px;
+}
+.book-card-green {
+    width: 250px;
+    background-color: #92ed8c; 
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+.book-card-purple {
+    width: 250px;
+    background-color: #f275f0; 
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.book-image-placeholder {
+    width: 100%;
+    height: 300px;
+    background-color: #dcdcdc; /* etwas dunkler hellgrau */
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #444;
+    font-size: 16px;
+    text-align: center;
+}
+.book-image-placeholder-green {
+    width: 100%;
+    height: 300px;
+    background-color: #92ed8c; 
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #444;
+    font-size: 16px;
+    text-align: center;
+}
+.book-image-placeholder-purple {
+    width: 100%;
+    height: 300px;
+    background-color: #f275f0; 
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #444;
+    font-size: 16px;
+    text-align: center;
 }
 
 /* Hover-Effekt bleibt */
@@ -26,20 +84,6 @@
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
 }
 
-/* Graues Feld für Bild mit abgerundeten Kanten */
-.book-image-placeholder {
-    width: 100%;
-    height: 300px;
-    background-color: #cccccc; /* graues Feld */
-    border-radius: 12px; /* abgerundete Ecken */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #444;
-    font-size: 16px;
-    margin-bottom: 12px;
-    text-align: center;
-}
 
 /* Titel im großen hellgrauen Feld */
 .book-title {

@@ -32,14 +32,44 @@ else
         <div class="book-grid">
             @foreach (var book in books)
             {
-                <div class="book-card" @onclick="() => ShowBookDetails(book)">
-                    <div class="book-image-placeholder">
-                        Bild kommt hier hin
+                // Prüfen, ob das Rückgabedatum in 2 Tagen oder weniger ist
+                bool isExpiringSoon = book.GiveBackDate.HasValue && 
+                                      (book.GiveBackDate.Value.Date - DateTime.Today).TotalDays <= 2 &&
+                                      (book.GiveBackDate.Value.Date - DateTime.Today).TotalDays >= 0;
+
+                if (isExpiringSoon)
+                {
+                    <div class="book-card-purple" @onclick="() => ShowBookDetails(book)">
+                        <div class="book-image-placeholder-purple">
+                            Bild kommt hier hin
+                        </div>
+                        <div class="book-title-container">
+                            <div class="book-title">@book.Title</div>
+                        </div>
                     </div>
-                    <div class="book-title-container">
-                        <div class="book-title">@book.Title</div>
+                }
+                else if (book.IsAvailable == true)
+                {
+                    <div class="book-card-green" @onclick="() => ShowBookDetails(book)">
+                        <div class="book-image-placeholder-green">
+                            Bild kommt hier hin
+                        </div>
+                        <div class="book-title-container">
+                            <div class="book-title">@book.Title</div>
+                        </div>
                     </div>
-                </div>
+                }
+                else
+                {
+                    <div class="book-card" @onclick="() => ShowBookDetails(book)">
+                        <div class="book-image-placeholder">
+                            Bild kommt hier hin
+                        </div>
+                        <div class="book-title-container">
+                            <div class="book-title">@book.Title</div>
+                        </div>
+                    </div>
+                }
             }
         </div>
     }
