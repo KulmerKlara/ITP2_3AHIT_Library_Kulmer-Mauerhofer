@@ -9,11 +9,57 @@
     align-items: center;
     gap: 12px;
 }
+.book-card-green {
+    width: 250px;
+    background-color: #92ed8c; /* sehr sehr hellgrau */
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+.book-card-purple {
+    width: 250px;
+    background-color: #f275f0; /* sehr sehr hellgrau */
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
 
 .book-image-placeholder {
     width: 100%;
     height: 300px;
     background-color: #dcdcdc; /* etwas dunkler hellgrau */
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #444;
+    font-size: 16px;
+    text-align: center;
+}
+.book-image-placeholder-green {
+    width: 100%;
+    height: 300px;
+    background-color: #92ed8c; /* etwas dunkler hellgrau */
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #444;
+    font-size: 16px;
+    text-align: center;
+}
+.book-image-placeholder-purple {
+    width: 100%;
+    height: 300px;
+    background-color: #f275f0; /* etwas dunkler hellgrau */
     border-radius: 12px;
     display: flex;
     align-items: center;
