@@ -29,11 +29,11 @@
 
 @if (books == null)
 {
-    <p>Lade Bücher...</p>
+    <p>Loading books...</p>
 }
 else if (books.Count == 0)
 {
-    <p>Keine Bücher @(string.IsNullOrEmpty(Genre) ? "" : $"im Genre \"{Genre}\" ")gefunden.</p>
+    <p>No books @(string.IsNullOrEmpty(Genre) ? "" : $"in genre \"{Genre}\" ")found.</p>
 }
 else
 {  
@@ -44,7 +44,7 @@ else
             {
                 <div class="book-card-green" @onclick="() => ShowBookDetails(book)">
                     <div class="book-image-placeholder-green">
-                        Bild kommt hier hin
+                        Image goes here
                     </div>
                     <div class="book-title-container">
                         <div class="book-title">@book.Title</div>
@@ -55,7 +55,7 @@ else
             {
                 <div class="book-card" @onclick="() => ShowBookDetails(book)">
                     <div class="book-image-placeholder">
-                        Bild kommt hier hin
+                        Image goes here
                     </div>
                     <div class="book-title-container">
                         <div class="book-title">@book.Title</div>
@@ -77,7 +77,7 @@ else
             </div>
 
             <div class="info-field">
-                <strong>Autor:</strong> @selectedBook.Author
+                <strong>Author:</strong> @selectedBook.Author
             </div>
 
             <div class="info-field">
@@ -85,12 +85,12 @@ else
             </div>
 
             <div class="info-field">
-                <strong>Zusammenfassung:</strong>
+                <strong>Summary:</strong>
                 <p>@selectedBook.Summary</p>
             </div>
 
             <div class="info-field">
-                <strong>Verfügbar:</strong> @(selectedBook.IsAvailable ? "Ja" : "Nein")
+                <strong>Available:</strong> @(selectedBook.IsAvailable ? "Yes" : "No")
             </div>
 
             <div class="modal-footer">
@@ -144,54 +144,56 @@ else
     {
         if (!AuthService.IsAuthenticated || AuthService.LoggedInUser == null)
         {
-            addToListMessage = "Bitte erst anmelden, um Bücher hinzuzufügen.";
+            addToListMessage = "Please log in to add books.";
             return;
         }
 
         var userId = AuthService.LoggedInUser.Id;
 
-        // Lade das Buch nochmal aus der DB, um aktuellen Status zu prüfen
+        // Reload the book from the DB to check current status
         var bookFromDb = BookRepo.GetAllBooks().FirstOrDefault(b => b.BookId == selectedBook.BookId);
         if (bookFromDb == null)
         {
-            addToListMessage = "Buch konnte nicht gefunden werden.";
+            addToListMessage = "Book could not be found.";
             return;
         }
 
         if (!bookFromDb.IsAvailable)
         {
-            addToListMessage = $"Buch '{bookFromDb.Title}' ist aktuell nicht verfügbar und kann nicht hinzugefügt werden.";
+            addToListMessage = $"Book '{bookFromDb.Title}' is currently not available and cannot be added.";
             return;
         }
 
         if (UserBookListRepository.IsBookAlreadyInUserList(userId, selectedBook.BookId))
         {
-            addToListMessage = $"Buch '{selectedBook.Title}' ist bereits in deiner Booklist.";
+            addToListMessage = $"Book '{selectedBook.Title}' is already in your booklist.";
             return;
         }
 
         var giveBackDate = DateTime.Today.AddDays(7);
 
-        // Buch zur UserBookList mit Rückgabedatum hinzufügen
+        // Add book to user's booklist with return date
         UserBookListRepository.AddBookToUserList(userId, selectedBook.BookId, giveBackDate);
 
-        // Buch auf nicht verfügbar setzen und Rückgabedatum vergeben
+        // Set book as unavailable and assign return date
         bookFromDb.IsAvailable = false;
-        bookFromDb.GiveBackDate = DateTime.Today.AddDays(7);
         bookFromDb.GiveBackDate = giveBackDate;
 
-        // Änderungen in der DB speichern
+        // Save changes to DB
         BookRepo.UpdateBook(bookFromDb);
 
-        // UI aktualisieren, damit Status korrekt angezeigt wird
+        // Update UI so status is shown correctly
         selectedBook.IsAvailable = false;
-        selectedBook.GiveBackDate = bookFromDb.GiveBackDate;
         selectedBook.GiveBackDate = giveBackDate;
 
-        addToListMessage = $"Buch '{selectedBook.Title}' wurde zur Booklist hinzugefügt. Rückgabe bis: {selectedBook.GiveBackDate?.ToString("dd.MM.yyyy")}";
-        addToListMessage = $"Buch '{selectedBook.Title}' wurde zur Booklist hinzugefügt. Rückgabe bis: {giveBackDate:dd.MM.yyyy}";
+        addToListMessage = $"Book '{selectedBook.Title}' was added to your booklist. Return by: {giveBackDate:dd.MM.yyyy}";
     }
 }
+
+/* 
+    CSS below: 
+    All comments are now in English.
+*/
 
 <style>
 .book-grid {
@@ -202,10 +204,10 @@ else
     justify-content: flex-start;
 }
 
-/* Große Karte mit hellgrauem Hintergrund (leicht dunkler als weiß) */
+/* Large card with light gray background (slightly darker than white) */
 .book-card {
     width: 250px;
-    background-color: #f0f0f0; /* etwas dunkler als weiß */
+    background-color: #f0f0f0; /* slightly darker than white */
     border-radius: 12px;
     padding: 16px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -216,18 +218,18 @@ else
     cursor: pointer;
 }
 
-/* Hover-Effekt bleibt */
+/* Hover effect remains */
 .book-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
 }
 
-/* Graues Feld für Bild mit abgerundeten Kanten */
+/* Gray field for image with rounded corners */
 .book-image-placeholder {
     width: 100%;
     height: 300px;
-    background-color: #cccccc; /* graues Feld */
-    border-radius: 12px; /* abgerundete Ecken */
+    background-color: #cccccc; /* gray field */
+    border-radius: 12px; /* rounded corners */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -237,7 +239,7 @@ else
     text-align: center;
 }
 
-/* Titel im großen hellgrauen Feld */
+/* Title in the large light gray field */
 .book-title {
     font-size: 1.1rem;
     font-weight: 600;
@@ -245,7 +247,7 @@ else
     text-align: center;
 }
 
-/* Modal Overlay */
+/* Modal overlay */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -259,14 +261,14 @@ else
     z-index: 9999;
 }
 
-/* Modal Content ca. halb so breit wie die Seite, max 600px, etwas höher */
+/* Modal content about half as wide as the page, max 600px, a bit taller */
 .modal-content {
     background-color: white;
     border-radius: 12px;
     padding: 24px 32px;
     width: 50vw;
     max-width: 600px;
-    max-height: 90vh; /* höher als vorher */
+    max-height: 90vh; /* taller than before */
     overflow-y: auto;
     box-shadow: 0 8px 24px rgba(0,0,0,0.3);
     position: relative;
@@ -274,7 +276,7 @@ else
     flex-direction: column;
 }
 
-/* Close Button oben rechts */
+/* Close button in the top right */
 .close-btn {
     position: absolute;
     top: 12px;
@@ -291,9 +293,9 @@ else
     color: #000;
 }
 
-/* Einzelne Info-Felder im Modal */
+/* Individual info fields in the modal */
 .info-field {
-    background-color: #f5f5f5; /* hellgrau */
+    background-color: #f5f5f5; /* light gray */
     border-radius: 10px;
     padding: 12px 16px;
     margin-bottom: 16px;
@@ -305,16 +307,16 @@ else
     margin: 0;
 }
 
-/* Footer Bereich für den Button */
+/* Footer area for the button */
 .modal-footer {
-    margin-top: auto; /* schiebt den Footer nach unten */
+    margin-top: auto; /* pushes the footer down */
     padding-top: 12px;
     border-top: 1px solid #ddd;
     display: flex;
     justify-content: center;
 }
 
-/* Stil für den Add to Booklist Button */
+/* Style for the Add to Booklist button */
 .add-btn {
     background-color: #007bff;
     color: white;

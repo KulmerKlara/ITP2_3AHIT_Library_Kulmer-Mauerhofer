@@ -6,6 +6,10 @@ namespace Library.Data
 {
     public class BookRepository
     {
+        /// <summary>
+        /// Adds a new book to the database.
+        /// </summary>
+        /// <param name="book">The book to add.</param>
         public void AddBook(Book book)
         {
             using var conn = Database.GetConnection();
@@ -24,6 +28,10 @@ namespace Library.Data
             cmd.ExecuteNonQuery();
         }
 
+        /// <summary>
+        /// Gets all books from the database.
+        /// </summary>
+        /// <returns>List of all books.</returns>
         public List<Book> GetAllBooks()
         {
             var books = new List<Book>();
@@ -47,6 +55,11 @@ namespace Library.Data
             return books;
         }
 
+        /// <summary>
+        /// Gets all books of a specific genre.
+        /// </summary>
+        /// <param name="genre">The genre to filter by.</param>
+        /// <returns>List of books of the given genre.</returns>
         public List<Book> GetBooksByGenre(string genre)
         {
             var books = new List<Book>();
@@ -71,6 +84,11 @@ namespace Library.Data
             return books;
         }
 
+        /// <summary>
+        /// Searches for books by title, author, or genre.
+        /// </summary>
+        /// <param name="searchTerm">The search term.</param>
+        /// <returns>List of books matching the search term.</returns>
         public static List<Book> SearchBooks(string searchTerm)
         {
             var results = new List<Book>();
@@ -100,6 +118,10 @@ namespace Library.Data
             return results;
         }
 
+        /// <summary>
+        /// Updates a book in the database.
+        /// </summary>
+        /// <param name="book">The book to update.</param>
         public void UpdateBook(Book book)
         {
             using var conn = Database.GetConnection();
@@ -119,6 +141,11 @@ namespace Library.Data
 
             cmd.ExecuteNonQuery();
         }
+
+        /// <summary>
+        /// Updates the availability and details of a book in memory.
+        /// </summary>
+        /// <param name="updatedBook">The updated book.</param>
         public void Availability(Book updatedBook)
         {
             var books = GetAllBooks();
@@ -130,9 +157,15 @@ namespace Library.Data
                 existingBook.Genre = updatedBook.Genre;
                 existingBook.Summary = updatedBook.Summary;
                 existingBook.IsAvailable = updatedBook.IsAvailable;
-                // Bei Datenbankanbindung: Kontext speichern
+                // Save context if using a database
             }
         }
+
+        /// <summary>
+        /// Sets the availability of a book in memory.
+        /// </summary>
+        /// <param name="bookId">The book ID.</param>
+        /// <param name="isAvailable">Availability status.</param>
         public void SetBookAvailability(int bookId, bool isAvailable)
         {
             var books = GetAllBooks();
@@ -140,11 +173,14 @@ namespace Library.Data
             if (book != null)
             {
                 book.IsAvailable = isAvailable;
-                // Wenn du mit einer Datenbank arbeitest, hier speichern
+                // Save if using a database
             }
         }
 
-
+        /// <summary>
+        /// Deletes a book from the database.
+        /// </summary>
+        /// <param name="bookId">The book ID to delete.</param>
         public void DeleteBook(int bookId)
         {
             using var conn = Database.GetConnection();
@@ -156,6 +192,10 @@ namespace Library.Data
             cmd.ExecuteNonQuery();
         }
 
+        /// <summary>
+        /// Gets all borrowed books (not yet returned).
+        /// </summary>
+        /// <returns>List of borrowed books.</returns>
         public List<Book> GetBorrowedBooks()
         {
             var books = new List<Book>();
@@ -184,7 +224,10 @@ namespace Library.Data
             return books;
         }
 
-
+        /// <summary>
+        /// Gets all available books (not currently borrowed).
+        /// </summary>
+        /// <returns>List of available books.</returns>
         public List<Book> GetAvailableBooks()
         {
             var books = new List<Book>();
@@ -215,4 +258,3 @@ namespace Library.Data
 
     }
 }
-

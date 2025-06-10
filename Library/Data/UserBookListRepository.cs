@@ -120,7 +120,12 @@ namespace Library.Data
             return books;
         }
 
-
+        /// <summary>
+        /// chek if a book is already in the user's book list.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="bookId"></param>
+        /// <returns></returns>
         public bool IsBookAlreadyInUserList(int userId, int bookId)
         {
             using var conn = Database.GetConnection();

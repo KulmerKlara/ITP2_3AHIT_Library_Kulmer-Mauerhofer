@@ -10,6 +10,16 @@ public class Book
     public bool IsAvailable { get; set; } = true;
     public DateTime? GiveBackDate { get; set; }
 
+    /// <summary>
+    /// Constructor for the Book class.
+    /// </summary>
+    /// <param name="bookId"></param>
+    /// <param name="title"></param>
+    /// <param name="author"></param>
+    /// <param name="genre"></param>
+    /// <param name="summary"></param>
+    /// <param name="isAvailable"></param>
+    /// <param name="giveBackDate"></param>
     public Book(int bookId, string title, string author, string genre, string summary, bool isAvailable = true, DateTime? giveBackDate = null)
     {
         BookId = bookId;
