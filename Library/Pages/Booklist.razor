@@ -1,38 +1,38 @@
-﻿@page "/booklist" // Definiert die URL-Routing-Adresse für diese Seite
-@using Library.Data // Importiert den Namespace, der Zugriff auf Datenstrukturen wie Book erlaubt
-@inject AuthService AuthService // Blazor-DI: Zugriff auf Authentifizierungsinformationen
-@inject UserBookListRepository UserBookListRepository // Blazor-DI: Zugriff auf benutzerspezifische Buchlisten
-@inject BookRepository BookRepository // Blazor-DI: Zugriff auf Buchdatenbank
+﻿@page "/booklist" // Defines the URL routing address for this page
+@using Library.Data // Imports the namespace that provides access to data structures like Book
+@inject AuthService AuthService // Blazor DI: Access to authentication information
+@inject UserBookListRepository UserBookListRepository // Blazor DI: Access to user-specific book lists
+@inject BookRepository BookRepository // Blazor DI: Access to the book database
 
-<PageTitle>Your Book List</PageTitle> // Setzt den Seitentitel im Browser-Tab
+<PageTitle>Your Book List</PageTitle> // Sets the page title in the browser tab
 
-<!-- Wenn der Benutzer nicht eingeloggt ist, wird ein Hinweis angezeigt -->
+<!-- If the user is not logged in, a notice is displayed -->
 @if (!AuthService.IsAuthenticated)
 {
     <p>Please <a href="/login">log in</a> to see your book list.</p>
 }
 else
 {
-    <!-- Benutzer ist eingeloggt: Anzeige seiner Bücherliste -->
+    <!-- User is logged in: show their book list -->
     <h1>Your Book List, @AuthService.LoggedInUser.Name</h1>
 
-    <!-- Ladeanzeige, falls Liste noch geladen wird -->
+    <!-- Loading indicator if the list is still loading -->
     @if (books == null)
     {
         <p>Loading your books...</p>
     }
-    <!-- Hinweis, wenn die Liste leer ist -->
+    <!-- Notice if the list is empty -->
     else if (books.Count == 0)
     {
         <p>Your list is empty.</p>
     }
     else
     {
-        <!-- Darstellung der Buchkarten im Grid-Layout -->
+        <!-- Display book cards in a grid layout -->
         <div class="book-grid">
             @foreach (var book in books)
             {
-                // Prüfen, ob das Rückgabedatum in 2 Tagen oder weniger ist
+                // Check if the return date is in 2 days or less
                 bool isExpiringSoon = book.GiveBackDate.HasValue && 
                                       (book.GiveBackDate.Value.Date - DateTime.Today).TotalDays <= 2 &&
                                       (book.GiveBackDate.Value.Date - DateTime.Today).TotalDays >= 0;
@@ -41,7 +41,7 @@ else
                 {
                     <div class="book-card-purple" @onclick="() => ShowBookDetails(book)">
                         <div class="book-image-placeholder-purple">
-                            Bild kommt hier hin
+                            Image goes here
                         </div>
                         <div class="book-title-container">
                             <div class="book-title">@book.Title</div>
@@ -52,7 +52,7 @@ else
                 {
                     <div class="book-card-green" @onclick="() => ShowBookDetails(book)">
                         <div class="book-image-placeholder-green">
-                            Bild kommt hier hin
+                            Image goes here
                         </div>
                         <div class="book-title-container">
                             <div class="book-title">@book.Title</div>
@@ -63,7 +63,7 @@ else
                 {
                     <div class="book-card" @onclick="() => ShowBookDetails(book)">
                         <div class="book-image-placeholder">
-                            Bild kommt hier hin
+                            Image goes here
                         </div>
                         <div class="book-title-container">
                             <div class="book-title">@book.Title</div>
@@ -75,7 +75,7 @@ else
     }
 }
 
-<!-- Modal-Fenster zur Anzeige von Buchdetails -->
+<!-- Modal window to display book details -->
 @if (showDetails && selectedBook != null)
 {
     <div class="modal-overlay" @onclick="CloseDetails">
@@ -83,12 +83,11 @@ else
             <button class="close-btn" @onclick="CloseDetails">×</button>
 
             <h2>@selectedBook.Title</h2>
-            <p><strong>Autor:</strong> @selectedBook.Author</p>
-            <p><strong>Zusammenfassung:</strong> @selectedBook.Summary</p>
-            <p><strong>Rückgabedatum:</strong> @(selectedBook.GiveBackDate?.ToString("dd.MM.yyyy") ?? "Keine Angabe")</p>
+            <p><strong>Author:</strong> @selectedBook.Author</p>
+            <p><strong>Summary:</strong> @selectedBook.Summary</p>
+            <p><strong>Return date:</strong> @(selectedBook.GiveBackDate?.ToString("dd.MM.yyyy") ?? "No information")</p>
 
-
-            <!-- Entfernt das Buch aus der Liste -->
+            <!-- Remove the book from the list -->
            <div >
             <button 
                 class="remove-btn"
@@ -98,13 +97,13 @@ else
             </button>
 
             More actions
-            <!-- Rückgabedatum verlängern -->
+            <!-- Extend return date -->
             <div style="margin-top: 1rem;">
-                <label for="extendDays">Verlängern um:</label>
+                <label for="extendDays">Extend by:</label>
                 <select id="extendDays" @bind="extendDays">
                     @for (int i = 1; i <= 4; i++)
                     {
-                        <option value="@i">@i Tag(i)</option>
+                        <option value="@i">@i day(s)</option>
                     }
                 </select>
 
@@ -121,68 +120,67 @@ else
 }
 
 @code {
-    // Liste der Bücher, die dem aktuellen Benutzer zugeordnet sind
+    // List of books assigned to the current user
     private List<Book> books;
 
-    // Steuerung des Detailmodals
+    // Controls the detail modal
     private bool showDetails = false;
     private Book selectedBook;
 
-    // Wird beim Initialisieren der Komponente aufgerufen
+    // Called when the component is initialized
     protected override void OnInitialized()
     {
-        // Wenn der Benutzer eingeloggt ist, wird dessen Bücherliste geladen
+        // If the user is logged in, load their book list
         if (AuthService.IsAuthenticated)
         {
             books = UserBookListRepository.GetUserBookList(AuthService.LoggedInUser.Id);
         }
     }
 
-    // Öffnet das Modal mit Buchdetails
+    // Opens the modal with book details
     private void ShowBookDetails(Book book)
     {
         selectedBook = book;
         showDetails = true;
     }
 
-    // Schließt das Modal
+    // Closes the modal
     private void CloseDetails()
     {
         showDetails = false;
         selectedBook = null;
     }
 
-    // Entfernt das Buch aus der Liste und lädt die Liste neu
+    // Removes the book from the list and reloads the list
     private void RemoveFromList(int bookId)
     {
         UserBookListRepository.RemoveBookFromUserList(AuthService.LoggedInUser.Id, bookId);
-        books = UserBookListRepository.GetUserBookList(AuthService.LoggedInUser.Id);  // Liste neu laden
-        StateHasChanged();  // UI-Aktualisierung erzwingen
+        books = UserBookListRepository.GetUserBookList(AuthService.LoggedInUser.Id);  // Reload list
+        StateHasChanged();  // Force UI update
     }
 
-    private int extendDays = 1; // Standard auf 1 Tag setzen
+    private int extendDays = 1; // Default to 1 day
 
-    private bool showExtendOptions = false; // Steuerung der Anzeige der Verlängerungsoptionen
-// Methode zur Verlängerung des Rückgabedatums
-private void ExtendGiveBackDate()
-{
-    
-    if (selectedBook != null)
+    private bool showExtendOptions = false; // Controls the display of extension options
+    // Method to extend the return date
+    private void ExtendGiveBackDate()
     {
-        try
+        if (selectedBook != null)
         {
+            try
+            {
                 UserBookListRepository.ExtendGiveBackDate(AuthService.LoggedInUser.Id, selectedBook.BookId, extendDays);
 
-                // Liste und ausgewähltes Buch aktualisieren
+                // Update list and selected book
                 books = UserBookListRepository.GetUserBookList(AuthService.LoggedInUser.Id);
                 selectedBook = books.FirstOrDefault(b => b.BookId == selectedBook.BookId);
 
-                StateHasChanged();  // UI-Aktualisierung
+                StateHasChanged();  // UI update
             }
             catch (Exception ex)
             {
-                // Fehlerbehandlung (optional erweitern)
-                Console.WriteLine("Fehler beim Verlängern: " + ex.Message);
+                // Error handling (optional)
+                Console.WriteLine("Error while extending: " + ex.Message);
             }
         }
     }

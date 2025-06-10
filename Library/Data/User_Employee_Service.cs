@@ -7,6 +7,11 @@ public class User_Employee_Service
         "Admin", "User", "Guest", "Moderator", "Editor"
     };
 
+    /// <summary>
+    /// Generates a list of users with dummy data.
+    /// </summary>
+    /// <param name="count"></param>
+    /// <returns></returns>
     public Task<User[]> GetUsersAsync(int count)
     {
         return Task.FromResult(Enumerable.Range(1, count).Select(index => new User(
