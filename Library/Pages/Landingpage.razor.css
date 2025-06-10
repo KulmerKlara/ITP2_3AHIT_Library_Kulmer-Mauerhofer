@@ -1,11 +1,14 @@
 /* Background image */
 .background-container {
-background-image: url('/images/image1_lp.png');
+    position: fixed;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: url('/images/image1_lp.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    min-height: 100vh;
-    position: relative;
+    z-index: -1;
 }
 
 .overlay {
