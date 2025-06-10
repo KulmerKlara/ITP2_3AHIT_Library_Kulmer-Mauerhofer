@@ -1,10 +1,10 @@
-﻿@page "/booklist" // Defines the URL routing address for this page
-@using Library.Data // Imports the namespace that provides access to data structures like Book
+﻿@page "/booklist" 
+@using Library.Data 
 @inject AuthService AuthService // Blazor DI: Access to authentication information
 @inject UserBookListRepository UserBookListRepository // Blazor DI: Access to user-specific book lists
 @inject BookRepository BookRepository // Blazor DI: Access to the book database
 
-<PageTitle>Your Book List</PageTitle> // Sets the page title in the browser tab
+<PageTitle>Your Book List</PageTitle> 
 
 <!-- If the user is not logged in, a notice is displayed -->
 @if (!AuthService.IsAuthenticated)
