@@ -1,3 +1,5 @@
+Klamminger: Gutes Read me
+
 # Online Bookshelf Library
 
 Willkommen zur **Online Bookshelf Library** – einer modernen Webanwendung zur Verwaltung, Ausleihe und Reservierung von Büchern für Kunden und Mitarbeiter.
